@@ -43,14 +43,18 @@ setTimeout(function(){ delNotification(); }, 3000);
 
 function delNotification(){
   document.getElementById('notification').innerHTML = null;
+  if (document.getElementById('launch').disabled == true){
+    document.getElementById('launch').disabled = false;
+  }
 }
 
 function launch(){
+  document.getElementById('launch').disabled = true;
   let xhr = new XMLHttpRequest();
   let mail = document.getElementById('mail').value;
   let token = document.getElementById('token').value;
   let use = 'login';
-	xhr.open("POST", "http://cop-finder.com/api/login.php", true);
+	xhr.open("POST", "http://cop-finder.com/api/api.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.send("mail="+ mail + "&token=" + token + "&use=" + use);
   xhr.onreadystatechange = function() {
