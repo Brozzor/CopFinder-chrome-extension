@@ -9,7 +9,9 @@ window.addEventListener('load', function load(event){
 
 function loginPage(){
 document.getElementById('app').innerHTML = `
+
 <div class="login-page">
+
       <br />
       <div class="form card">
       <center>
@@ -19,7 +21,8 @@ document.getElementById('app').innerHTML = `
           <input id="mail" type="mail" placeholder="Mail address" />
           <input id="token" type="token" placeholder="Token key" />
           <button id="launch" class="btn">Launch app</button>
-          <p class="message">No token key ? <a id="buyLicence" href="#">Buy licence</a></p>
+          <p class="message">No token key ? <a id="buyLicence" href="#">Buy licence</a></p><br>
+          <div id="notification"> </div>
         </div>
       </div>
     </div>
@@ -30,6 +33,18 @@ function redirectToBuy(){
     chrome.tabs.create({url : 'http://cop-finder.com/'});
 }
 
+function notification(color, message){
+  document.getElementById('notification').innerHTML += `
+<div class="alert alert-${color}" role="alert">
+  ${message}
+</div>`;
+setTimeout(function(){ delNotification(); }, 3000);
+}
+
+function delNotification(){
+  document.getElementById('notification').innerHTML = null;
+}
+
 function launch(){
   let xhr = new XMLHttpRequest();
   let mail = document.getElementById('mail').value;
@@ -38,6 +53,15 @@ function launch(){
 	xhr.open("POST", "http://cop-finder.com/api/login.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.send("mail="+ mail + "&token=" + token + "&use=" + use);
-
-    console.log(xhr);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
+      let res = JSON.parse(xhr.responseText);
+      if (res.status == '1'){
+        notification('success', res.status_message);
+      }else{
+        notification('danger', 'Mail or token is invalid');
+      }
+      
+    }
+  };
 }
