@@ -10,11 +10,6 @@ window.addEventListener("load", function load(event) {
     redirectToBuy();
   });
 
-  let createButton3 = document.getElementById("logout");
-  createButton3.addEventListener("click", function() {
-    localStorage["keyG"] = null;
-    loginPage();
-  });
 });
 
 function loginPage() {
@@ -79,7 +74,7 @@ function delNotification() {
 }
 
 function reconnectFromKey() {
-  if (localStorage["keyG"] == "null") {
+  if (localStorage["keyG"] == "null" || localStorage["keyG"] == undefined) {
     loginPage();
     return false;
   }
