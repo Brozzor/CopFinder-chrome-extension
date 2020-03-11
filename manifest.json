@@ -1,19 +1,18 @@
 {
-    "manifest_version": 2,
-    "name" : "Cop Finder",
-    "description": "Application permettant de cop automatiquement des items supreme",
-    "version" : "1.0",
-    "permissions": [
-        "http://*/*",
-        "https://*/*",
-        "notifications",
-        "storage"
-    ],
-    "browser_action": {
-        "default_icon" : "img/icon.png",
-        "default_popup": "popup.html"
-    },
-    "icons": {
-        "173" : "img/icon.png"
-    }
+  "manifest_version": 2,
+  "name": "Cop Finder",
+  "description": "Application permettant de cop automatiquement des items supreme",
+  "version": "1.0",
+  "permissions": ["http://*/*", "https://*/*", "notifications", "storage", "tabs", "windows"],
+  "browser_action": {
+    "default_icon": "img/icon.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": false
+  },
+  "icons": {
+    "173": "img/icon.png"
+  }
 }
