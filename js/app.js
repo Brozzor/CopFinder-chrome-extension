@@ -9,7 +9,6 @@ window.addEventListener("load", function load(event) {
   createButton2.addEventListener("click", function() {
     redirectToBuy();
   });
-
 });
 
 function loginPage() {
@@ -97,11 +96,18 @@ function reconnectFromKey() {
   };
 }
 
+function checkInputLogin(mail, token) {
+  if (mail == "" || token == "") {
+    notification("danger", "Mail or token is invalid");
+  }
+}
+
 function launch() {
   document.getElementById("launch").disabled = true;
   let xhr = new XMLHttpRequest();
   let mail = document.getElementById("mail").value;
   let token = document.getElementById("token").value;
+  checkInputLogin(mail, token);
   let use = "login";
   xhr.open("POST", "http://cop-finder.com/api/api.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
