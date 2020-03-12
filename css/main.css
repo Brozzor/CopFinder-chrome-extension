@@ -6,6 +6,19 @@
   font-weight: normal;
   font-style: normal;
 }
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 0px;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: #FF0000;
+}
+
 body{
     height: 570px;
     width: 770px;
@@ -103,4 +116,11 @@ body{
 }
 .container .info span .fa {
   color: #EF3B3A;
+}
+/* ITEM LIST*/
+.item-list {
+margin-top: 4rem!important;
+}
+.center {
+  text-align: center;
 }
