@@ -36,6 +36,27 @@ body{
   padding: 10px;
   color: #DA2727!important;
 }
+.supreme-black {
+  font-family: 'FuturaBT-BoldItalic';
+  font-size: 24px;
+  padding: 10px;
+  color: #000000!important;
+}
+
+.supreme-white {
+  font-family: 'FuturaBT-BoldItalic';
+  font-size: 24px;
+  padding: 10px;
+  color: #ffffff!important;
+}
+
+.supreme-black red {
+  color: #DA2727!important;
+}
+
+.bg-white {
+  background-color: #ffffff !important;
+}
 
 .form {
   position: relative;
@@ -120,6 +141,7 @@ body{
 /* ITEM LIST*/
 .item-list {
 margin-top: 4rem!important;
+margin-bottom: 2rem!important;
 }
 .center {
   text-align: center;
