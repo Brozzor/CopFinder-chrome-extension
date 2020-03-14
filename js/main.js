@@ -43,18 +43,32 @@ function initialItemList(){
 
 function addItemInPage(res){
   let i = 1;
-  while(i < res.length / 2){
+  while(i < res.length){
     document.getElementById("left").innerHTML += `
-            <div class="card mt-4 ml-4">
+            <div class="card bg-white mt-4 ml-4 text-center">
+            <div class="card-header">
+            ${res[i].nb} articles
+            </div>
               <div class="card-body">
-                <h5 class="card-title center">${res[i].name}</h5>
+                <h5 class="card-title center supreme-black">${res[i].name}</h5>
+
               </div>
+            <a href="#"><div class="card-footer text-muted">
+              view
+            </div></a>
             </div>`;
+    i++;
     document.getElementById("right").innerHTML += `
-            <div class="card mt-4 mr-4">
+            <div class="card bg-white mt-4 mr-4 text-center">
+            <div class="card-header">
+            ${res[i].nb} articles
+            </div>
               <div class="card-body">
-                <h5 class="card-title center">${res[i+1].name}</h5>
+                <h5 class="card-title center supreme-black">${res[i].name}</h5>
               </div>
+            <a href="#"><div class="card-footer text-muted">
+              view
+            </div></a>
             </div>`;
     console.log(res[i])
     i++;
