@@ -9,7 +9,7 @@ window.addEventListener("load", function load(event) {
 
     let createNavButton = document.getElementById("itemListNavBtn");
     createNavButton.addEventListener("click", function() {
-        window.location.href = "/pages/item-list.html";
+        window.location.href = "/pages/main.html";
     });
 
     let createNavButton2 = document.getElementById("myCopNavBtn");

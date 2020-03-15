@@ -1,10 +1,25 @@
 window.addEventListener("load", function load(event) {
   mainPage();
   initialItemList();
+
+  
 });
 
-function mainPage() {
+function searchAllBtn(){
+  document.getElementsByName('btnViewCat').forEach(item => {
+    console.log(item)
+      item.addEventListener('click', event => {
+        clickCat(item.dataset.id);
+      })
+    })
+}
 
+function clickCat(id){
+  localStorage['cat-choice'] = id;
+  window.location.href = "/pages/item-list.html";
+}
+
+function mainPage() {
   document.getElementById("app").innerHTML = `
   <div class="row">
         <div id="left" class="col"></div>
@@ -47,11 +62,15 @@ function addItemInPage(res){
                 <h5 class="card-title center supreme-black">${res[i].name}</h5>
 
               </div>
-            <a href="#"><div class="card-footer text-muted">
+            <a data-id="${i}" name="btnViewCat"><div class="card-footer text-muted">
               view
             </div></a>
             </div>`;
+            
     i++;
+    if (i >= res.length){
+      searchAllBtn();
+      break;}
     document.getElementById("right").innerHTML += `
             <div class="card bg-white mt-4 mr-4 text-center">
             <div class="card-header">
@@ -60,11 +79,10 @@ function addItemInPage(res){
               <div class="card-body">
                 <h5 class="card-title center supreme-black">${res[i].name}</h5>
               </div>
-            <a href="#"><div class="card-footer text-muted">
+            <a data-id="${i}" name="btnViewCat"><div class="card-footer text-muted">
               view
             </div></a>
             </div>`;
-    console.log(res[i])
     i++;
   }
 }

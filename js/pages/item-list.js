@@ -1,17 +1,8 @@
 window.addEventListener("load", function load(event) {
-    reconnectFromKey();
-    let createButton = document.getElementById("launch");
-    createButton.addEventListener("click", function() {
-      launch();
-    });
-  
-    let createButton2 = document.getElementById("buyLicence");
-    createButton2.addEventListener("click", function() {
-      redirectToBuy();
-    });
+   itemListPage();
 });
 
-function mainPage() {
+function itemListPage() {
 
   document.getElementById("app").innerHTML = `
   <div class="row">
@@ -22,4 +13,23 @@ function mainPage() {
       
     </div>
   `;
+}
+
+function initialItemList(){
+  let xhr = new XMLHttpRequest();
+  let use = "item-cat";
+  xhr.open("POST", "http://cop-finder.com/api/api.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhr.send("key=" + localStorage["keyG"] + "&use=" + use);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
+      let res = JSON.parse(xhr.responseText);
+      if (res[0].status == "1") {
+        addItemInPage(res);
+      } else {
+        localStorage["keyG"] = null;
+        window.location.href="/popup.html"
+      }
+    }
+  };
 }
