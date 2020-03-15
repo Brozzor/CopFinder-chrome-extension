@@ -69,8 +69,7 @@ function reconnectFromKey() {
     if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
       let res = JSON.parse(xhr.responseText);
       if (res.status == "1") {
-        //mainPage();
-        window.location.href = "main.html";
+        window.location.href = "pages/main.html";
       } else {
         localStorage["keyG"] = null;
         window.location.href="popup.html"
@@ -96,8 +95,7 @@ function launch() {
         console.log(localStorage);
         notification("success", res.status_message);
         setTimeout(function() {
-          //mainPage();
-          window.location.href = "main.html";
+          window.location.href = "pages/main.html";
         }, 1000);
       } else {
         notification("danger", "Mail or token is invalid");

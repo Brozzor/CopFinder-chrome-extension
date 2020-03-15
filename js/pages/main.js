@@ -1,11 +1,6 @@
 window.addEventListener("load", function load(event) {
   mainPage();
   initialItemList();
-  let createButton = document.getElementById("logout");
-  createButton.addEventListener("click", function() {
-    localStorage["keyG"] = null;
-    window.location.href = "popup.html";
-  });
 });
 
 function mainPage() {
@@ -30,12 +25,11 @@ function initialItemList(){
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
       let res = JSON.parse(xhr.responseText);
-      
       if (res[0].status == "1") {
         addItemInPage(res);
       } else {
         localStorage["keyG"] = null;
-        window.location.href="popup.html"
+        window.location.href="/popup.html"
       }
     }
   };
