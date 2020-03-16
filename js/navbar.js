@@ -25,6 +25,7 @@ window.addEventListener("load", function load(event) {
     let createNavButton4 = document.getElementById("logoutNavBtn");
     createNavButton4.addEventListener("click", function() {
         localStorage["keyG"] = null;
+        localStorage['cat-choice'] = null;
         window.location.href = "/popup.html";
     });
     

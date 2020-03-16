@@ -62,7 +62,7 @@ function addItemInPage(res){
                 <h5 class="card-title center supreme-black">${res[i].name}</h5>
 
               </div>
-            <a data-id="${i}" name="btnViewCat"><div class="card-footer text-muted">
+            <a data-id="${res[i].id}" name="btnViewCat"><div class="card-footer text-muted">
               view
             </div></a>
             </div>`;
@@ -79,7 +79,7 @@ function addItemInPage(res){
               <div class="card-body">
                 <h5 class="card-title center supreme-black">${res[i].name}</h5>
               </div>
-            <a data-id="${i}" name="btnViewCat"><div class="card-footer text-muted">
+            <a data-id="${res[i].id}" name="btnViewCat"><div class="card-footer text-muted">
               view
             </div></a>
             </div>`;
