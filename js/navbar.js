@@ -29,4 +29,6 @@ window.addEventListener("load", function load(event) {
         window.location.href = "/popup.html";
     });
     
+    localStorage['lastPage'] = document.location.href.split("/")[3] + "/" + document.location.href.split("/")[4];
+
   });

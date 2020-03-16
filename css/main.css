@@ -64,6 +64,14 @@ body {
   border: none;
 }
 
+.btn-rounded {
+  border-radius: 10em!important;
+}
+
+.back-btn {
+  margin-bottom: -0.9rem!important;
+}
+
 .supreme-black red {
   color: #da2727 !important;
 }

@@ -1,6 +1,11 @@
 window.addEventListener("load", function load(event) {
    itemListPage();
    initialItemList();
+
+  let createButton = document.getElementById("backBtn");
+  createButton.addEventListener("click", function() {
+    window.location.href="/pages/main.html"
+  });
 });
 
 function searchAllBtn(){
@@ -16,6 +21,9 @@ function itemListPage() {
   document.getElementById("app").innerHTML = `
   <br><center><h1 id="title" class="supreme-white-h1"></h1></center>
   <hr class="hr-style"> 
+
+  <button id="backBtn" class="btn btn-elegant btn-sm ml-4 back-btn"><i class="fa fa-arrow-left"></i> back</button>
+
   <div class="row">
       
         <div id="left" class="col"></div>

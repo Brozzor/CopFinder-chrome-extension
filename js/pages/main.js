@@ -1,8 +1,6 @@
 window.addEventListener("load", function load(event) {
   mainPage();
   initialItemList();
-
-  
 });
 
 function searchAllBtn(){
