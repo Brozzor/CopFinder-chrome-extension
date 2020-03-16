@@ -7,7 +7,6 @@ window.addEventListener("load", function load(event) {
 
 function searchAllBtn(){
   document.getElementsByName('btnViewCat').forEach(item => {
-    console.log(item)
       item.addEventListener('click', event => {
         clickCat(item.dataset.id);
       })

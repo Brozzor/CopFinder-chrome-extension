@@ -5,7 +5,6 @@ window.addEventListener("load", function load(event) {
 
 function searchAllBtn(){
   document.getElementsByName('btnViewCat').forEach(item => {
-    console.log(item)
       item.addEventListener('click', event => {
         clickCat(item.dataset.id);
       })
@@ -39,7 +38,6 @@ function initialItemList(){
       let res = JSON.parse(xhr.responseText);
       if (res[0].status == "1") {
         addItemInPage(res);
-        console.log(res);
       } else {
         localStorage["keyG"] = null;
         window.location.href="/popup.html"
@@ -49,6 +47,7 @@ function initialItemList(){
 }
 
 function addItemInPage(res){
+  document.getElementById("title").innerHTML = res[0].catName;
   let i = 1;
   while(i < res.length){
     document.getElementById("left").innerHTML += `
