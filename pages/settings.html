@@ -125,9 +125,56 @@
       </div>
     </div>
     <!-- Card -->
-  </div>
-  </div>
 
+    <div class="col" style="position: relative;">
+      <!--card-->
+      <div class="card mb-3 center-block" style="max-width: 95%;">
+        <div class="row no-gutters">
+          <div class="col-md-6 ">
+            <div class="card-body">
+              <h5 class="card-title mb-3">Card Information</h5>
+              <hr>
+
+              <form id="card-form" action="" method="">
+                <div class="form-group row">
+                  <label class="col-sm-5 col-form-label">Number card</label>
+                  <div class="col-sm-7">
+                    <input type="text" id="inputName" name="number" class="form-control ">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="control-label col-sm-5">Expiry date</label>
+                  <div class="col-sm-7">
+                    <input type="text" id="inputMail" name="expiry" class="form-control ">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="control-label col-sm-5">CVC</label>
+                  <div class="col-sm-7">
+                    <input type="text" id="inputTel" name="cvc" class="form-control ">
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card-body">
+
+
+                <div class="card-wrapper"></div>
+
+              <div class="form-btn-cop-card">
+                <button id="selectToCop" class="btn supreme-btn btn-block float-right">Modify</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="/js/card.js"></script>
   <script src="/js/navbar.js"></script>
 </body>
 
