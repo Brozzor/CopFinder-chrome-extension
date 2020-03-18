@@ -81,5 +81,9 @@ function addItemInPage(res){
             </div></a>
             </div>`;
     i++;
+    if (i >= res.length) {
+      searchAllBtn();
+      break;
+    }
   }
 }

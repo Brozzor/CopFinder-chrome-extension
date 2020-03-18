@@ -69,7 +69,8 @@ function reconnectFromKey() {
     if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
       let res = JSON.parse(xhr.responseText);
       if (res.status == "1") {
-        window.location.href = "pages/main.html";
+       // window.location.href = "pages/main.html";
+       window.location.href = localStorage['lastPage'];
       } else {
         localStorage["keyG"] = null;
         window.location.href="popup.html"
