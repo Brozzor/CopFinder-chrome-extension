@@ -75,7 +75,7 @@
                   <div class="form-group row">
                     <label class="control-label col-sm-4">Country</label>
                     <div class="col-sm-8">
-                      <select id="inputCity" class="browser-default custom-select">
+                      <select id="inputCountry" class="browser-default custom-select">
                         <option selected>Open this select menu</option>
                         <option value="GB">UK</option>
                         <option value="NB">UK (N. IRELAND)</option>
@@ -117,7 +117,7 @@
                 </form>
               </div>
               <div class="form-btn-cop">
-                <button id="selectToCop" class="btn supreme-btn btn-block float-right">Modify</button>
+                <button id="addInformation" class="btn supreme-btn btn-block float-right">Add/Modify</button>
               </div>
             </div>
           </div>
@@ -139,19 +139,31 @@
                 <div class="form-group row">
                   <label class="col-sm-5 col-form-label">Number card</label>
                   <div class="col-sm-7">
-                    <input type="text" id="inputName" name="number" class="form-control ">
+                    <input type="text" id="inputNumber" name="number" class="form-control ">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label class="control-label col-sm-5">Expiry date</label>
                   <div class="col-sm-7">
-                    <input type="text" id="inputMail" name="expiry" class="form-control ">
+                    <input type="text" id="inputExpiry" name="expiry" class="form-control ">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label class="control-label col-sm-5">CVC</label>
                   <div class="col-sm-7">
-                    <input type="text" id="inputTel" name="cvc" class="form-control ">
+                    <input type="text" id="inputCvc" name="cvc" class="form-control ">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="control-label col-sm-5">Card Type</label>
+                  <div class="col-sm-7">
+                    <select id="inputCardType" class="browser-default custom-select">
+                      <option value="visa">Visa</option>
+                      <option value="american_express">American Express</option>
+                      <option value="master">Mastercard</option>
+                      <option value="solo">Solo</option>
+                      <option value="paypal">PayPal</option>
+                    </select>
                   </div>
                 </div>
 
@@ -165,7 +177,7 @@
                 <div class="card-wrapper"></div>
 
               <div class="form-btn-cop-card">
-                <button id="selectToCop" class="btn supreme-btn btn-block float-right">Modify</button>
+                <button id="addCard" class="btn supreme-btn btn-block float-right">Add/Modify</button>
               </div>
             </div>
           </div>

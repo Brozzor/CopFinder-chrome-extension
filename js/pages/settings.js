@@ -1,41 +1,65 @@
 window.addEventListener("load", function load(event) {
-    settingsPage();
+  readCardInfo();
+  readPersoInfo();
+    let createButton = document.getElementById("addInformation");
+    createButton.addEventListener("click", function() {
+      addInformation();
+    });
+
+    let createButton1 = document.getElementById("addCard");
+    createButton1.addEventListener("click", function() {
+      addCard();
+    });
+
   });
 
-function settingsPage() {
-    document.getElementById("appp").innerHTML = `
-    <br>
-    <center>
-      <h1 id="title" class="supreme-white-h1">Settings</h1>
-    </center>
-    
-    <div class="col" style="position: relative;">
-      <!--card-->
-      <div class="card mb-3 center-block" style="max-width: 95%;">
-          <div class="row no-gutters">
-            <div class="col-md-6">
-              <img src="" class="card-img img-item">
-            </div>
-            <div class="col-md-6">
-              <div class="card-body">
-                <h5 class="card-title">Settings item for cop</h5>
-                <p class="card-text">Size :</p>
-  
-                <p class="card-text">Shoe :</p>
-                <p class="card-text">Datetime :
-                <input type="datetime-local" class="form-control form-control-sm" id="datetimeData"  required>
-                </p>
+function addInformation(){
 
-                <div class="row no-gutters">
-                  <button id="redirectWebsiteSup" data-link="" class="btn btn-outline-grey btn-sm">View on supreme</button>
-                  <button id="selectToCop" class="btn btn-danger btn-sm">Select to cop</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      <!-- Card -->
-    </div>
-      
-      `;
+  let persoInfo = { 
+    "name": document.getElementById("inputName").value,
+    "mail": document.getElementById("inputMail").value,
+    "tel": document.getElementById("inputTel").value,
+    "city": document.getElementById("inputCity").value,
+    "postcode": document.getElementById("inputPostcode").value,
+    "country": document.getElementById("inputCountry").value
+ };
+ localStorage['persoInfo'] = JSON.stringify(persoInfo);
+
+}
+
+function addCard(){
+
+  let cardInfo = { 
+    "number": document.getElementById("inputNumber").value,
+    "expiry": document.getElementById("inputExpiry").value,
+    "cvc": document.getElementById("inputCvc").value,
+    "type": document.getElementById("inputCardType").value
+ };
+ localStorage['cardInfo'] = JSON.stringify(cardInfo);
+}
+
+function readCardInfo(){
+  if (localStorage['cardInfo'] != null || localStorage['cardInfo'] != undefined)
+  {
+    let infoCard = JSON.parse(localStorage['cardInfo'])
+    document.getElementById("inputNumber").value = infoCard.number;
+    document.getElementById("inputExpiry").value = infoCard.expiry;
+    document.getElementById("inputCvc").value = infoCard.cvc;
+    document.getElementById("inputCardType").value = infoCard.type;
+    }
+
+}
+
+function readPersoInfo(){
+  if (localStorage['persoInfo'] != null || localStorage['persoInfo'] != undefined)
+  {
+    let infoPerso = JSON.parse(localStorage['persoInfo']);
+    document.getElementById("inputName").value = infoPerso.name;
+    document.getElementById("inputMail").value = infoPerso.mail;
+    document.getElementById("inputTel").value = infoPerso.tel;
+    document.getElementById("inputCity").value = infoPerso.city;
+    document.getElementById("inputPostcode").value = infoPerso.postcode;
+    document.getElementById("inputCountry").value = infoPerso.country;
   }
+  
+}
