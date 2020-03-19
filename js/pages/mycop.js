@@ -34,11 +34,43 @@ function taskPanel(){
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-4">Email</label>
-                  <div class="col-sm-8">
-                    <input type="text" id="inputMail" class="form-control ">
+                  <label class="control-label col-sm-2">Shoe:</label>
+                  <div class="col-sm-4">
+
+                <select id="shoeData" class="form-control form-control-sm">
+                  <option value="any" selected="">Open this select menu if item need shoe size</option>
+                  <option value="8">US 8 - UK 7 - EUR 41</option>
+                  <option value="8.5">US 8.5 - UK 7.5 - EUR 42</option>
+                  <option value="9">US 9 - UK 8 - EUR 42.5</option>
+                  <option value="9.5">US 9.5 - UK 8.5 - EUR 43</option>
+                  <option value="10">US 10 - UK 9 - EUR 44</option>
+                  <option value="10.5">US 10,5 - UK 9,5 - EUR 44,5</option>
+                  <option value="11">US 11 - UK 10 - EUR 45</option>
+                  <option value="11.5">US 11,5 - UK 10,5 - EUR 45,5</option>
+                  <option value="12">US 12 - UK 11 - EUR 46</option>
+                </select>
+
+                  </div>
+
+                  <label class="control-label col-sm-2">Hat:</label>
+                  <div class="col-sm-4">
+
+                <select id="shoeData" class="form-control form-control-sm">
+                  <option value="any" selected="">Open this select menu if item need shoe size</option>
+                  <option value="8">US 8 - UK 7 - EUR 41</option>
+                  <option value="8.5">US 8.5 - UK 7.5 - EUR 42</option>
+                  <option value="9">US 9 - UK 8 - EUR 42.5</option>
+                  <option value="9.5">US 9.5 - UK 8.5 - EUR 43</option>
+                  <option value="10">US 10 - UK 9 - EUR 44</option>
+                  <option value="10.5">US 10,5 - UK 9,5 - EUR 44,5</option>
+                  <option value="11">US 11 - UK 10 - EUR 45</option>
+                  <option value="11.5">US 11,5 - UK 10,5 - EUR 45,5</option>
+                  <option value="12">US 12 - UK 11 - EUR 46</option>
+                </select>
+
                   </div>
                 </div>
+                <hr>
                 <div class="form-group row">
                   <label class="control-label col-sm-4">Tel</label>
                   <div class="col-sm-8">
@@ -52,7 +84,7 @@ function taskPanel(){
                   </div>
                 </div>
 
-              </divssssssssssssssssssss>
+              </div>
             </div>
           </div>
         </div>
