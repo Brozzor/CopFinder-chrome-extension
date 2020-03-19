@@ -21,7 +21,8 @@ function addInformation(){
     "tel": document.getElementById("inputTel").value,
     "city": document.getElementById("inputCity").value,
     "postcode": document.getElementById("inputPostcode").value,
-    "country": document.getElementById("inputCountry").value
+    "country": document.getElementById("inputCountry").value,
+    "address": document.getElementById("inputAddress").value
  };
  localStorage['persoInfo'] = JSON.stringify(persoInfo);
 
@@ -60,6 +61,7 @@ function readPersoInfo(){
     document.getElementById("inputCity").value = infoPerso.city;
     document.getElementById("inputPostcode").value = infoPerso.postcode;
     document.getElementById("inputCountry").value = infoPerso.country;
+    document.getElementById("inputAddress").value = infoPerso.address;
   }
   
 }
