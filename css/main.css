@@ -69,6 +69,16 @@ body {
   color: white!important;  
 }
 
+.supreme-badge {
+  color: #fff !important;
+  background-color: #da2727 !important;
+}
+
+.cat-task-name {
+  margin-left: 5rem!important;
+  margin-right: 5rem!important;
+}
+
 .form-btn-cop {
   margin-top: 1.9rem!important;
 }
