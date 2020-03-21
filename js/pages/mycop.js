@@ -35,7 +35,7 @@ function taskPanel() {
                   <label class="control-label col-sm-2">Shoe:</label>
                   <div class="col-sm-4">
 
-                <select id="shoeData" class="form-control form-control-sm">
+                <select id="hatData" class="form-control form-control-sm">
                   <option value="any" selected="">Open this select menu</option>
                   <option value="8">US 8 - UK 7 - EUR 41</option>
                   <option value="8.5">US 8.5 - UK 7.5 - EUR 42</option>
@@ -72,32 +72,32 @@ function taskPanel() {
                 <div class="center cat-task-name"><p id="catList"></p></div>
                 <hr>
                 <div class="form-group">
-                  <button class="btn btn-block" data-selected="false" name="keywordFinderBtn">KEYWORD FINDER</button>
+                  <button class="btn btn-block" data-selected="false" id="keywordFinderBtn" name="keywordFinderBtn">KEYWORD FINDER</button>
                   <div id="keywordFinder" hidden>
                     <center><button name="keywordFinderNewKeyBtn" class="btn btn-success btn-sm">Add New keyword</button></center>
                     <div class="row">
                     <div id="inputkf" class="col-sm-12">
-                    <input type="text" data-id="1" name="keywordFinderInput" placeholder="Item Name / Color" class="form-control mb-1">
+                    <input type="text" data-id="1" data-selected="true" name="keywordFinderInput" placeholder="Item Name / Color" class="form-control mb-1">
                     </div>
                     </div>
                     </div>
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-block" data-selected="false" name="timerBtn">TIMER</button>
+                  <button class="btn btn-block" data-selected="false" id="timerBtn" name="timerBtn">TIMER</button>
                   <div id="timer" hidden>
                     <div class="row">
                     <div class="col-sm-12">
-                    <input type="datetime-local" name="timerInput" placeholder="Set time" class="form-control mb-1">
+                    <input type="datetime-local" id="timerInput" name="timerInput" placeholder="Set time" class="form-control mb-1">
                     </div>
                     </div>
                     </div>
                   </div>
                 <div class="form-group">
-                  <button class="btn btn-block" data-selected="false" name="checkoutDelayBtn">CHECKOUT DELAY</button>
+                  <button class="btn btn-block" data-selected="false" id="checkoutDelayBtn" name="checkoutDelayBtn">CHECKOUT DELAY</button>
                   <div id="checkoutDelay" hidden>
                     <div class="row">
                     <div class="col-sm-12">
-                    <input type="text" name="checkoutDelayInput" value="4000" placeholder="Time in milliseconds" class="form-control mb-1">
+                    <input type="text" name="checkoutDelayInput" id="checkoutDelayInput" value="4000" placeholder="Time in milliseconds" class="form-control mb-1">
                     </div>
                     </div>
                     </div>
@@ -105,22 +105,28 @@ function taskPanel() {
                   </div>
                 <div class="form-group row">
                   <div class="col-sm-4">
-                    <button class="btn btn-block" data-selected="false" name="anySizeBtn">ANY SIZE</button>
+                    <button class="btn btn-block" data-selected="false" data-id="1" id="anySizeBtn" name="aacBtn">ANY SIZE</button>
                   </div>
                   <div class="col-sm-4">
-                    <button class="btn btn-block" data-selected="false" name="addToCartBtn">ADD TO CART</button>
+                    <button class="btn btn-block" data-selected="false" data-id="2" id="addToCartBtn" name="aacBtn">ADD TO CART</button>
                   </div>
                   <div class="col-sm-4">
-                    <button class="btn btn-block" data-selected="false" name="checkoutBtn">CHECKOUT</button>
+                    <button class="btn btn-block" data-selected="false" data-id="3" id="checkoutBtn" name="aacBtn">CHECKOUT</button>
                   </div>
                 </div>
                 <div class="form-group row">
                   <div class="col-sm-6">
-                    <button class="btn btn-block" data-selected="false" name="disImgBtn">DISPLAY IMAGES: ON</button>
+                    <button class="btn btn-block" data-selected="false" id="disImgONBtn" name="disImgBtn">DISPLAY IMAGES: ON</button>
                   </div>
                   <div class="col-sm-6">
                     <button class="btn btn-block supreme-btn" data-selected="true" name="disImgBtn">DISPLAY IMAGES: OFF</button>
                   </div>
+                </div>
+                <hr>
+                <div class="row">
+                <div class="col-sm-12 mt-1">
+                  <button class="btn btn-block supreme-btn" id="saveTaskBtn" name="saveTaskBtn">SAVE</button>
+                </div>
                 </div>
 
               </div>
@@ -169,17 +175,19 @@ function SearchBtnTaskPanel() {
           }
       
             break;
+
         case "keywordFinderNewKeyBtn":
                 let id = document.getElementsByName('keywordFinderInput').length + 1;
                 document.getElementById('inputkf').innerHTML += `
                 <div id="kfDiv${id}" class="row">
-                  <div class="col-sm-10"><input type="text" data-id="${id}" name="keywordFinderInput" placeholder="Item Name / Color" class="form-control"></div>
+                  <div class="col-sm-10"><input type="text" data-selected="true" data-id="${id}" name="keywordFinderInput" placeholder="Item Name / Color" class="form-control"></div>
                   <div class="col-sm-2"><button name="keywordFinderDel" data-id="${id}" class="btn btn-sm">❌</button></div>
                 </div>
                   `;
                   keywordFinderDel();
 
             break;
+
         case "timerBtn":
 
           if (item.dataset.selected == "false"){
@@ -193,6 +201,7 @@ function SearchBtnTaskPanel() {
           }
       
             break;
+
         case "checkoutDelayBtn":
 
           if (item.dataset.selected == "false"){
@@ -206,6 +215,62 @@ function SearchBtnTaskPanel() {
           }
       
             break;
+
+        case "aacBtn":
+            
+            if (
+              item.dataset.id == item.dataset.id &&
+              item.className != "btn btn-block supreme-btn"
+            ) {
+              item.className = "btn btn-block supreme-btn";
+              item.dataset.selected = true;
+            } else {
+              item.className = "btn btn-block";
+              item.dataset.selected = false;
+            }
+      
+            break;
+        case "disImgBtn":
+            
+          let disImgBtn = document.getElementsByName("disImgBtn");
+          let j = 0;
+          while (j < disImgBtn.length) {
+            if (
+              disImgBtn[j].dataset.id == item.dataset.id &&
+              disImgBtn[j].className != "btn btn-block supreme-btn"
+            ) {
+              disImgBtn[j].className = "btn btn-block supreme-btn";
+              disImgBtn[j].dataset.selected = true;
+            } else {
+              disImgBtn[j].className = "btn btn-block";
+              disImgBtn[j].dataset.selected = false;
+            }
+            j++;
+          }
+      
+            break;
+        case "saveTaskBtn":
+          
+          let newTask = {
+            "shoeSize": document.getElementById('shoeData').value,
+            "hatSize": document.getElementById('hatData').value,
+            "size": findEveryValue("sizeBtn"),
+            "cat": findEveryValue("catBtn"),
+            "keywordFinder": findEveryValue("keywordFinderInput"),
+            "timer": document.getElementById('timerInput').value,
+            "checkoutDelay": document.getElementById('checkoutDelayInput').value,
+            "anySize": document.getElementById('anySizeBtn').dataset.selected,
+            "addToCart": document.getElementById('addToCartBtn').dataset.selected,
+            "checkout": document.getElementById('checkoutBtn').dataset.selected,
+            "stateKeywordFinderBtn": document.getElementById('checkoutBtn').dataset.selected,
+            "stateTimerBtn": document.getElementById('timerBtn').dataset.selected,
+            "stateCheckoutBtn": document.getElementById('checkoutBtn').dataset.selected,
+            "disImgONBtn": document.getElementById('disImgONBtn').dataset.selected
+          }
+            addNewTask(newTask);
+          break;
+        
+            
         default:
           break;
       }
@@ -220,6 +285,28 @@ function keywordFinderDel(){
     });
   });
 
+}
+function addNewTask(newTask){
+
+}
+
+function findEveryValue(name) {
+  let findValue = [];
+  let k = 0;
+  findItem = document.getElementsByName(name);
+  while (k < findItem.length) {
+    if (findItem[k].dataset.selected == "true")
+    {
+      if (findItem[k].nodeName == "BUTTON" || findItem[k].nodeName == "A"){
+        findValue.push(findItem[k].innerText);
+      }else if (findItem[k].nodeName == "INPUT"){
+        findValue.push(findItem[k].value);
+      }
+      
+    }
+    k++;
+  }
+    return findValue;
 }
 
 function requestApi(use, argv, callback) {
