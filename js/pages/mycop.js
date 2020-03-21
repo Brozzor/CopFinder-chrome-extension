@@ -178,12 +178,6 @@ function SearchBtnTaskPanel() {
 
         case "keywordFinderNewKeyBtn":
                 let id = document.getElementsByName('keywordFinderInput').length + 1;
-                /*document.getElementById('inputkf').innerHTML += `
-                <div id="kfDiv${id}" class="row">
-                  <div class="col-sm-10"><input type="text" data-selected="true" data-id="${id}" name="keywordFinderInput" placeholder="Item Name / Color" class="form-control"></div>
-                  <div class="col-sm-2"><button name="keywordFinderDel" data-id="${id}" class="btn btn-sm">❌</button></div>
-                </div>
-                  `;*/
                   let element = document.createElement("div")
                   let container = document.getElementById('inputkf');
                   element.id = `kfDiv${id}`
