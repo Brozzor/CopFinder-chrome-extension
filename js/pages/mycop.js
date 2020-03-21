@@ -84,10 +84,25 @@ function taskPanel() {
                 </div>
                 <div class="form-group">
                   <button class="btn btn-block" data-selected="false" name="timerBtn">TIMER</button>
-                </div>
+                  <div id="timer" hidden>
+                    <div class="row">
+                    <div class="col-sm-12">
+                    <input type="datetime-local" name="timerInput" placeholder="Set time" class="form-control mb-1">
+                    </div>
+                    </div>
+                    </div>
+                  </div>
                 <div class="form-group">
                   <button class="btn btn-block" data-selected="false" name="checkoutDelayBtn">CHECKOUT DELAY</button>
-                </div>
+                  <div id="checkoutDelay" hidden>
+                    <div class="row">
+                    <div class="col-sm-12">
+                    <input type="text" name="checkoutDelayInput" value="4000" placeholder="Time in milliseconds" class="form-control mb-1">
+                    </div>
+                    </div>
+                    </div>
+                  </div>
+                  </div>
                 <div class="form-group row">
                   <div class="col-sm-4">
                     <button class="btn btn-block" data-selected="false" name="anySizeBtn">ANY SIZE</button>
@@ -165,7 +180,32 @@ function SearchBtnTaskPanel() {
                   keywordFinderDel();
 
             break;
+        case "timerBtn":
 
+          if (item.dataset.selected == "false"){
+            item.dataset.selected = true;
+            item.className = 'btn btn-block supreme-btn';
+            document.getElementById('timer').hidden = false;
+          }else{
+            item.dataset.selected = false;
+            item.className = 'btn btn-block';
+            document.getElementById('timer').hidden = true;
+          }
+      
+            break;
+        case "checkoutDelayBtn":
+
+          if (item.dataset.selected == "false"){
+            item.dataset.selected = true;
+            item.className = 'btn btn-block supreme-btn';
+            document.getElementById('checkoutDelay').hidden = false;
+          }else{
+            item.dataset.selected = false;
+            item.className = 'btn btn-block';
+            document.getElementById('checkoutDelay').hidden = true;
+          }
+      
+            break;
         default:
           break;
       }
