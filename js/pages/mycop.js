@@ -2,19 +2,25 @@ window.addEventListener("load", function load(event) {
   let createButton = document.getElementById("addTaskBtn");
   createButton.addEventListener("click", function() {
     if (taskPanelif == false) {
+      document.getElementById("taskAddPanel").hidden = false;
       taskPanel();
     } else {
       taskPanelif = false;
-      document.getElementById("taskAddPanel").innerHTML = null;
+      document.getElementById("taskAddPanel").hidden = true;
       createButton.innerText = "ADD TASK";
     }
   });
 });
 let taskPanelif = false;
+let nbOpen = 0;
 
 function taskPanel() {
   taskPanelif = true;
   document.getElementById("addTaskBtn").innerText = "CLOSE TASK";
+  if (nbOpen == 1) {
+    return false;
+  }
+  nbOpen++;
   document.getElementById("taskAddPanel").innerHTML = `
     <div class="card mb-3 center-block mt-3" style="max-width: 95%;">
         <div class="row no-gutters">
@@ -35,7 +41,7 @@ function taskPanel() {
                   <label class="control-label col-sm-2">Shoe:</label>
                   <div class="col-sm-4">
 
-                <select id="hatData" class="form-control form-control-sm">
+                <select id="shoeData" class="form-control form-control-sm">
                   <option value="any" selected="">Open this select menu</option>
                   <option value="8">US 8 - UK 7 - EUR 41</option>
                   <option value="8.5">US 8.5 - UK 7.5 - EUR 42</option>
@@ -53,7 +59,7 @@ function taskPanel() {
                   <label class="control-label col-sm-2">Hat:</label>
                   <div class="col-sm-4">
 
-                <select id="shoeData" class="form-control form-control-sm">
+                <select id="hatData" class="form-control form-control-sm">
                   <option value="any" selected="">Open this select menu</option>
                   <option value="8">US 8 - UK 7 - EUR 41</option>
                   <option value="8.5">US 8.5 - UK 7.5 - EUR 42</option>
@@ -127,6 +133,7 @@ function taskPanel() {
                 <div class="col-sm-12 mt-1">
                   <button class="btn btn-block supreme-btn" id="saveTaskBtn" name="saveTaskBtn">SAVE</button>
                 </div>
+                <div class="col-sm-12 mt-2 center" id="notificationForSave"></div>
                 </div>
 
               </div>
@@ -140,18 +147,14 @@ function taskPanel() {
 }
 
 function SearchBtnTaskPanel() {
-  document.getElementsByTagName('button').forEach(item => {
+  document.getElementsByTagName("button").forEach(item => {
     item.addEventListener("click", event => {
       switch (item.name) {
-
         case "sizeBtn":
           let allBtn = document.getElementsByName("sizeBtn");
           let i = 0;
           while (i < allBtn.length) {
-            if (
-              allBtn[i].dataset.id == item.dataset.id &&
-              allBtn[i].className != "btn btn-sm supreme-btn"
-            ) {
+            if (allBtn[i].dataset.id == item.dataset.id && allBtn[i].className != "btn btn-sm supreme-btn") {
               allBtn[i].className = "btn btn-sm supreme-btn";
               allBtn[i].dataset.selected = true;
             } else {
@@ -163,84 +166,73 @@ function SearchBtnTaskPanel() {
           break;
 
         case "keywordFinderBtn":
-
-          if (item.dataset.selected == "false"){
+          if (item.dataset.selected == "false") {
             item.dataset.selected = true;
-            item.className = 'btn btn-block supreme-btn';
-            document.getElementById('keywordFinder').hidden = false;
-          }else{
+            item.className = "btn btn-block supreme-btn";
+            document.getElementById("keywordFinder").hidden = false;
+          } else {
             item.dataset.selected = false;
-            item.className = 'btn btn-block';
-            document.getElementById('keywordFinder').hidden = true;
+            item.className = "btn btn-block";
+            document.getElementById("keywordFinder").hidden = true;
           }
-      
-            break;
+
+          break;
 
         case "keywordFinderNewKeyBtn":
-                let id = document.getElementsByName('keywordFinderInput').length + 1;
-                  let element = document.createElement("div")
-                  let container = document.getElementById('inputkf');
-                  element.id = `kfDiv${id}`
-                  element.classList.add("row")
-                  element.innerHTML = `
+          let id = document.getElementsByName("keywordFinderInput").length + 1;
+          let element = document.createElement("div");
+          let container = document.getElementById("inputkf");
+          element.id = `kfDiv${id}`;
+          element.classList.add("row");
+          element.innerHTML = `
                   <div class="col-sm-10"><input type="text" data-selected="true" data-id="${id}" name="keywordFinderInput" placeholder="Item Name / Color" class="form-control"></div>
-                  <div class="col-sm-2"><button name="keywordFinderDel" data-id="${id}" class="btn btn-sm">❌</button></div>`
-                  container.appendChild(element)
-                  keywordFinderDel();
+                  <div class="col-sm-2"><button name="keywordFinderDel" data-id="${id}" class="btn btn-sm">❌</button></div>`;
+          container.appendChild(element);
+          keywordFinderDel();
 
-            break;
+          break;
 
         case "timerBtn":
-
-          if (item.dataset.selected == "false"){
+          if (item.dataset.selected == "false") {
             item.dataset.selected = true;
-            item.className = 'btn btn-block supreme-btn';
-            document.getElementById('timer').hidden = false;
-          }else{
+            item.className = "btn btn-block supreme-btn";
+            document.getElementById("timer").hidden = false;
+          } else {
             item.dataset.selected = false;
-            item.className = 'btn btn-block';
-            document.getElementById('timer').hidden = true;
+            item.className = "btn btn-block";
+            document.getElementById("timer").hidden = true;
           }
-      
-            break;
+
+          break;
 
         case "checkoutDelayBtn":
-
-          if (item.dataset.selected == "false"){
+          if (item.dataset.selected == "false") {
             item.dataset.selected = true;
-            item.className = 'btn btn-block supreme-btn';
-            document.getElementById('checkoutDelay').hidden = false;
-          }else{
+            item.className = "btn btn-block supreme-btn";
+            document.getElementById("checkoutDelay").hidden = false;
+          } else {
             item.dataset.selected = false;
-            item.className = 'btn btn-block';
-            document.getElementById('checkoutDelay').hidden = true;
+            item.className = "btn btn-block";
+            document.getElementById("checkoutDelay").hidden = true;
           }
-      
-            break;
+
+          break;
 
         case "aacBtn":
-            
-            if (
-              item.dataset.id == item.dataset.id &&
-              item.className != "btn btn-block supreme-btn"
-            ) {
-              item.className = "btn btn-block supreme-btn";
-              item.dataset.selected = true;
-            } else {
-              item.className = "btn btn-block";
-              item.dataset.selected = false;
-            }
-      
-            break;
+          if (item.dataset.id == item.dataset.id && item.className != "btn btn-block supreme-btn") {
+            item.className = "btn btn-block supreme-btn";
+            item.dataset.selected = true;
+          } else {
+            item.className = "btn btn-block";
+            item.dataset.selected = false;
+          }
+
+          break;
         case "disImgBtn":
-            
           let disImgBtn = document.getElementsByName("disImgBtn");
           let j = 0;
           while (j < disImgBtn.length) {
-            if (
-              disImgBtn[j].dataset.id == item.dataset.id &&
-              disImgBtn[j].className != "btn btn-block supreme-btn"
-            ) {
+            if (disImgBtn[j].dataset.id == item.dataset.id && disImgBtn[j].className != "btn btn-block supreme-btn") {
               disImgBtn[j].className = "btn btn-block supreme-btn";
               disImgBtn[j].dataset.selected = true;
             } else {
@@ -249,30 +241,28 @@ function SearchBtnTaskPanel() {
             }
             j++;
           }
-      
-            break;
-        case "saveTaskBtn":
-          
-          let newTask = {
-            "shoeSize": document.getElementById('shoeData').value,
-            "hatSize": document.getElementById('hatData').value,
-            "size": findEveryValue("sizeBtn"),
-            "cat": findEveryValue("catBtn"),
-            "keywordFinder": findEveryValue("keywordFinderInput"),
-            "timer": document.getElementById('timerInput').value,
-            "checkoutDelay": document.getElementById('checkoutDelayInput').value,
-            "anySize": document.getElementById('anySizeBtn').dataset.selected,
-            "addToCart": document.getElementById('addToCartBtn').dataset.selected,
-            "checkout": document.getElementById('checkoutBtn').dataset.selected,
-            "stateKeywordFinderBtn": document.getElementById('checkoutBtn').dataset.selected,
-            "stateTimerBtn": document.getElementById('timerBtn').dataset.selected,
-            "stateCheckoutBtn": document.getElementById('checkoutBtn').dataset.selected,
-            "disImgONBtn": document.getElementById('disImgONBtn').dataset.selected
-          }
-            addNewTask(newTask);
+
           break;
-        
-            
+        case "saveTaskBtn":
+          let newTask = {
+            shoeSize: document.getElementById("shoeData").value,
+            hatSize: document.getElementById("hatData").value,
+            size: findEveryValue("sizeBtn"),
+            cat: findEveryValue("catBtn"),
+            keywordFinder: findEveryValue("keywordFinderInput"),
+            timer: document.getElementById("timerInput").value,
+            checkoutDelay: document.getElementById("checkoutDelayInput").value,
+            anySize: document.getElementById("anySizeBtn").dataset.selected,
+            addToCart: document.getElementById("addToCartBtn").dataset.selected,
+            checkout: document.getElementById("checkoutBtn").dataset.selected,
+            stateKeywordFinderBtn: document.getElementById("keywordFinderBtn").dataset.selected,
+            stateTimerBtn: document.getElementById("timerBtn").dataset.selected,
+            stateCheckoutBtn: document.getElementById("checkoutBtn").dataset.selected,
+            disImgONBtn: document.getElementById("disImgONBtn").dataset.selected
+          };
+          addNewTask(newTask);
+          break;
+
         default:
           break;
       }
@@ -280,16 +270,54 @@ function SearchBtnTaskPanel() {
   });
 }
 
-function keywordFinderDel(){
-  document.getElementsByName('keywordFinderDel').forEach(item => {
+function keywordFinderDel() {
+  document.getElementsByName("keywordFinderDel").forEach(item => {
     item.addEventListener("click", event => {
       document.getElementById(`kfDiv${item.dataset.id}`).remove();
     });
   });
-
 }
-function addNewTask(newTask){
-  console.log(newTask)
+
+function addNewTask(constTask) {
+  let taskForInsert = constTask;
+
+  if (taskForInsert.size.length == 0) {
+    taskForInsert.size = "any";
+  } else {
+    taskForInsert.size = taskForInsert.size[0];
+  }
+
+  if (taskForInsert.timer == "" || taskForInsert.stateTimerBtn == "false") {
+    taskForInsert.timer = null;
+  }
+
+  if (taskForInsert.checkoutDelay == "" || taskForInsert.stateCheckoutBtn == "false") {
+    taskForInsert.checkoutDelay = null;
+  }
+
+  if (taskForInsert.stateKeywordFinderBtn == "false" || taskForInsert.keywordFinder[0].length == 0) {
+    notification("danger", "You must choose keyword");
+    return false;
+  }
+
+  if (taskForInsert.cat.length == 0) {
+    notification("danger", "You must choose categories for keywords selected");
+    return false;
+  }
+
+  if (localStorage["AllTasks"] == undefined || localStorage["AllTasks"] == "") {
+    localStorage["AllTasks"] = "[" + JSON.stringify(taskForInsert) + "]";
+  } else {
+    let lastList = localStorage["AllTasks"].substr(0, localStorage["AllTasks"].length - 1);
+    localStorage["AllTasks"] = lastList + "," + JSON.stringify(taskForInsert) + "]";
+  }
+  taskPanelif = false;
+  notification("success", "You have added a new task");
+  setTimeout(function() {
+      document.getElementById("taskAddPanel").hidden = true;
+      document.getElementById("addTaskBtn").innerText = "ADD TASK";
+  }, 3000);
+  
 }
 
 function findEveryValue(name) {
@@ -297,18 +325,34 @@ function findEveryValue(name) {
   let k = 0;
   findItem = document.getElementsByName(name);
   while (k < findItem.length) {
-    if (findItem[k].dataset.selected == "true")
-    {
-      if (findItem[k].nodeName == "BUTTON" || findItem[k].nodeName == "A"){
+    if (findItem[k].dataset.selected == "true") {
+      if (findItem[k].nodeName == "BUTTON" || findItem[k].nodeName == "A") {
         findValue.push(findItem[k].innerText);
-      }else if (findItem[k].nodeName == "INPUT"){
+      } else if (findItem[k].nodeName == "INPUT") {
         findValue.push(findItem[k].value);
       }
-      
     }
     k++;
   }
-    return findValue;
+  return findValue;
+}
+
+function notification(type, msg) {
+  document.getElementById("saveTaskBtn").disabled = true;
+  document.getElementById("notificationForSave").innerHTML = `
+<div class="alert alert-${type}" role="alert">
+  ${msg}
+</div>`;
+setTimeout(function() {
+  delNotification();
+}, 3000);
+}
+
+function delNotification() {
+  document.getElementById("notificationForSave").innerHTML = null;
+  if (document.getElementById("saveTaskBtn").disabled == true) {
+    document.getElementById("saveTaskBtn").disabled = false;
+  }
 }
 
 function requestApi(use, argv, callback) {
@@ -328,17 +372,12 @@ function requestApi(use, argv, callback) {
 
 function displayCatList(res) {
   for (let i = 1; i < res.length; i++) {
-    document.getElementById(
-      "catList"
-    ).innerHTML += `<a class="ml-1 mr-1" name="catBtn" data-selected="false" data-id="${res[i].id}">${res[i].name} </a>`;
+    document.getElementById("catList").innerHTML += `<a class="ml-1 mr-1" name="catBtn" data-selected="false" data-id="${res[i].id}">${res[i].name} </a>`;
   }
 
   document.getElementsByName("catBtn").forEach(item => {
     item.addEventListener("click", event => {
-      if (
-        item.dataset.id == item.dataset.id &&
-        item.className != "badge badge-danger ml-1 mr-1"
-      ) {
+      if (item.dataset.id == item.dataset.id && item.className != "badge badge-danger ml-1 mr-1") {
         item.className = "badge badge-danger ml-1 mr-1";
         item.dataset.selected = true;
       } else {
