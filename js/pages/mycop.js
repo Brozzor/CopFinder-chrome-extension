@@ -11,6 +11,35 @@ window.addEventListener("load", function load(event) {
       createButton.innerText = "ADD TASK";
     }
   });
+
+
+  document.getElementsByName("actionBtn").forEach(item => {
+    item.addEventListener("click", event => {
+      
+         AllTasksParse = JSON.parse(localStorage.AllTasks); 
+        switch (item.dataset.type) {
+          case "play":
+              AllTasksParse[item.dataset.id].status = 'On Play';
+              AllTasksParse = JSON.stringify(AllTasksParse);
+              localStorage.AllTasks = AllTasksParse;
+            break;
+          case "edit":
+
+              
+            break;
+          case "delete":
+              AllTasksParse.splice(item.dataset.id, 1);
+              AllTasksParse = JSON.stringify(AllTasksParse);
+              localStorage.AllTasks = AllTasksParse;
+              window.location.href="/pages/mycop.html";
+            break;
+        
+          default:
+            break;
+        }
+    })
+  });
+
 });
 let taskPanelif = false;
 let nbOpen = 0;
@@ -319,7 +348,7 @@ function addNewTask(constTask) {
   setTimeout(function() {
       document.getElementById("taskAddPanel").hidden = true;
       document.getElementById("addTaskBtn").innerText = "ADD TASK";
-      displayAllTasks();
+      window.location.href="/pages/mycop.html";
   }, 3000);
   
 }
@@ -393,8 +422,8 @@ function displayCatList(res) {
 }
 
 function displayAllTasks(){
-  if (localStorage.AllTasks == "" || localStorage.AllTasks == undefined ){
-    //displayTask('0');
+  if (localStorage.AllTasks == "" || localStorage.AllTasks == "undefined" || localStorage.AllTasks == undefined ){
+    displayTask('0');
     return false;
   }
   AllTasks = JSON.parse(localStorage.AllTasks);
@@ -407,21 +436,26 @@ function displayAllTasks(){
 
 function displayTask(task, nb){
   if (task == 0){
-    document.getElementById("AllTasks").innerHTML = `
-    <p>You don't have tasks</p>
+    document.getElementById("errorTask").innerHTML = `
+    <center><p>You don't have tasks</p></center>
     `;
+    return false;
   }
   let stateTd;
   if (task.status == "Successfully Checked Out"){
+    statePlayBtn = 'play';
     stateTd = `<span class="badge badge-success state-badge"><i class="fa fa-circle"></i> Successfully Checked Out</span>`;
   }else if(task.status == "On Pause"){
+    statePlayBtn = 'play';
     stateTd = `<span class="badge badge-warning state-badge"><i class="fa fa-circle"></i> Currently inactive</span>`;
   }else if(task.status == "On Play"){
+    statePlayBtn = 'pause';
     stateTd = `<span class="badge badge-warning state-badge"><i class="fa fa-circle"></i> Currently active</span>`;
   }else{
+    statePlayBtn = 'play';
     stateTd = `<span class="badge badge-danger state-badge"><i class="fa fa-circle"></i> ${task.status}</span>`;
   }
-  console.log(task)
+
   let element = document.createElement("tr");
   let container = document.getElementById("AllTasks");
   element.dataset.id = nb;
@@ -432,10 +466,14 @@ function displayTask(task, nb){
   <td>Hat Size: ${task.hatSize} <br> Shoe Size: ${task.shoeSize}<br>Size: ${task.size}</td>
   <td>None</td>
   <td>${stateTd}</td>
-  <td><h5><a id="play" data-id="${nb}" class="mr-2" style="color: #00c851;"><i class="fa fa-play" aria-hidden="true"></i></a> 
-    <a id="edit" data-id="${nb}" style="color: #ffc107;"><i class="fa fa-pencil" aria-hidden="true"></i></a> 
-    <a id="delete" data-id="${nb}" class="ml-2" style="color: #da2727;"><i class="fa fa-trash" aria-hidden="true"></i></a>
+  <td><h5><a data-type="play" name="actionBtn" data-id="${nb}" class="mr-2" style="color: #00c851;"><i class="fa fa-${statePlayBtn}" aria-hidden="true"></i></a> 
+    <a data-type="edit" name="actionBtn" data-id="${nb}" style="color: #ffc107;"><i class="fa fa-pencil" aria-hidden="true"></i></a> 
+    <a data-type="delete" name="actionBtn" data-id="${nb}" class="ml-2" style="color: #da2727;"><i class="fa fa-trash" aria-hidden="true"></i></a>
   </h5></td>
 `;
   container.appendChild(element);
+}
+
+function deleteTask(){
+
 }
