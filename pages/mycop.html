@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/font-awesome.min.css" />
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/pages/mycop.js"></script>
@@ -15,18 +16,42 @@
     <div id="navbarCF"></div>
 
     <div id="app" class="item-list">
-        <br>
-        <center>
-            <h1 id="title" class="supreme-white-h1">All Tasks</h1>
-          </center>
-        <div class="col" style="margin-top: 1rem!important;">
+      <br />
+      <center>
+        <h1 id="title" class="supreme-white-h1">All Tasks</h1>
+      </center>
+      <div class="col" style="margin-top: 1rem!important;">
         <center><button id="addTaskBtn" class="btn btn-elegant btn-sm waves-effect waves-light">Add Task</button></center>
-            <div id="taskAddPanel">
-                
-            </div>
-        </div>
-     
+        <div id="taskAddPanel"></div>
+      </div>
     </div>
+    <div class="card mb-3 center-block mt-3" style="max-width: 95%;">
+      <div class="row no-gutters">
+        <div class="col-md-12 ">
+          <div  class="card-body">
+
+            <table class="table">
+              <thead>
+                <tr class="center">
+                  <th scope="col">#</th>
+                  <th scope="col"><i class="fa fa-star-o"></i> Product</th>
+                  <th scope="col"><i class="fa fa-expand"></i> Size</th>
+                  <th scope="col"><i class="fa fa-server"></i> Proxies</th>
+                  <th scope="col"><i class="fa fa-play-circle-o"></i> Status</th>
+                  <th scope="col"><i class="fa fa-bars"></i> Actions</th>
+                </tr>
+              </thead>
+              <tbody id="AllTasks">
+                
+              </tbody>
+            </table>
+            
+
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="/js/navbar.js"></script>
   </body>
 </html>

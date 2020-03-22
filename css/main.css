@@ -74,6 +74,10 @@ body {
   background-color: #da2727 !important;
 }
 
+.state-badge {
+  padding: .50em .8em!important;
+}
+
 .cat-task-name {
   margin-left: 5rem!important;
   margin-right: 5rem!important;

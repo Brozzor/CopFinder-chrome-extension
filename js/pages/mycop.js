@@ -1,4 +1,5 @@
 window.addEventListener("load", function load(event) {
+  displayAllTasks();
   let createButton = document.getElementById("addTaskBtn");
   createButton.addEventListener("click", function() {
     if (taskPanelif == false) {
@@ -281,6 +282,8 @@ function keywordFinderDel() {
 function addNewTask(constTask) {
   let taskForInsert = constTask;
 
+  constTask.status = 'On Pause';
+
   if (taskForInsert.size.length == 0) {
     taskForInsert.size = "any";
   } else {
@@ -316,6 +319,7 @@ function addNewTask(constTask) {
   setTimeout(function() {
       document.getElementById("taskAddPanel").hidden = true;
       document.getElementById("addTaskBtn").innerText = "ADD TASK";
+      displayAllTasks();
   }, 3000);
   
 }
@@ -386,4 +390,52 @@ function displayCatList(res) {
       }
     });
   });
+}
+
+function displayAllTasks(){
+  if (localStorage.AllTasks == "" || localStorage.AllTasks == undefined ){
+    //displayTask('0');
+    return false;
+  }
+  AllTasks = JSON.parse(localStorage.AllTasks);
+  let i = 0;
+  while(i < AllTasks.length){
+    displayTask(AllTasks[i], i);
+    i++
+  }
+} 
+
+function displayTask(task, nb){
+  if (task == 0){
+    document.getElementById("AllTasks").innerHTML = `
+    <p>You don't have tasks</p>
+    `;
+  }
+  let stateTd;
+  if (task.status == "Successfully Checked Out"){
+    stateTd = `<span class="badge badge-success state-badge"><i class="fa fa-circle"></i> Successfully Checked Out</span>`;
+  }else if(task.status == "On Pause"){
+    stateTd = `<span class="badge badge-warning state-badge"><i class="fa fa-circle"></i> Currently inactive</span>`;
+  }else if(task.status == "On Play"){
+    stateTd = `<span class="badge badge-warning state-badge"><i class="fa fa-circle"></i> Currently active</span>`;
+  }else{
+    stateTd = `<span class="badge badge-danger state-badge"><i class="fa fa-circle"></i> ${task.status}</span>`;
+  }
+  console.log(task)
+  let element = document.createElement("tr");
+  let container = document.getElementById("AllTasks");
+  element.dataset.id = nb;
+  element.classList.add("center");
+  element.innerHTML = `
+  <th scope="row">${nb+1}</th>
+  <td>${task.keywordFinder}</td>
+  <td>Hat Size: ${task.hatSize} <br> Shoe Size: ${task.shoeSize}<br>Size: ${task.size}</td>
+  <td>None</td>
+  <td>${stateTd}</td>
+  <td><h5><a id="play" data-id="${nb}" class="mr-2" style="color: #00c851;"><i class="fa fa-play" aria-hidden="true"></i></a> 
+    <a id="edit" data-id="${nb}" style="color: #ffc107;"><i class="fa fa-pencil" aria-hidden="true"></i></a> 
+    <a id="delete" data-id="${nb}" class="ml-2" style="color: #da2727;"><i class="fa fa-trash" aria-hidden="true"></i></a>
+  </h5></td>
+`;
+  container.appendChild(element);
 }

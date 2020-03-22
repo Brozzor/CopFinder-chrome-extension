@@ -3,14 +3,28 @@
   "name": "Cop Finder",
   "description": "Application permettant de cop automatiquement des items supreme",
   "version": "1.0",
-  "permissions": ["http://*/*", "https://*/*", "notifications", "storage", "tabs", "windows"],
+  "permissions": ["http://*/*", "https://*/*", "notifications", "storage", "tabs", "windows",
+    "proxy",
+    "tabs",
+    "activeTab",
+    "background",
+    "notifications",
+    "webRequest",
+    "webRequestBlocking"],
   "browser_action": {
     "default_icon": "img/icon.png",
     "default_popup": "popup.html"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": ["js/extension.js"]
+    }
+  ],
   "background": {
-    "scripts": ["js/background.js"],
-    "persistent": false
+    "scripts": ["js/background.js"]
   },
   "icons": {
     "173": "img/icon.png"
