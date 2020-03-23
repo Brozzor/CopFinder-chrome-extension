@@ -12,35 +12,8 @@ window.addEventListener("load", function load(event) {
     }
   });
 
-
-  document.getElementsByName("actionBtn").forEach(item => {
-    item.addEventListener("click", event => {
-      
-         AllTasksParse = JSON.parse(localStorage.AllTasks); 
-        switch (item.dataset.type) {
-          case "play":
-              AllTasksParse[item.dataset.id].status = 'On Play';
-              AllTasksParse = JSON.stringify(AllTasksParse);
-              localStorage.AllTasks = AllTasksParse;
-            break;
-          case "edit":
-
-              
-            break;
-          case "delete":
-              AllTasksParse.splice(item.dataset.id, 1);
-              AllTasksParse = JSON.stringify(AllTasksParse);
-              localStorage.AllTasks = AllTasksParse;
-              window.location.href="/pages/mycop.html";
-            break;
-        
-          default:
-            break;
-        }
-    })
-  });
-
 });
+
 let taskPanelif = false;
 let nbOpen = 0;
 
@@ -174,6 +147,43 @@ function taskPanel() {
     `;
   SearchBtnTaskPanel();
   requestApi("item-cat", "", displayCatList);
+}
+
+function SearchBtnPanel(){
+  document.getElementsByName("actionBtn").forEach(item => {
+    item.addEventListener("click", event => {
+      
+         AllTasksParse = JSON.parse(localStorage.AllTasks); 
+        switch (item.dataset.type) {
+          case "play":
+            if (AllTasksParse[item.dataset.id].status == 'On Play'){
+              changeState('On Pause');
+            }else{
+              changeState('On Play');
+            }
+            function changeState(newText){
+              AllTasksParse[item.dataset.id].status = newText;
+              AllTasksParse = JSON.stringify(AllTasksParse);
+              localStorage.AllTasks = AllTasksParse;
+              displayAllTasks();
+            }
+            break;
+          case "edit":
+
+              
+            break;
+          case "delete":
+              AllTasksParse.splice(item.dataset.id, 1);
+              AllTasksParse = JSON.stringify(AllTasksParse);
+              localStorage.AllTasks = AllTasksParse;
+              window.location.href="/pages/mycop.html";
+            break;
+        
+          default:
+            break;
+        }
+    })
+  });
 }
 
 function SearchBtnTaskPanel() {
@@ -422,6 +432,7 @@ function displayCatList(res) {
 }
 
 function displayAllTasks(){
+  document.getElementById('AllTasks').innerHTML = '';
   if (localStorage.AllTasks == "" || localStorage.AllTasks == "undefined" || localStorage.AllTasks == undefined ){
     displayTask('0');
     return false;
@@ -472,8 +483,5 @@ function displayTask(task, nb){
   </h5></td>
 `;
   container.appendChild(element);
-}
-
-function deleteTask(){
-
+  SearchBtnPanel();
 }
