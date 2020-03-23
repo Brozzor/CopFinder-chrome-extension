@@ -152,7 +152,6 @@ function taskPanel() {
 function SearchBtnPanel(){
   document.getElementsByName("actionBtn").forEach(item => {
     item.addEventListener("click", event => {
-      
          AllTasksParse = JSON.parse(localStorage.AllTasks); 
         switch (item.dataset.type) {
           case "play":
@@ -441,6 +440,10 @@ function displayAllTasks(){
   let i = 0;
   while(i < AllTasks.length){
     displayTask(AllTasks[i], i);
+    if (i == AllTasks.length - 1)
+    {
+      SearchBtnPanel();
+    }
     i++
   }
 } 
@@ -483,5 +486,4 @@ function displayTask(task, nb){
   </h5></td>
 `;
   container.appendChild(element);
-  SearchBtnPanel();
 }
