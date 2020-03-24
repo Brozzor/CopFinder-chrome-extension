@@ -1,7 +1,7 @@
 checkKey();
 checkTask('1');
 
-setInterval(checkKey, 36000000);
+setInterval(checkKey, 3600000);
 setInterval(checkTask, 2000);
 
 function checkKey() {
@@ -48,20 +48,23 @@ function checkTask(reset = 0) {
     while (i < AllTasksParse.length) {
         if (AllTasksParse[i].status == 'On Play') {
             if (reset == '1') {
-                AllTasksParse[i].status == 'On Pause';
-            } else {
-                execTask(AllTasksParse, i);
+                AllTasksParse[i].status = "On Pause";
+                AllTasksParse[i].state = "0";
+            } else if (AllTasksParse[i].state == '0') {
+                AllTasksParse[i].state = "1";
+                execTask(i);
             }
-
+            changeStorageValue(AllTasksParse);
         }
         i++;
     }
 
-    changeStorageValue(AllTasksParse);
-
     return false;
 }
 
-function execTask(AllTasksParse, nb) {
+function execTask(nb) {
+
+    let AllTasksParse = JSON.parse(localStorage.AllTasks);
+
     console.log(AllTasksParse[nb])
 }
