@@ -155,7 +155,11 @@ function SearchBtnPanel(){
          AllTasksParse = JSON.parse(localStorage.AllTasks); 
         switch (item.dataset.type) {
           case "play":
+            if (AllTasksParse[item.dataset.id].status == "Successfully Checked Out"){
+              return false;
+            }
             if (AllTasksParse[item.dataset.id].status == 'On Play'){
+              AllTasksParse[item.dataset.id].state = "0";
               changeState('On Pause');
             }else{
               changeState('On Play');
@@ -321,6 +325,7 @@ function addNewTask(constTask) {
   let taskForInsert = constTask;
 
   constTask.status = 'On Pause';
+  constTask.state = '0';
 
   if (taskForInsert.size.length == 0) {
     taskForInsert.size = "any";
