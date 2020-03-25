@@ -62,49 +62,15 @@ function checkTask(reset = 0) {
   return false;
 }
 
-function lancerFonction(callback, fenetre, tab) {
-  // son rôle est de lancer la fonction callback avec tab en paramètre
-  if (!fenetre) {
-    // premier appel : 1 seul paramètre
-    chrome.windows.getLastFocused(function(fenetre) {
-      lancerFonction(callback, fenetre);
-    }); /* on récupère la fenêtre en prenant soin de conserver callback */
-  } else {
-    if (!tab) {
-      // deuxième appel : 2 paramètres
-      chrome.tabs.getSelected(fenetre.id, function(tab) {
-        lancerFonction(callback, fenetre, tab);
-      });
-    } // troisième appel : tous les paramètres
-    else {
-      callback(tab);
-    }
-  }
-}
-
-function newTab(linkPage) {
-
-    browser.tabs.create({url: linkPage}).then(() => {
-        browser.tabs.executeScript({
-          code: `console.log('location:', window.location.href);`
-        });
-      });
-}
-
 function execTask(nb) {
-  let AllTasksParse = JSON.parse(localStorage.AllTasks);
-  AllTasksParse[nb].cat
-
-  let i = 0;
-
-  while (i < AllTasksParse[nb].cat.length)
-  {
-    AllTasksParse[nb].cat[i];
-    i++;
-  }
-  AllTasksParse[nb].keywordFinder
-
-  //console.log(AllTasksParse[nb])
+  createSupremeTab()
+    .then(tabid => {
+      tabId = tabid
+      let AllTasksParse = JSON.parse(localStorage.AllTasks);
+      keywords = AllTasksParse[nb].keywordFinder;
+      let i = 0;
+      cop(AllTasksParse[nb].cat[0], keywords);
+    })
 }
 
 createSupremeTab = () => {
@@ -115,15 +81,47 @@ createSupremeTab = () => {
     })
 }
 
+cop = (catName) => {
+
+    var url = "https://www.supremenewyork.com/shop/all/" + catName
+    updateTab(tabId, url, () => {
+ 
+      chrome.tabs.executeScript(tabId, { file: '/js/inject.js' }, function(){
+        chrome.tabs.executeScript(tabId, {
+            code: `findingArticleByKeyword('${keywords}', '${catName}')`
+        })
+      })
+    })
+  
+};
+
+updateTab = (tabId, url, callback) => {
+  //update url of current tab
+
+    chrome.tabs.update(tabId, { url: url }, () => {
+    chrome.tabs.onUpdated.addListener(function listenTab(tabnumber, info, tab) {
+      if (tab.url == url && info.status == "complete") {
+        chrome.tabs.onUpdated.removeListener(listenTab)
+        callback()
+      }
+    })
+  })
+};
+
+function copNext(newValue){
+  let AllTasksParse = JSON.parse(localStorage.AllTasks);
+  
+}
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	switch(request.msg) {
 
 		case 'startCop':
 
             break;
-        case 'createCop':
-			createSupremeTab()
-                .then(tabid => tabId = tabid)
+
+    case 'keywordFindItem':
+			copNext(request.value)
                 
 			break;
 		
