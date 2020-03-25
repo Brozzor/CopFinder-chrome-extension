@@ -68,8 +68,7 @@ function execTask(nb) {
       tabId = tabid
       let AllTasksParse = JSON.parse(localStorage.AllTasks);
       keywords = AllTasksParse[nb].keywordFinder;
-      let i = 0;
-      cop(AllTasksParse[nb].cat[0], keywords);
+      cop(AllTasksParse[nb].cat[0], keywords,nb,'0');
     })
 }
 
@@ -81,14 +80,14 @@ createSupremeTab = () => {
     })
 }
 
-cop = (catName) => {
+cop = (catName,keywords,idTask,idCat) => {
 
     var url = "https://www.supremenewyork.com/shop/all/" + catName
     updateTab(tabId, url, () => {
  
       chrome.tabs.executeScript(tabId, { file: '/js/inject.js' }, function(){
         chrome.tabs.executeScript(tabId, {
-            code: `findingArticleByKeyword('${keywords}', '${catName}')`
+            code: `findingArticleByKeyword('${keywords}', '${catName}', '${idTask}', '${idCat}' )`
         })
       })
     })
@@ -110,7 +109,7 @@ updateTab = (tabId, url, callback) => {
 
 function copNext(newValue){
   let AllTasksParse = JSON.parse(localStorage.AllTasks);
-  
+  console.log(newValue);
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {

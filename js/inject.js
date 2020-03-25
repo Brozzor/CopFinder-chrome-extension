@@ -1,12 +1,15 @@
-function newRes(prevRes,wordname,catname){
+function newRes(prevRes,wordname,catname,taskNb, idcat){
     let res = prevRes;
     res.catname = catname;
     res.wordname = wordname;
-        
+    res.taskNb = parseInt(taskNb); 
+    res.idcat = parseInt(idcat);
+    console.log(res)
     chrome.runtime.sendMessage({msg: "keywordFindItem", value: res})
 }
 
-function findingArticleByKeyword(kw,catname){
+function findingArticleByKeyword(kw,catname,taskNb,idcat){
+    console.log(taskNb)
     let reg=new RegExp("[,]+", "g");
     let words=kw.split(reg);
     let res = {};
@@ -14,7 +17,6 @@ function findingArticleByKeyword(kw,catname){
     let articles = document.getElementsByClassName('inner-article')
     while (i < words.length)
     {
-        console.log(kw)
         let mdlFind = words[i].split('/')[0].toLowerCase().trim();
         let colorFind = words[i].split('/')[1].toLowerCase().trim();
         let j = 0;
@@ -32,8 +34,7 @@ function findingArticleByKeyword(kw,catname){
 
             j++;
         }
-        console.log(res);
-        newRes(res,words[i], catname);
+        newRes(res,words[i], catname, taskNb, idcat);
         i++;
     }
     
