@@ -66,7 +66,8 @@ function execTask(nb) {
   createSupremeTab().then(tabid => {
     tabId = tabid;
     let AllTasksParse = JSON.parse(localStorage.AllTasks);
-    //cop(AllTasksParse[nb].cat[0], AllTasksParse[nb].keywordFinder, nb, "0");
+    AllTasksParse[nb].execTask = "";
+    changeStorageValue(AllTasksParse);
     copTest(AllTasksParse[nb].cat, AllTasksParse[nb].keywordFinder, nb);
   });
 }
@@ -174,34 +175,6 @@ updateTab = (tabId, url, callback) => {
     }
   );
 };
-
-function copNext(newValue) {
-  console.log(newValue);
-  let AllTasksParse = JSON.parse(localStorage.AllTasks);
-  if (newValue.link != undefined) {
-    if (AllTasksParse[newValue.taskNb].execTask == undefined || AllTasksParse[newValue.taskNb].execTask == "") {
-      AllTasksParse[newValue.taskNb].execTask = "[" + JSON.stringify(newValue) + "]";
-    } else {
-      let lastList = AllTasksParse[newValue.taskNb].execTask.substr(0, AllTasksParse[newValue.taskNb].execTask.length - 1);
-      AllTasksParse[newValue.taskNb].execTask = lastList + "," + JSON.stringify(newValue) + "]";
-    }
-    changeStorageValue(AllTasksParse);
-  }
-  //console.log('---')
-  //console.log(AllTasksParse[newValue.taskNb].keywordFinder[newValue.idword])
-  //console.log(newValue.wordname)
-  //console.log(newValue);
-  //console.log('---')
-  if (AllTasksParse[newValue.taskNb].keywordFinder[newValue.idword + 1] == undefined) {
-    let idCat = newValue.idcat + 1;
-    let keywords = AllTasksParse[newValue.taskNb].keywordFinder;
-    cop(AllTasksParse[newValue.taskNb].cat[idCat], keywords, newValue.taskNb, idCat);
-  }
-}
-
-function finishFindItems() {
-  console.log("ouiiiiiiiii");
-}
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.msg) {
