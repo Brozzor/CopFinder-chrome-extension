@@ -1,9 +1,10 @@
-function newRes(prevRes,wordname,catname,taskNb, idcat){
+function newRes(prevRes,wordname,catname,taskNb, idcat, idword){
     let res = prevRes;
     res.catname = catname;
     res.wordname = wordname;
     res.taskNb = parseInt(taskNb); 
     res.idcat = parseInt(idcat);
+    res.idword = parseInt(idword);
     console.log(res)
     chrome.runtime.sendMessage({msg: "keywordFindItem", value: res})
 }
@@ -34,7 +35,7 @@ function findingArticleByKeyword(kw,catname,taskNb,idcat){
 
             j++;
         }
-        newRes(res,words[i], catname, taskNb, idcat);
+        newRes(res,words[i], catname, taskNb, idcat, i);
         i++;
     }
     

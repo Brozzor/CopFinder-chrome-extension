@@ -326,6 +326,7 @@ function addNewTask(constTask) {
 
   constTask.status = 'On Pause';
   constTask.state = '0';
+  constTask.execTask = "";
 
   if (taskForInsert.size.length == 0) {
     taskForInsert.size = "any";
