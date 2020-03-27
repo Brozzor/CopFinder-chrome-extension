@@ -68,7 +68,7 @@ function execTask(nb) {
     let AllTasksParse = JSON.parse(localStorage.AllTasks);
     AllTasksParse[nb].execTask = "";
     changeStorageValue(AllTasksParse);
-    copTest(AllTasksParse[nb].cat, AllTasksParse[nb].keywordFinder, nb);
+    findLink(AllTasksParse[nb].cat, AllTasksParse[nb].keywordFinder, nb);
   });
 }
 
@@ -85,32 +85,24 @@ createSupremeTab = () => {
   });
 };
 
-cop = (catName, keywords, idTask, idCat) => {
-  if (catName == undefined) {
-    finishFindItems();
-    return false;
-  }
-  var url = "https://www.supremenewyork.com/shop/all/" + catName;
-  updateTab(tabId, url, () => {
-    chrome.tabs.executeScript(
-      tabId,
-      {
-        file: "/js/inject.js"
-      },
-      function() {
-        chrome.tabs.executeScript(tabId, {
-          code: `findingArticleByKeyword('${keywords}', '${catName}', '${idTask}', '${idCat}' )`
-        });
-      }
-    );
+cop = (idTask,idTaskItem,AllTasks) => {
+  let task = JSON.parse(localStorage.AllTasks);
+  task = task[idTask];
+  let AllTasksExecParse = JSON.parse(task.execTask);
+  
+  updateTab(tabId, AllTasksExecParse[idTaskItem].link, () => {
+    chrome.tabs.executeScript(tabId, {
+      code: 'copItem(' + idTask + ','+ JSON.stringify(AllTasks) + ',' + idTaskItem + ')'
+    });
+
   });
 };
 
-function copTest(cats, keywords, taskNb) {
+function findLink(cats, keywords, taskNb) {
   requestApi("item-all", "", function(res) {
     let i = 0;
     let words = keywords;
-
+    let AllTasksParse = JSON.parse(localStorage.AllTasks);
     while (i < words.length) {
       let finalInsert;
       
@@ -140,8 +132,7 @@ function copTest(cats, keywords, taskNb) {
         j++;
       }
       if (finalInsert != null || finalInsert != undefined) {
-        let AllTasksParse = JSON.parse(localStorage.AllTasks);
-
+        
         if (AllTasksParse[finalInsert.taskNb].execTask == undefined || AllTasksParse[finalInsert.taskNb].execTask == "") {
           AllTasksParse[finalInsert.taskNb].execTask = "[" + JSON.stringify(finalInsert) + "]";
         } else {
@@ -150,10 +141,13 @@ function copTest(cats, keywords, taskNb) {
         }
         console.log(finalInsert);
         changeStorageValue(AllTasksParse);
+
       }
 
       i++;
     }
+
+    cop(taskNb, 0, localStorage.AllTasks);
   });
 }
 
@@ -182,7 +176,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break;
 
     case "keywordFindItem":
-      copNext(request.value);
+      findLink(request.value);
 
       break;
   }
