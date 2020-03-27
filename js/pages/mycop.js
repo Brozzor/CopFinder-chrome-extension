@@ -34,10 +34,10 @@ function taskPanel() {
                 <div class="form-group row">
                   <label class="col-sm-12 col-form-label center">Size</label>
                   <div class="col-sm-12 center">
-                  <button data-id="1" data-selected="false" name="sizeBtn" class="btn btn-sm">S</button>
-                  <button data-id="2" data-selected="false" name="sizeBtn" class="btn btn-sm">M</button>
-                  <button data-id="3" data-selected="false" name="sizeBtn" class="btn btn-sm">L</button>
-                  <button data-id="4" data-selected="false" name="sizeBtn" class="btn btn-sm">XL</button>
+                  <button data-id="1" data-selected="false" name="sizeBtn" class="btn btn-sm" value="Small">S</button>
+                  <button data-id="2" data-selected="false" name="sizeBtn" class="btn btn-sm" value="Medium">M</button>
+                  <button data-id="3" data-selected="false" name="sizeBtn" class="btn btn-sm" value="Large">L</button>
+                  <button data-id="4" data-selected="false" name="sizeBtn" class="btn btn-sm" value="XLarge">XL</button>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -59,20 +59,18 @@ function taskPanel() {
 
                   </div>
 
-                  <label class="control-label col-sm-2">Hat:</label>
+                  <label class="control-label col-sm-2">Pant:</label>
                   <div class="col-sm-4">
 
-                <select id="hatData" class="form-control form-control-sm">
-                  <option value="any" selected="">Open this select menu</option>
-                  <option value="8">US 8 - UK 7 - EUR 41</option>
-                  <option value="8.5">US 8.5 - UK 7.5 - EUR 42</option>
-                  <option value="9">US 9 - UK 8 - EUR 42.5</option>
-                  <option value="9.5">US 9.5 - UK 8.5 - EUR 43</option>
-                  <option value="10">US 10 - UK 9 - EUR 44</option>
-                  <option value="10.5">US 10,5 - UK 9,5 - EUR 44,5</option>
-                  <option value="11">US 11 - UK 10 - EUR 45</option>
-                  <option value="11.5">US 11,5 - UK 10,5 - EUR 45,5</option>
-                  <option value="12">US 12 - UK 11 - EUR 46</option>
+                <select id="pantData" class="form-control form-control-sm">
+                <option value="any" selected="">Open this select menu</option>
+                <option value="28">28 </option>
+                <option value="30">30 </option>
+                <option value="32">32 </option>
+                <option value="34">34 </option>
+                <option value="36">36 </option>
+                <option value="38">38 </option>
+                <option value="40">40 </option>
                 </select>
 
                   </div>
@@ -289,7 +287,7 @@ function SearchBtnTaskPanel() {
         case "saveTaskBtn":
           let newTask = {
             shoeSize: document.getElementById("shoeData").value,
-            hatSize: document.getElementById("hatData").value,
+            pantSize: document.getElementById("pantData").value,
             size: findEveryValue("sizeBtn"),
             cat: findEveryValue("catBtn"),
             keywordFinder: findEveryValue("keywordFinderInput"),
@@ -352,7 +350,7 @@ function addNewTask(constTask) {
     return false;
   }
 
-  if (localStorage["AllTasks"] == undefined || localStorage["AllTasks"] == "") {
+  if (localStorage["AllTasks"] == undefined || localStorage["AllTasks"] == "" || localStorage["AllTasks"] == "[]") {
     localStorage["AllTasks"] = "[" + JSON.stringify(taskForInsert) + "]";
   } else {
     let lastList = localStorage["AllTasks"].substr(0, localStorage["AllTasks"].length - 1);
@@ -374,9 +372,9 @@ function findEveryValue(name) {
   findItem = document.getElementsByName(name);
   while (k < findItem.length) {
     if (findItem[k].dataset.selected == "true") {
-      if (findItem[k].nodeName == "BUTTON" || findItem[k].nodeName == "A") {
+      if ((findItem[k].nodeName == "BUTTON" || findItem[k].nodeName == "A") && (name != 'sizeBtn')) {
         findValue.push(findItem[k].innerText);
-      } else if (findItem[k].nodeName == "INPUT") {
+      } else if (findItem[k].nodeName == "INPUT" || name == 'sizeBtn') {
         findValue.push(findItem[k].value);
       }
     }
@@ -438,7 +436,7 @@ function displayCatList(res) {
 
 function displayAllTasks(){
   document.getElementById('AllTasks').innerHTML = '';
-  if (localStorage.AllTasks == "" || localStorage.AllTasks == "undefined" || localStorage.AllTasks == undefined ){
+  if (localStorage.AllTasks == "" || localStorage.AllTasks == "undefined" || localStorage.AllTasks == undefined || localStorage.AllTasks == "[]"){
     displayTask('0');
     return false;
   }
@@ -455,7 +453,7 @@ function displayAllTasks(){
 } 
 
 function displayTask(task, nb){
-  if (task == 0){
+  if (task == 0 || task == undefined){
     document.getElementById("errorTask").innerHTML = `
     <center><p>You don't have tasks</p></center>
     `;
@@ -483,7 +481,7 @@ function displayTask(task, nb){
   element.innerHTML = `
   <th scope="row">${nb+1}</th>
   <td>${task.keywordFinder}</td>
-  <td>Hat Size: ${task.hatSize} <br> Shoe Size: ${task.shoeSize}<br>Size: ${task.size}</td>
+  <td>Pant Size: ${task.pantSize} <br> Shoe Size: ${task.shoeSize}<br>Size: ${task.size}</td>
   <td>None</td>
   <td>${stateTd}</td>
   <td><h5><a data-type="play" name="actionBtn" data-id="${nb}" class="mr-2" style="color: #00c851;"><i class="fa fa-${statePlayBtn}" aria-hidden="true"></i></a> 

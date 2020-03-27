@@ -13,8 +13,13 @@ function copItem(idTask, allTask, idTaskItem){
         case "shoes":
             selectSize(task.shoeSize);
             break;
+        
+        case "pants":
+            selectSize(task.pantSize);
+            break;
     
         default:
+            selectSize(task.size);
             break;
     }
 
@@ -29,21 +34,24 @@ function selectSize(sizeWanted){
 		let i = 0;
 		while (i < sizeForm.length) {
             
-			let html = sizeForm[i] != undefined ? sizeForm[i].innerText : sizeWanted
-            console.log('ret ' + html+ ' ret ' + sizeWanted)
-            if (html == sizeWanted) {
+			let html = sizeForm[i] != undefined ? sizeForm[i].innerText.trim() : sizeWanted
+            if (html == sizeWanted || sizeWanted == "any") {
 
 				if(sizeForm[i])
 					sizeForm.value = sizeForm[i].value;
 
-				console.log('je buy');
+                    addToBasket()
 				break
 			 	
 			}
 			else if (i == sizeForm.length - 1) {
-				console.log('pb');
+				chrome.runtime.sendMessage({msg: "NoSize", idtask: idTask,idtaskitem: idTaskItem});
 				break
             }
             i++;
         }
+}
+
+function addToBasket(){
+    document.getElementsByName('commit')[0].click();
 }
