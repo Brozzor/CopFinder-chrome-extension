@@ -98,6 +98,16 @@ cop = (idTask,idTaskItem,AllTasks) => {
   });
 };
 
+checkout = (idTask,persoInfos) => {
+  
+  updateTab(tabId, 'https://www.supremenewyork.com/checkout', () => {
+    chrome.tabs.executeScript(tabId, {
+      code: 'checkout(' + idTask + ','+ JSON.stringify(persoInfos)+')'
+    });
+
+  });
+};
+
 function findLink(cats, keywords, taskNb) {
   requestApi("item-all", "", function(res) {
     let i = 0;
@@ -139,7 +149,7 @@ function findLink(cats, keywords, taskNb) {
           let lastList = AllTasksParse[finalInsert.taskNb].execTask.substr(0, AllTasksParse[finalInsert.taskNb].execTask.length - 1);
           AllTasksParse[finalInsert.taskNb].execTask = lastList + "," + JSON.stringify(finalInsert) + "]";
         }
-        console.log(finalInsert);
+        //console.log(finalInsert);
         changeStorageValue(AllTasksParse);
 
       }
@@ -171,8 +181,17 @@ updateTab = (tabId, url, callback) => {
 };
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  let AllTasksParse = JSON.parse(localStorage.AllTasks);
   switch (request.msg) {
-    case "startCop":
+    case "addItemToBasket":
+      let task = JSON.parse(AllTasksParse[request.idtask].execTask);
+      if (task.length - 1 == request.idtaskitem){
+        sendResponse('checkout');
+        checkout(request.idtask,localStorage.persoInfos);
+      }else{
+        let newID = parseInt(request.idtaskitem) + 1
+        cop(request.idtask, newID, localStorage.AllTasks);
+      }
       break;
 
     case "keywordFindItem":

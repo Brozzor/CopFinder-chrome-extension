@@ -11,15 +11,15 @@ function copItem(idTask, allTask, idTaskItem){
 
     switch (catName) {
         case "shoes":
-            selectSize(task.shoeSize);
+            selectSize(task.shoeSize,idTask,idTaskItem);
             break;
         
         case "pants":
-            selectSize(task.pantSize);
+            selectSize(task.pantSize,idTask,idTaskItem);
             break;
     
         default:
-            selectSize(task.size);
+            selectSize(task.size,idTask,idTaskItem);
             break;
     }
 
@@ -29,9 +29,14 @@ function findCat(){
     return window.location.pathname.split("/")[2];
 }
 
-function selectSize(sizeWanted){
+function selectSize(sizeWanted,idTask,idTaskItem){
     let sizeForm = document.getElementById("size") || document.getElementById("s")
-		let i = 0;
+        let i = 0;
+        if (sizeForm[0] == undefined && document.getElementsByClassName('button in-cart')[0].innerText.trim() == "in basket")
+        {
+            addToBasket(idTask,idTaskItem);
+            return false;
+        }
 		while (i < sizeForm.length) {
             
 			let html = sizeForm[i] != undefined ? sizeForm[i].innerText.trim() : sizeWanted
@@ -39,8 +44,10 @@ function selectSize(sizeWanted){
 
 				if(sizeForm[i])
 					sizeForm.value = sizeForm[i].value;
-
-                    addToBasket()
+                
+                document.getElementsByName('commit')[0].click();
+                setTimeout(`addToBasket(${idTask},${idTaskItem})`, 500);
+                    
 				break
 			 	
 			}
@@ -52,6 +59,15 @@ function selectSize(sizeWanted){
         }
 }
 
-function addToBasket(){
-    document.getElementsByName('commit')[0].click();
+function addToBasket(idTask,idTaskItem){
+    chrome.runtime.sendMessage({msg: "addItemToBasket", idtask: idTask,idtaskitem: idTaskItem}, function(callback) {
+        if (callback != null){
+            checkout();
+        }
+ 
+    });
+}
+
+function checkout(idTask, persoInfos){
+    console.log(persoInfos);
 }
