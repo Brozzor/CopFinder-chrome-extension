@@ -208,6 +208,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
 
       break;
+    case "soldOut":
+
+      break;
+
     case "checkoutError":
 
       break;

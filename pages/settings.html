@@ -40,19 +40,19 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-4">Email</label>
+                  <label class="col-form-label col-sm-4">Email</label>
                   <div class="col-sm-8">
                     <input type="text" id="inputMail" class="form-control ">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-4">Tel</label>
+                  <label class="col-form-label col-sm-4">Tel</label>
                   <div class="col-sm-8">
                     <input type="text" id="inputTel" class="form-control ">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-4">City</label>
+                  <label class="col-form-label col-sm-4">City</label>
                   <div class="col-sm-8">
                     <input type="text" id="inputCity" class="form-control ">
                   </div>
@@ -67,19 +67,19 @@
               <div class="left-col-form">
                 <form action="" method="">
                   <div class="form-group row">
-                    <label class="control-label col-sm-4">Address</label>
+                    <label class="col-form-label col-sm-4">Address</label>
                     <div class="col-sm-8">
                       <input type="text" id="inputAddress" class="form-control ">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label class="control-label col-sm-4">Postcode</label>
+                    <label class="col-form-label col-sm-4">Postcode</label>
                     <div class="col-sm-8">
                       <input type="text" id="inputPostcode" class="form-control ">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label class="control-label col-sm-4">Country</label>
+                    <label class="col-form-label col-sm-4">Country</label>
                     <div class="col-sm-8">
                       <select id="inputCountry" class="browser-default custom-select">
                         <option selected>Open this select menu</option>
@@ -149,19 +149,19 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-5">Expiry date</label>
+                  <label class="col-sm-5 col-form-label">Expiry date</label>
                   <div class="col-sm-7">
                     <input type="text" id="inputExpiry" name="expiry" class="form-control ">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-5">CVC</label>
+                  <label class="col-sm-5 col-form-label">CVC</label>
                   <div class="col-sm-7">
                     <input type="text" id="inputCvc" name="cvc" class="form-control ">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-5">Card Type</label>
+                  <label class="col-sm-5 col-form-label">Card Type</label>
                   <div class="col-sm-7">
                     <select id="inputCardType" class="browser-default custom-select">
                       <option value="visa">Visa</option>
@@ -187,6 +187,65 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" style="position: relative;">
+      <!--card-->
+      <div class="card mb-3 center-block" style="max-width: 95%;">
+        <div class="row no-gutters">
+          <div class="col-md-12">
+            <div class="card-body">
+              <h5 class="card-title mb-3">Cop Information</h5>
+              <hr>
+
+              <div id="card-form" action="" method="">
+                <div class="form-group row">
+                  <label class="col-sm-5 col-form-label">If item is sold out</label>
+                  <div class="col-sm-7">
+                    <select id="soldOut" class="browser-default custom-select">
+                      <option value="wait">wait restock a item</option>
+                      <option value="next">passed to item next</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-8">Timer before refreshing to check if the item is restocked (ms)</label>
+                  <div class="col-sm-4">
+                    <input type="text" id="TimerRestock" name="" placeholder="Time in milliseconds" value="5000" class="form-control ">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-5 col-form-label">If checkout error</label>
+                  <div class="col-sm-7">
+                    <select id="checkError" class="browser-default custom-select">
+                      <option value="send">Send Notification Chrome</option>
+                      <option value="nsend">Not Send</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-5 col-form-label">If checkout successfully</label>
+                  <div class="col-sm-7">
+                    <select id="checkSuccess" class="browser-default custom-select">
+                      <option value="send">Send Notification Chrome</option>
+                      <option value="nsend">Not Send</option>
+                    </select>
+                  </div>
+                </div><!--
+                <div class="form-group row">
+                  <label class="col-sm-12 col-form-label center"><hr>LiveCop</label>
+                  <div class="col-sm-12 center">
+                  <button data-id="1" data-selected="false" name="sizeBtn" class="btn" value="Small" style="width: 150px">Activate</button>
+                  <button data-id="2" data-selected="false" name="sizeBtn" class="btn" value="Medium">Desactivate</button>
+                  </div>
+                </div>-->
+
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
