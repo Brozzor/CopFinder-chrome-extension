@@ -1,6 +1,7 @@
 window.addEventListener("load", function load(event) {
   readCardInfo();
   readPersoInfo();
+  readCopInfo();
     let createButton = document.getElementById("addInformation");
     createButton.addEventListener("click", function() {
       addInformation();
@@ -9,6 +10,11 @@ window.addEventListener("load", function load(event) {
     let createButton1 = document.getElementById("addCard");
     createButton1.addEventListener("click", function() {
       addCard();
+    });
+
+    let createButton2 = document.getElementById("addCop");
+    createButton2.addEventListener("click", function() {
+      addCop();
     });
 
   });
@@ -76,6 +82,28 @@ function addCard(){
  localStorage['cardInfo'] = JSON.stringify(cardInfo);
 }
 
+function addCop(){
+
+  let copInfo = { 
+    "soldOut": document.getElementById("soldOut").value,
+    "timerRestock": document.getElementById("timerRestock").value,
+    "checkError": document.getElementById("checkError").value,
+    "checkSuccess": document.getElementById("checkSuccess").value
+ };
+ localStorage['copInfo'] = JSON.stringify(copInfo);
+}
+
+function readCopInfo(){
+  if (localStorage['copInfo'] != null || localStorage['copInfo'] != undefined)
+  {
+    let infoCop = JSON.parse(localStorage['copInfo'])
+    document.getElementById("soldOut").value = infoCop.soldOut;
+    document.getElementById("timerRestock").value = infoCop.timerRestock;
+    document.getElementById("checkError").value = infoCop.checkError;
+    document.getElementById("checkSuccess").value = infoCop.checkSuccess;
+  }
+}
+
 function readCardInfo(){
   if (localStorage['cardInfo'] != null || localStorage['cardInfo'] != undefined)
   {
@@ -84,7 +112,7 @@ function readCardInfo(){
     document.getElementById("inputExpiry").value = infoCard.expiry;
     document.getElementById("inputCvc").value = infoCard.cvc;
     document.getElementById("inputCardType").value = infoCard.type;
-    }
+  }
 
 }
 

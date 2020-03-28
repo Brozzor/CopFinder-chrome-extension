@@ -209,9 +209,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
       break;
     case "soldOut":
-
+      let copInfo = localStorage.copInfo;
+      if (copInfo.solOut == "next"){
+        sendResponse("next");
+        let newID = parseInt(request.idtaskitem) + 1
+        cop(request.idtask, newID, localStorage.AllTasks);
+      }else{
+        sendResponse("wait");
+       //setTimeout(`cop(${request.idtask}, ${request.idtaskitem}, ${JSON.stringify(localStorage.AllTasks)})`, 5000)
+      }
       break;
-
+    case "refreshCop":
+      cop(request.idtask, request.idtaskitem, localStorage.AllTasks);
+      break;
     case "checkoutError":
 
       break;

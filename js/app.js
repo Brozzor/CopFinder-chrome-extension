@@ -105,6 +105,7 @@ function initialPerso() {
 }
 
 function insertInfoPerso(res){
+  defaultConfig();
 
   let persoInfo = { 
     "name": res[1].global_name,
@@ -119,6 +120,16 @@ function insertInfoPerso(res){
  setTimeout(function() {
   window.location.href = "pages/main.html";
 }, 500);
+}
+
+function defaultConfig(){
+    let copInfo = { 
+      "soldOut": "wait",
+      "timerRestock": "5000",
+      "checkError": "send",
+      "checkSuccess": "send"
+   };
+   localStorage['copInfo'] = JSON.stringify(copInfo);
 }
 
 function launch() {

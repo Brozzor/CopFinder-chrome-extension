@@ -5,7 +5,14 @@ function copItem(idTask, allTask, idTaskItem){
     let soldOut = document.getElementById('add-remove-buttons').innerText.includes('sold out');
 
     if (soldOut) {
-        chrome.runtime.sendMessage({msg: "soldOut", idtask: idTask,idtaskitem: idTaskItem});
+        chrome.runtime.sendMessage({msg: "soldOut", idtask: idTask,idtaskitem: idTaskItem}, function (callback) {
+            if (callback == "next"){
+                addToBasket(idTask,idTaskItem);
+            }else{
+                setTimeout(`soldOutRefresh(${idTask},${idTaskItem})`, 5000)
+                
+            }
+        });
         return false;
     }
 
@@ -23,6 +30,10 @@ function copItem(idTask, allTask, idTaskItem){
             break;
     }
 
+}
+
+function soldOutRefresh(idTask,idTaskItem){
+    chrome.runtime.sendMessage({msg: "refreshCop", idtask: idTask,idtaskitem: idTaskItem});
 }
 
 function findCat(){
@@ -95,13 +106,13 @@ function checkout(idTask, persoInfos, cardInfos){
     chrome.runtime.sendMessage({msg: "fillCheckout", idtask: idTask}, rep => {
         if (rep.callback != 0)
         {
-            setTimeout("checkoutClick()", rep.timer);
+            setTimeout(`checkoutClick(${idTask})`, rep.timer);
             console.log('checkout with timer'+ rep.timer);
         }
     });
 }
 
-function checkoutClick(){
+function checkoutClick(idTask){
     console.log('go checkout');
     document.getElementsByName('commit')[0].click();
     setTimeout(function () {
