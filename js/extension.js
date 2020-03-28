@@ -92,4 +92,21 @@ function checkout(idTask, persoInfos, cardInfos){
     document.getElementById('vval').value = cardInfosParse.cvc
     
     document.getElementsByClassName('icheckbox_minimal')[1].click();
+    chrome.runtime.sendMessage({msg: "fillCheckout", idtask: idTask}, rep => {
+        if (rep.callback != 0)
+        {
+            setTimeout("checkoutClick()", rep.timer);
+            console.log('checkout with timer'+ rep.timer);
+        }
+    });
+}
+
+function checkoutClick(){
+    console.log('go checkout');
+    document.getElementsByName('commit')[0].click();
+    setTimeout(function () {
+        if (document.querySelector("#cart-cc > fieldset > div.errors") != undefined){
+            chrome.runtime.sendMessage({msg: "checkoutError", idtask: idTask})
+        }
+    }, 1000);
 }

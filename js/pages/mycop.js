@@ -153,7 +153,7 @@ function SearchBtnPanel(){
          AllTasksParse = JSON.parse(localStorage.AllTasks); 
         switch (item.dataset.type) {
           case "play":
-            if (AllTasksParse[item.dataset.id].status == "Successfully Checked Out"){
+            if (AllTasksParse[item.dataset.id].status == "Successfully"){
               return false;
             }
             if (AllTasksParse[item.dataset.id].status == 'On Play'){
@@ -460,9 +460,9 @@ function displayTask(task, nb){
     return false;
   }
   let stateTd;
-  if (task.status == "Successfully Checked Out"){
+  if (task.status == "Successfully"){
     statePlayBtn = 'play';
-    stateTd = `<span class="badge badge-success state-badge"><i class="fa fa-circle"></i> Successfully Checked Out</span>`;
+    stateTd = `<span class="badge badge-success state-badge"><i class="fa fa-circle"></i> Successfully</span>`;
   }else if(task.status == "On Pause"){
     statePlayBtn = 'play';
     stateTd = `<span class="badge badge-warning state-badge"><i class="fa fa-circle"></i> Currently inactive</span>`;

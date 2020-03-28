@@ -182,9 +182,10 @@ updateTab = (tabId, url, callback) => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let AllTasksParse = JSON.parse(localStorage.AllTasks);
+  let task = JSON.parse(AllTasksParse[request.idtask].execTask);
   switch (request.msg) {
     case "addItemToBasket":
-      let task = JSON.parse(AllTasksParse[request.idtask].execTask);
+      
       if (task.length - 1 == request.idtaskitem){
         sendResponse('checkout');
         checkout(request.idtask,localStorage.persoInfo,localStorage.cardInfo);
@@ -194,8 +195,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
       break;
 
-    case "keywordFindItem":
-      findLink(request.value);
+    case "fillCheckout":
+
+      if (AllTasksParse[request.idtask].checkout == "true" && AllTasksParse[request.idtask].stateCheckoutBtn == "true"){
+        sendResponse({callback: 'checkout', timer: AllTasksParse[request.idtask].checkoutDelay});
+      } else if (AllTasksParse[request.idtask].checkout == "true" && AllTasksParse[request.idtask].stateCheckoutBtn == "false"){
+        sendResponse({callback: 'checkout', timer: '0'});
+      } else {
+        sendResponse(0);
+        AllTasksParse[request.idtask].status = "Successfully";
+        changeStorageValue(AllTasksParse);
+      }
+
+      break;
+    case "checkoutError":
 
       break;
   }
