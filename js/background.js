@@ -98,11 +98,11 @@ cop = (idTask,idTaskItem,AllTasks) => {
   });
 };
 
-checkout = (idTask,persoInfos) => {
+checkout = (idTask,persoInfo,cardInfo) => {
   
   updateTab(tabId, 'https://www.supremenewyork.com/checkout', () => {
     chrome.tabs.executeScript(tabId, {
-      code: 'checkout(' + idTask + ','+ JSON.stringify(persoInfos)+')'
+      code: 'checkout(' + idTask + ','+ JSON.stringify(persoInfo)+','+ JSON.stringify(cardInfo)+')'
     });
 
   });
@@ -187,7 +187,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       let task = JSON.parse(AllTasksParse[request.idtask].execTask);
       if (task.length - 1 == request.idtaskitem){
         sendResponse('checkout');
-        checkout(request.idtask,localStorage.persoInfos);
+        checkout(request.idtask,localStorage.persoInfo,localStorage.cardInfo);
       }else{
         let newID = parseInt(request.idtaskitem) + 1
         cop(request.idtask, newID, localStorage.AllTasks);

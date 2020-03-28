@@ -68,6 +68,28 @@ function addToBasket(idTask,idTaskItem){
     });
 }
 
-function checkout(idTask, persoInfos){
-    console.log(persoInfos);
+function checkout(idTask, persoInfos, cardInfos){
+    cardInfosParse = JSON.parse(cardInfos);
+    persoInfosParse = JSON.parse(persoInfos);
+
+    let cardYear = cardInfosParse.expiry.split("/")[1].trim();
+    if (cardInfosParse.expiry.split("/")[1].trim().length == 2){
+        cardYear = "20" + cardInfosParse.expiry.split("/")[1].trim();
+    }
+
+    document.getElementById('order_billing_name').value = persoInfosParse.name
+    document.getElementById('order_email').value = persoInfosParse.mail
+    document.getElementById('order_tel').value = persoInfosParse.tel
+    document.getElementById('bo').value = persoInfosParse.address
+    document.getElementById('order_billing_city').value = persoInfosParse.city
+    document.getElementById('order_billing_zip').value = persoInfosParse.postcode
+    document.getElementById('order_billing_country').value = persoInfosParse.country
+
+    document.getElementById('credit_card_type').value = cardInfosParse.type
+    document.getElementById('cnb').value = cardInfosParse.number
+    document.getElementById('credit_card_month').value = cardInfosParse.expiry.split("/")[0].trim()
+    document.getElementById('credit_card_year').value = cardYear
+    document.getElementById('vval').value = cardInfosParse.cvc
+    
+    document.getElementsByClassName('icheckbox_minimal')[1].click();
 }
