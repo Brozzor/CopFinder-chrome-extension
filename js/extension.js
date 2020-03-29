@@ -2,13 +2,14 @@ function copItem(idTask, allTask, idTaskItem){
     AllTasksParse = JSON.parse(allTask);
     task = AllTasksParse[idTask];
     taskExecParse = JSON.parse(task.execTask);
-    if (taskExecParse[idTaskItem].color != undefined || taskExecParse[idTaskItem].color != ""){
+    if (taskExecParse[idTaskItem].color != undefined && taskExecParse[idTaskItem].color != ""){
         let i = 0;
         while (i < document.querySelector("#details > ul").childNodes.length){
             let name = document.querySelector("#details > ul").childNodes[i].firstChild.dataset.styleName.toLowerCase().trim();
             if (name.includes(taskExecParse[idTaskItem].color))
             {
-                chrome.runtime.sendMessage({msg: "findingLink", idtask: idTask,idtaskitem: idTaskItem,link: document.querySelector("#details > ul").childNodes[i].firstChild.href})
+                chrome.runtime.sendMessage({msg: "findingLink", idtask: idTask,idtaskitem: idTaskItem,link: document.querySelector("#details > ul").childNodes[i].firstChild.href});
+                break;
             }
             i++;
         }

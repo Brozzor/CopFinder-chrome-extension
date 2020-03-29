@@ -68,7 +68,11 @@ function execTask(nb) {
     let AllTasksParse = JSON.parse(localStorage.AllTasks);
     AllTasksParse[nb].execTask = "";
     changeStorageValue(AllTasksParse);
-    findLink(AllTasksParse[nb].cat, AllTasksParse[nb].keywordFinder, nb);
+    fetch("https://www.supremenewyork.com/mobile_stock.json")
+      .then(result => result.json())
+      .then(data => {
+        findLink(AllTasksParse[nb].cat, AllTasksParse[nb].keywordFinder, nb, data);
+      });
   });
 }
 
@@ -105,7 +109,7 @@ checkout = (idTask, persoInfo, cardInfo) => {
   });
 };
 
-function findLink(cats, keywords, taskNb) {
+function findLink(cats, keywords, taskNb, data) {
   requestApi("item-all", "", function(res) {
     let i = 0;
     let words = keywords;
@@ -139,6 +143,22 @@ function findLink(cats, keywords, taskNb) {
         j++;
       }
 
+      // il faut recuperer la liste avant d'executer la fonction
+      if (finalInsert == null || finalInsert == undefined) {
+        let k = 0;
+        while (k < data.products_and_categories.new.length) {
+          let mdl = data.products_and_categories.new[k].name.toLowerCase();
+          if (mdl.includes(mdlFind)) {
+            finalInsert = {
+              link: "https://www.supremenewyork.com/shop/" + data.products_and_categories.new[k].id,
+              taskNb: taskNb,
+              color: colorFind
+            };
+            break;
+          }
+          k++;
+        }
+      }
       if (finalInsert != null || finalInsert != undefined) {
         if (AllTasksParse[finalInsert.taskNb].execTask == undefined || AllTasksParse[finalInsert.taskNb].execTask == "") {
           AllTasksParse[finalInsert.taskNb].execTask = "[" + JSON.stringify(finalInsert) + "]";
@@ -147,40 +167,8 @@ function findLink(cats, keywords, taskNb) {
           AllTasksParse[finalInsert.taskNb].execTask = lastList + "," + JSON.stringify(finalInsert) + "]";
         }
         changeStorageValue(AllTasksParse);
-      }
-
-      if (finalInsert == null || finalInsert == undefined) {
-        fetch("https://www.supremenewyork.com/mobile_stock.json")
-          .then(result => result.json())
-          .then(data => {
-
-            let k = 0;
-            while (k < data.products_and_categories.new.length) {
-              
-              let mdl = data.products_and_categories.new[k].name.toLowerCase();
-              if (mdl.includes(mdlFind)) {
-                console.log('ye')
-                finalInsert = {
-                  link: "https://www.supremenewyork.com/shop/" + data.products_and_categories.new[k].id,
-                  taskNb: taskNb,
-                  color: colorFind
-                };
-                break ;
-              }
-              k++;
-            }
-            if (finalInsert != null || finalInsert != undefined) {
-              if (AllTasksParse[finalInsert.taskNb].execTask == undefined || AllTasksParse[finalInsert.taskNb].execTask == "") {
-                AllTasksParse[finalInsert.taskNb].execTask = "[" + JSON.stringify(finalInsert) + "]";
-              } else {
-                let lastList = AllTasksParse[finalInsert.taskNb].execTask.substr(0, AllTasksParse[finalInsert.taskNb].execTask.length - 1);
-                AllTasksParse[finalInsert.taskNb].execTask = lastList + "," + JSON.stringify(finalInsert) + "]";
-              }
-              changeStorageValue(AllTasksParse);
-            }else{
-              console.log('g rien trouver woula')
-            }
-          });
+      } else {
+        console.log("not item find");
       }
 
       i++;
@@ -250,14 +238,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       cop(request.idtask, request.idtaskitem, localStorage.AllTasks);
       break;
     case "findingLink":
-        task[request.idtaskitem].link = request.link;
-        task[request.idtaskitem].color = "";
-        AllTasksParse[request.idtask].execTask = JSON.stringify(task);
-      console.log(AllTasksParse)
+      task[request.idtaskitem].link = request.link;
+      task[request.idtaskitem].color = "";
+      AllTasksParse[request.idtask].execTask = JSON.stringify(task);
       changeStorageValue(AllTasksParse);
       break;
     case "checkoutError":
       break;
-      
   }
 });
