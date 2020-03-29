@@ -85,26 +85,23 @@ createSupremeTab = () => {
   });
 };
 
-cop = (idTask,idTaskItem,AllTasks) => {
+cop = (idTask, idTaskItem, AllTasks) => {
   let task = JSON.parse(localStorage.AllTasks);
   task = task[idTask];
   let AllTasksExecParse = JSON.parse(task.execTask);
-  
+
   updateTab(tabId, AllTasksExecParse[idTaskItem].link, () => {
     chrome.tabs.executeScript(tabId, {
-      code: 'copItem(' + idTask + ','+ JSON.stringify(AllTasks) + ',' + idTaskItem + ')'
+      code: "copItem(" + idTask + "," + JSON.stringify(AllTasks) + "," + idTaskItem + ")"
     });
-
   });
 };
 
-checkout = (idTask,persoInfo,cardInfo) => {
-  
-  updateTab(tabId, 'https://www.supremenewyork.com/checkout', () => {
+checkout = (idTask, persoInfo, cardInfo) => {
+  updateTab(tabId, "https://www.supremenewyork.com/checkout", () => {
     chrome.tabs.executeScript(tabId, {
-      code: 'checkout(' + idTask + ','+ JSON.stringify(persoInfo)+','+ JSON.stringify(cardInfo)+')'
+      code: "checkout(" + idTask + "," + JSON.stringify(persoInfo) + "," + JSON.stringify(cardInfo) + ")"
     });
-
   });
 };
 
@@ -115,7 +112,7 @@ function findLink(cats, keywords, taskNb) {
     let AllTasksParse = JSON.parse(localStorage.AllTasks);
     while (i < words.length) {
       let finalInsert;
-      
+
       let mdlFind = words[i]
         .split("/")[0]
         .toLowerCase()
@@ -141,17 +138,49 @@ function findLink(cats, keywords, taskNb) {
 
         j++;
       }
+
       if (finalInsert != null || finalInsert != undefined) {
-        
         if (AllTasksParse[finalInsert.taskNb].execTask == undefined || AllTasksParse[finalInsert.taskNb].execTask == "") {
           AllTasksParse[finalInsert.taskNb].execTask = "[" + JSON.stringify(finalInsert) + "]";
         } else {
           let lastList = AllTasksParse[finalInsert.taskNb].execTask.substr(0, AllTasksParse[finalInsert.taskNb].execTask.length - 1);
           AllTasksParse[finalInsert.taskNb].execTask = lastList + "," + JSON.stringify(finalInsert) + "]";
         }
-        //console.log(finalInsert);
         changeStorageValue(AllTasksParse);
+      }
 
+      if (finalInsert == null || finalInsert == undefined) {
+        fetch("https://www.supremenewyork.com/mobile_stock.json")
+          .then(result => result.json())
+          .then(data => {
+
+            let k = 0;
+            while (k < data.products_and_categories.new.length) {
+              
+              let mdl = data.products_and_categories.new[k].name.toLowerCase();
+              if (mdl.includes(mdlFind)) {
+                console.log('ye')
+                finalInsert = {
+                  link: "https://www.supremenewyork.com/shop/" + data.products_and_categories.new[k].id,
+                  taskNb: taskNb,
+                  color: colorFind
+                };
+                break ;
+              }
+              k++;
+            }
+            if (finalInsert != null || finalInsert != undefined) {
+              if (AllTasksParse[finalInsert.taskNb].execTask == undefined || AllTasksParse[finalInsert.taskNb].execTask == "") {
+                AllTasksParse[finalInsert.taskNb].execTask = "[" + JSON.stringify(finalInsert) + "]";
+              } else {
+                let lastList = AllTasksParse[finalInsert.taskNb].execTask.substr(0, AllTasksParse[finalInsert.taskNb].execTask.length - 1);
+                AllTasksParse[finalInsert.taskNb].execTask = lastList + "," + JSON.stringify(finalInsert) + "]";
+              }
+              changeStorageValue(AllTasksParse);
+            }else{
+              console.log('g rien trouver woula')
+            }
+          });
       }
 
       i++;
@@ -185,22 +214,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let task = JSON.parse(AllTasksParse[request.idtask].execTask);
   switch (request.msg) {
     case "addItemToBasket":
-      
-      if (task.length - 1 == request.idtaskitem){
-        sendResponse('checkout');
-        checkout(request.idtask,localStorage.persoInfo,localStorage.cardInfo);
-      }else{
-        let newID = parseInt(request.idtaskitem) + 1
+      if (task.length - 1 == request.idtaskitem) {
+        sendResponse("checkout");
+        checkout(request.idtask, localStorage.persoInfo, localStorage.cardInfo);
+      } else {
+        let newID = parseInt(request.idtaskitem) + 1;
         cop(request.idtask, newID, localStorage.AllTasks);
       }
       break;
 
     case "fillCheckout":
-
-      if (AllTasksParse[request.idtask].checkout == "true" && AllTasksParse[request.idtask].stateCheckoutBtn == "true"){
-        sendResponse({callback: 'checkout', timer: AllTasksParse[request.idtask].checkoutDelay});
-      } else if (AllTasksParse[request.idtask].checkout == "true" && AllTasksParse[request.idtask].stateCheckoutBtn == "false"){
-        sendResponse({callback: 'checkout', timer: '0'});
+      if (AllTasksParse[request.idtask].checkout == "true" && AllTasksParse[request.idtask].stateCheckoutBtn == "true") {
+        sendResponse({ callback: "checkout", timer: AllTasksParse[request.idtask].checkoutDelay });
+      } else if (AllTasksParse[request.idtask].checkout == "true" && AllTasksParse[request.idtask].stateCheckoutBtn == "false") {
+        sendResponse({ callback: "checkout", timer: "0" });
       } else {
         sendResponse(0);
         AllTasksParse[request.idtask].status = "Successfully";
@@ -210,20 +237,27 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break;
     case "soldOut":
       let copInfo = localStorage.copInfo;
-      if (copInfo.solOut == "next"){
+      if (copInfo.solOut == "next") {
         sendResponse("next");
-        let newID = parseInt(request.idtaskitem) + 1
+        let newID = parseInt(request.idtaskitem) + 1;
         cop(request.idtask, newID, localStorage.AllTasks);
-      }else{
+      } else {
         sendResponse("wait");
-       //setTimeout(`cop(${request.idtask}, ${request.idtaskitem}, ${JSON.stringify(localStorage.AllTasks)})`, 5000)
+        //setTimeout(`cop(${request.idtask}, ${request.idtaskitem}, ${JSON.stringify(localStorage.AllTasks)})`, 5000)
       }
       break;
     case "refreshCop":
       cop(request.idtask, request.idtaskitem, localStorage.AllTasks);
       break;
-    case "checkoutError":
-
+    case "findingLink":
+        task[request.idtaskitem].link = request.link;
+        task[request.idtaskitem].color = "";
+        AllTasksParse[request.idtask].execTask = JSON.stringify(task);
+      console.log(AllTasksParse)
+      changeStorageValue(AllTasksParse);
       break;
+    case "checkoutError":
+      break;
+      
   }
 });
