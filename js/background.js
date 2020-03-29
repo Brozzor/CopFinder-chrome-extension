@@ -235,7 +235,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
       break;
     case "refreshCop":
-      cop(request.idtask, request.idtaskitem, localStorage.AllTasks);
+        cop(request.idtask, request.idtaskitem, localStorage.AllTasks);
+      break;
+      
+    case "stopBot":
+        chrome.tabs.remove(tabId);
+        
       break;
     case "findingLink":
       task[request.idtaskitem].link = request.link;

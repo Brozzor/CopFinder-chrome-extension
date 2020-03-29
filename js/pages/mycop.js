@@ -159,6 +159,7 @@ function SearchBtnPanel(){
             if (AllTasksParse[item.dataset.id].status == 'On Play'){
               AllTasksParse[item.dataset.id].state = "0";
               changeState('On Pause');
+              chrome.runtime.sendMessage({msg: "stopBot", idtask: item.dataset.id});
             }else{
               changeState('On Play');
             }

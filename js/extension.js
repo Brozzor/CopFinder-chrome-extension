@@ -77,7 +77,7 @@ function selectSize(sizeWanted,idTask,idTaskItem){
 			 	
 			}
 			else if (i == sizeForm.length - 1) {
-				chrome.runtime.sendMessage({msg: "NoSize", idtask: idTask,idtaskitem: idTaskItem});
+				setTimeout(`soldOutRefresh(${idTask},${idTaskItem})`, 5000)
 				break
             }
             i++;
