@@ -89,14 +89,14 @@ createSupremeTab = () => {
   });
 };
 
-cop = (idTask, idTaskItem, AllTasks) => {
+cop = (idTask, idTaskItem, AllTasks , copInfo) => {
   let task = JSON.parse(localStorage.AllTasks);
   task = task[idTask];
   let AllTasksExecParse = JSON.parse(task.execTask);
 
   updateTab(tabId, AllTasksExecParse[idTaskItem].link, () => {
     chrome.tabs.executeScript(tabId, {
-      code: "copItem(" + idTask + "," + JSON.stringify(AllTasks) + "," + idTaskItem + ")"
+      code: "copItem(" + idTask + "," + JSON.stringify(AllTasks) + "," + idTaskItem + "," + JSON.stringify(copInfo) + ")"
     });
   });
 };
@@ -174,7 +174,7 @@ function findLink(cats, keywords, taskNb, data) {
       i++;
     }
 
-    cop(taskNb, 0, localStorage.AllTasks);
+    cop(taskNb, 0, localStorage.AllTasks,localStorage.copInfo);
   });
 }
 
@@ -207,7 +207,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         checkout(request.idtask, localStorage.persoInfo, localStorage.cardInfo);
       } else {
         let newID = parseInt(request.idtaskitem) + 1;
-        cop(request.idtask, newID, localStorage.AllTasks);
+        cop(request.idtask, newID, localStorage.AllTasks, localStorage.copInfo);
       }
       break;
 
@@ -228,14 +228,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (copInfo.solOut == "next") {
         sendResponse("next");
         let newID = parseInt(request.idtaskitem) + 1;
-        cop(request.idtask, newID, localStorage.AllTasks);
+        cop(request.idtask, newID, localStorage.AllTasks, localStorage.copInfo);
       } else {
         sendResponse("wait");
         //setTimeout(`cop(${request.idtask}, ${request.idtaskitem}, ${JSON.stringify(localStorage.AllTasks)})`, 5000)
       }
       break;
     case "refreshCop":
-        cop(request.idtask, request.idtaskitem, localStorage.AllTasks);
+        cop(request.idtask, request.idtaskitem, localStorage.AllTasks, localStorage.copInfo);
       break;
       
     case "stopBot":

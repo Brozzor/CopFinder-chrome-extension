@@ -1,4 +1,5 @@
-function copItem(idTask, allTask, idTaskItem){
+function copItem(idTask, allTask, idTaskItem, copInfo){
+    let copInf = JSON.parse(copInfo);
     AllTasksParse = JSON.parse(allTask);
     task = AllTasksParse[idTask];
     taskExecParse = JSON.parse(task.execTask);
@@ -23,7 +24,7 @@ function copItem(idTask, allTask, idTaskItem){
             if (callback == "next"){
                 addToBasket(idTask,idTaskItem);
             }else{
-                setTimeout(`soldOutRefresh(${idTask},${idTaskItem})`, 5000)
+                setTimeout(`soldOutRefresh(${idTask},${idTaskItem})`, copInf.timerRestock)
                 
             }
         });
@@ -32,15 +33,15 @@ function copItem(idTask, allTask, idTaskItem){
 
     switch (catName) {
         case "shoes":
-            selectSize(task.shoeSize,idTask,idTaskItem);
+            selectSize(task.shoeSize,idTask,idTaskItem,copInf);
             break;
         
         case "pants":
-            selectSize(task.pantSize,idTask,idTaskItem);
+            selectSize(task.pantSize,idTask,idTaskItem,copInf);
             break;
     
         default:
-            selectSize(task.size,idTask,idTaskItem);
+            selectSize(task.size,idTask,idTaskItem,copInf);
             break;
     }
 
@@ -54,7 +55,7 @@ function findCat(){
     return window.location.pathname.split("/")[2];
 }
 
-function selectSize(sizeWanted,idTask,idTaskItem){
+function selectSize(sizeWanted,idTask,idTaskItem, copInf){
     let sizeForm = document.getElementById("size") || document.getElementById("s")
         let i = 0;
         if (sizeForm[0] == undefined && document.getElementsByClassName('button in-cart')[0].innerText.trim() == "in basket")
@@ -77,7 +78,7 @@ function selectSize(sizeWanted,idTask,idTaskItem){
 			 	
 			}
 			else if (i == sizeForm.length - 1) {
-				setTimeout(`soldOutRefresh(${idTask},${idTaskItem})`, 5000)
+				setTimeout(`soldOutRefresh(${idTask},${idTaskItem})`, copInf.timerRestock)
 				break
             }
             i++;
