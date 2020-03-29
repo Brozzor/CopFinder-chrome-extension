@@ -62,9 +62,15 @@ function checkTask(reset = 0) {
   return false;
 }
 
+function execTaskTimer(){
+  var newURL = window.location.protocol + "//" + window.location.host + "/pages/timer.html";
+  createSupremeTab(newURL).then(tabid => {
+    
+  });
+}
+
 function execTask(nb) {
-  createSupremeTab().then(tabid => {
-    tabId = tabid;
+  createSupremeTab("https://www.supremenewyork.com/shop/all/").then(tabid => {
     let AllTasksParse = JSON.parse(localStorage.AllTasks);
     AllTasksParse[nb].execTask = "";
     changeStorageValue(AllTasksParse);
@@ -76,13 +82,14 @@ function execTask(nb) {
   });
 }
 
-createSupremeTab = () => {
+createSupremeTab = (URL) => {
   return new Promise(function(accept, reject) {
     chrome.tabs.create(
       {
-        url: "https://www.supremenewyork.com/shop/all/"
+        url: URL
       },
       tab => {
+        tabId = tab.id;
         accept(tab.id);
       }
     );
