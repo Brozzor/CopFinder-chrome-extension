@@ -265,7 +265,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       changeStorageValue(AllTasksParse);
       break; 
     case "startCopTimer":
-      //chrome.tabs.remove(tabId);
+      chrome.tabs.remove(tabId);
       execTask(request.idtask);
       break;
     case "endTimer":
