@@ -1,10 +1,28 @@
+function $_GET(param) {
+	var vars = {};
+	window.location.href.replace( location.hash, '' ).replace( 
+		/[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+		function( m, key, value ) { // callback
+			vars[key] = value !== undefined ? value : '';
+		}
+	);
+
+	if ( param ) {
+		return vars[param] ? vars[param] : null;	
+	}
+	return vars;
+}
+
+setTime($_GET('idt'), $_GET('ttc'));
+
+function setTime(idTask,timeToCop){
 const millisecond = 100,
       second = 1000,
       minute = second * 60,
       hour = minute * 60,
       day = hour * 24;
 
-let countDown = new Date('Sep 30, 2020 00:00:00').getTime(),
+let countDown = new Date(timeToCop).getTime(),
     x = setInterval(function() {    
 
       let now = new Date().getTime(),
@@ -17,7 +35,10 @@ let countDown = new Date('Sep 30, 2020 00:00:00').getTime(),
 
 
       if (distance < 0) {
+        chrome.runtime.sendMessage({msg: "startCopTimer", idtask: idTask});
         clearInterval(x);
+        
       }
 
     }, millisecond)
+}

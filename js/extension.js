@@ -86,12 +86,7 @@ function selectSize(sizeWanted,idTask,idTaskItem, copInf){
 }
 
 function addToBasket(idTask,idTaskItem){
-    chrome.runtime.sendMessage({msg: "addItemToBasket", idtask: idTask,idtaskitem: idTaskItem}, function(callback) {
-        if (callback != null){
-            checkout();
-        }
- 
-    });
+    chrome.runtime.sendMessage({msg: "addItemToBasket", idtask: idTask,idtaskitem: idTaskItem});
 }
 
 function checkout(idTask, persoInfos, cardInfos){
@@ -125,6 +120,7 @@ function checkout(idTask, persoInfos, cardInfos){
             console.log('checkout with timer'+ rep.timer);
         }
     });
+    chrome.runtime.sendMessage({msg: "endTimer", idtask: '0'});
 }
 
 function checkoutClick(idTask){

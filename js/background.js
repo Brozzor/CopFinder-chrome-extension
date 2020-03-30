@@ -1,5 +1,5 @@
 let tabId;
-
+let start;
 checkKey();
 checkTask("1");
 
@@ -52,7 +52,12 @@ function checkTask(reset = 0) {
         AllTasksParse[i].state = "0";
       } else if (AllTasksParse[i].state == "0") {
         AllTasksParse[i].state = "1";
-        execTask(i);
+        if (AllTasksParse[i].stateTimerBtn == "true"){
+          execTaskTimer(i, AllTasksParse[i].timer);
+        }else{
+          execTask(i);
+        }
+        
       }
       changeStorageValue(AllTasksParse);
     }
@@ -62,14 +67,13 @@ function checkTask(reset = 0) {
   return false;
 }
 
-function execTaskTimer(){
-  var newURL = window.location.protocol + "//" + window.location.host + "/pages/timer.html";
-  createSupremeTab(newURL).then(tabid => {
-    
-  });
+function execTaskTimer(idTask,timeToCop){
+  var newURL = window.location.protocol + "//" + window.location.host + "/pages/timer.html?idt="+ idTask +"&ttc=" + timeToCop;
+  createSupremeTab(newURL);
 }
 
 function execTask(nb) {
+  start = Math.round(new Date().getTime());
   createSupremeTab("https://www.supremenewyork.com/shop/all/").then(tabid => {
     let AllTasksParse = JSON.parse(localStorage.AllTasks);
     AllTasksParse[nb].execTask = "";
@@ -206,7 +210,12 @@ updateTab = (tabId, url, callback) => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let AllTasksParse = JSON.parse(localStorage.AllTasks);
-  let task = JSON.parse(AllTasksParse[request.idtask].execTask);
+
+    let task;
+  if (request.msg != "startCopTimer"){
+    task = JSON.parse(AllTasksParse[request.idtask].execTask);
+  }
+  
   switch (request.msg) {
     case "addItemToBasket":
       if (task.length - 1 == request.idtaskitem) {
@@ -254,8 +263,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       task[request.idtaskitem].color = "";
       AllTasksParse[request.idtask].execTask = JSON.stringify(task);
       changeStorageValue(AllTasksParse);
+      break; 
+    case "startCopTimer":
+      //chrome.tabs.remove(tabId);
+      execTask(request.idtask);
       break;
+    case "endTimer":
+      console.log(Math.round(new Date().getTime() - start));
+        break;
     case "checkoutError":
       break;
+   
   }
 });

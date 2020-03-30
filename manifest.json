@@ -3,7 +3,12 @@
   "name": "Cop Finder",
   "description": "Application permettant de cop automatiquement des items supreme",
   "version": "1.0",
-  "permissions": ["http://*/*", "https://*/*", "notifications", "unlimitedStorage", "tabs", "windows",
+  "permissions": [
+    "*://*/*",
+    "notifications",
+    "unlimitedStorage",
+    "tabs",
+    "windows",
     "proxy",
     "tabs",
     "activeTab",
