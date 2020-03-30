@@ -481,7 +481,7 @@ function displayTask(task, nb){
   element.classList.add("center");
   element.innerHTML = `
   <th scope="row">${nb+1}</th>
-  <td>${task.keywordFinder}</td>
+  <td width="150">${task.keywordFinder}</td>
   <td>Pant Size: ${task.pantSize} <br> Shoe Size: ${task.shoeSize}<br>Size: ${task.size}</td>
   <td>None</td>
   <td>${stateTd}</td>
