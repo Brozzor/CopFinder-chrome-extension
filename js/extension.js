@@ -58,7 +58,7 @@ function findCat(){
 function selectSize(sizeWanted,idTask,idTaskItem, copInf){
     let sizeForm = document.getElementById("size") || document.getElementById("s")
         let i = 0;
-        if (sizeForm[0] == undefined && document.getElementsByClassName('button in-cart')[0].innerText.trim() == "in basket")
+        if (sizeForm[0] == undefined && document.getElementsByClassName('button in-cart')[0] != undefined)
         {
             addToBasket(idTask,idTaskItem);
             return false;
@@ -128,7 +128,7 @@ function checkoutClick(idTask){
     document.getElementsByName('commit')[0].click();
     setTimeout(function () {
         if (document.querySelector("#cart-cc > fieldset > div.errors") != undefined){
-            chrome.runtime.sendMessage({msg: "checkoutError", idtask: idTask})
+            chrome.runtime.sendMessage({msg: "error", idtask: idTask, error: '300'})
         }
     }, 1000);
 }
