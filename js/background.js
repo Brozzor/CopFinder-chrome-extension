@@ -196,11 +196,23 @@ updateTab = (tabId, url, callback) => {
 
 function errorManager(taskID, id){
   let AllTasksParse = JSON.parse(localStorage.AllTasks);
+  let copInfo = JSON.parse(localStorage.copInfo);
   console.log(id)
+  if (copInfo.checkError == 'send'){
+    notificationsSend('errorNotif', `Error detected on task n°${taskID}`, `Error code : ${id}`)
+  }
   AllTasksParse[taskID].status = id;
   AllTasksParse[taskID].state = "0";
   changeStorageValue(AllTasksParse);
-  chrome.tabs.remove(tabId);      
+  chrome.tabs.remove(tabId);    
+}
+
+function notificationsSend(name, title, message){
+   chrome.notifications.create(name, {type:'basic', iconUrl: '/img/icon.png', title: title,message: message});
+   clearNotif(name);
+}
+function clearNotif(name){
+  chrome.notifications.clear(name);
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
