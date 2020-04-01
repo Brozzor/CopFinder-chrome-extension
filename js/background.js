@@ -21,7 +21,6 @@ function requestApi(use, argv, callback) {
     if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
       let res = JSON.parse(xhr.responseText);
       if (res.status == "1" || res[0].status == "1") {
-        console.log("ddd");
         if (callback != null) {
           callback(res);
         }
@@ -88,7 +87,6 @@ function execTask(nb) {
             j++;
           }
         }
-        console.log(allItems);
         findLink(AllTasksParse[nb].cat, AllTasksParse[nb].keywordFinder, nb, allItems);
       });
   });
@@ -158,6 +156,7 @@ function findLink(cats, keywords, taskNb, data) {
     k++;
   }
 
+
   if (finalInsert != null || finalInsert != undefined) {
     if (AllTasksParse[finalInsert.taskNb].execTask == undefined || AllTasksParse[finalInsert.taskNb].execTask == "") {
       AllTasksParse[finalInsert.taskNb].execTask = "[" + JSON.stringify(finalInsert) + "]";
@@ -166,8 +165,9 @@ function findLink(cats, keywords, taskNb, data) {
       AllTasksParse[finalInsert.taskNb].execTask = lastList + "," + JSON.stringify(finalInsert) + "]";
     }
     changeStorageValue(AllTasksParse);
-  } else {
-    console.log("not item find");
+  }else{
+    errorManager(taskNb, '101');
+    return false;
   }
 
   i++;
@@ -193,6 +193,15 @@ updateTab = (tabId, url, callback) => {
     }
   );
 };
+
+function errorManager(taskID, id){
+  let AllTasksParse = JSON.parse(localStorage.AllTasks);
+  console.log(id)
+  AllTasksParse[taskID].status = id;
+  AllTasksParse[taskID].state = "0";
+  changeStorageValue(AllTasksParse);
+  chrome.tabs.remove(tabId);      
+}
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let AllTasksParse = JSON.parse(localStorage.AllTasks);
@@ -270,7 +279,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       console.log(Math.round(new Date().getTime() - start));
       break;
     case "error":
-      console.log(request.error)
+        errorManager(request.idtask,request.id);
       break;
   }
 });

@@ -10,10 +10,11 @@ function copItem(idTask, allTask, idTaskItem, copInfo){
             if (name.includes(taskExecParse[idTaskItem].color))
             {
                 chrome.runtime.sendMessage({msg: "findingLink", idtask: idTask,idtaskitem: idTaskItem,link: document.querySelector("#details > ul").childNodes[i].firstChild.href});
-                break;
+                return false;
             }
             i++;
         }
+        chrome.runtime.sendMessage({msg: "error", idtask: idTask,id: '102'});
         return false;
     }
 
@@ -118,18 +119,18 @@ function checkout(idTask, persoInfos, cardInfos){
         if (rep.callback != 0)
         {
             setTimeout(`checkoutClick(${idTask})`, rep.timer);
-            console.log('checkout with timer'+ rep.timer);
         }
     });
     chrome.runtime.sendMessage({msg: "endTimer", idtask: '0'});
 }
 
 function checkoutClick(idTask){
-    console.log('go checkout');
     document.getElementsByName('commit')[0].click();
-    setTimeout(function () {
-        if (document.querySelector("#cart-cc > fieldset > div.errors") != undefined){
-            chrome.runtime.sendMessage({msg: "error", idtask: idTask, error: '300'})
-        }
-    }, 1000);
+    setTimeout(`checkError(${idTask})`, 4000);
+}
+
+function checkError(idTask){
+    if (document.querySelector("#cart-cc > fieldset > div.errors") != undefined){
+        chrome.runtime.sendMessage({msg: "error", idtask: idTask, id: '301'})
+    }
 }

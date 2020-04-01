@@ -472,7 +472,7 @@ function displayTask(task, nb){
     stateTd = `<span class="badge badge-warning state-badge"><i class="fa fa-circle"></i> Currently active</span>`;
   }else{
     statePlayBtn = 'play';
-    stateTd = `<span class="badge badge-danger state-badge"><i class="fa fa-circle"></i> ${task.status}</span>`;
+    stateTd = `<span class="badge badge-danger state-badge"><i class="fa fa-circle"></i> Error code : ${task.status}</span>`;
   }
 
   let element = document.createElement("tr");
