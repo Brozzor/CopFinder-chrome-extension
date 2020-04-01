@@ -14,6 +14,7 @@ function copItem(idTask, allTask, idTaskItem, copInfo){
             }
             i++;
         }
+        return false;
     }
 
     let catName = findCat();

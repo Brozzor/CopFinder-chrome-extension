@@ -52,12 +52,11 @@ function checkTask(reset = 0) {
         AllTasksParse[i].state = "0";
       } else if (AllTasksParse[i].state == "0") {
         AllTasksParse[i].state = "1";
-        if (AllTasksParse[i].stateTimerBtn == "true"){
+        if (AllTasksParse[i].stateTimerBtn == "true") {
           execTaskTimer(i, AllTasksParse[i].timer);
-        }else{
+        } else {
           execTask(i);
         }
-        
       }
       changeStorageValue(AllTasksParse);
     }
@@ -67,8 +66,8 @@ function checkTask(reset = 0) {
   return false;
 }
 
-function execTaskTimer(idTask,timeToCop){
-  var newURL = window.location.protocol + "//" + window.location.host + "/pages/timer.html?idt="+ idTask +"&ttc=" + timeToCop;
+function execTaskTimer(idTask, timeToCop) {
+  var newURL = window.location.protocol + "//" + window.location.host + "/pages/timer.html?idt=" + idTask + "&ttc=" + timeToCop;
   createSupremeTab(newURL);
 }
 
@@ -81,12 +80,21 @@ function execTask(nb) {
     fetch("https://www.supremenewyork.com/mobile_stock.json")
       .then(result => result.json())
       .then(data => {
-        findLink(AllTasksParse[nb].cat, AllTasksParse[nb].keywordFinder, nb, data);
+        let allItems = [];
+        for (let i in data.products_and_categories) {
+          let j = 0;
+          while (j < data.products_and_categories[i].length) {
+            allItems.push(data.products_and_categories[i][j]);
+            j++;
+          }
+        }
+        console.log(allItems);
+        findLink(AllTasksParse[nb].cat, AllTasksParse[nb].keywordFinder, nb, allItems);
       });
   });
 }
 
-createSupremeTab = (URL) => {
+createSupremeTab = URL => {
   return new Promise(function(accept, reject) {
     chrome.tabs.create(
       {
@@ -100,7 +108,7 @@ createSupremeTab = (URL) => {
   });
 };
 
-cop = (idTask, idTaskItem, AllTasks , copInfo) => {
+cop = (idTask, idTaskItem, AllTasks, copInfo) => {
   let task = JSON.parse(localStorage.AllTasks);
   task = task[idTask];
   let AllTasksExecParse = JSON.parse(task.execTask);
@@ -121,72 +129,50 @@ checkout = (idTask, persoInfo, cardInfo) => {
 };
 
 function findLink(cats, keywords, taskNb, data) {
-  requestApi("item-all", "", function(res) {
-    let i = 0;
-    let words = keywords;
-    let AllTasksParse = JSON.parse(localStorage.AllTasks);
-    while (i < words.length) {
-      let finalInsert;
-
-      let mdlFind = words[i]
+  let AllTasksParse = JSON.parse(localStorage.AllTasks);
+  let words = keywords;
+  let i = 0;
+  while (i < words.length) {
+  let finalInsert;
+  
+  let mdlFind = words[i]
         .split("/")[0]
         .toLowerCase()
         .trim();
-      let colorFind = words[i]
+
+  let colorFind = words[i]
         .split("/")[1]
         .toLowerCase()
         .trim();
-      let j = 1;
-      while (j < res.length) {
-        let mdl = res[j].title.toLowerCase().trim();
-        let color = res[j].model.toLowerCase().trim();
-
-        if (colorFind == "") {
-          color = true;
-        }
-        if (color.includes(colorFind) && mdl.includes(mdlFind)) {
-          finalInsert = {
-            link: res[j].link,
-            taskNb: taskNb
-          };
-        }
-
-        j++;
-      }
-
-      // il faut recuperer la liste avant d'executer la fonction
-      if (finalInsert == null || finalInsert == undefined) {
-        let k = 0;
-        while (k < data.products_and_categories.new.length) {
-          let mdl = data.products_and_categories.new[k].name.toLowerCase();
-          if (mdl.includes(mdlFind)) {
-            finalInsert = {
-              link: "https://www.supremenewyork.com/shop/" + data.products_and_categories.new[k].id,
-              taskNb: taskNb,
-              color: colorFind
-            };
-            break;
-          }
-          k++;
-        }
-      }
-      if (finalInsert != null || finalInsert != undefined) {
-        if (AllTasksParse[finalInsert.taskNb].execTask == undefined || AllTasksParse[finalInsert.taskNb].execTask == "") {
-          AllTasksParse[finalInsert.taskNb].execTask = "[" + JSON.stringify(finalInsert) + "]";
-        } else {
-          let lastList = AllTasksParse[finalInsert.taskNb].execTask.substr(0, AllTasksParse[finalInsert.taskNb].execTask.length - 1);
-          AllTasksParse[finalInsert.taskNb].execTask = lastList + "," + JSON.stringify(finalInsert) + "]";
-        }
-        changeStorageValue(AllTasksParse);
-      } else {
-        console.log("not item find");
-      }
-
-      i++;
+  let k = 0;
+  while (k < data.length) {
+    let mdl = data[k].name.toLowerCase();
+    if (mdl.includes(mdlFind)) {
+      finalInsert = {
+        link: "https://www.supremenewyork.com/shop/" + data[k].id,
+        taskNb: taskNb,
+        color: colorFind
+      };
+      break;
     }
+    k++;
+  }
 
-    cop(taskNb, 0, localStorage.AllTasks,localStorage.copInfo);
-  });
+  if (finalInsert != null || finalInsert != undefined) {
+    if (AllTasksParse[finalInsert.taskNb].execTask == undefined || AllTasksParse[finalInsert.taskNb].execTask == "") {
+      AllTasksParse[finalInsert.taskNb].execTask = "[" + JSON.stringify(finalInsert) + "]";
+    } else {
+      let lastList = AllTasksParse[finalInsert.taskNb].execTask.substr(0, AllTasksParse[finalInsert.taskNb].execTask.length - 1);
+      AllTasksParse[finalInsert.taskNb].execTask = lastList + "," + JSON.stringify(finalInsert) + "]";
+    }
+    changeStorageValue(AllTasksParse);
+  } else {
+    console.log("not item find");
+  }
+
+  i++;
+  }
+  cop(taskNb, 0, localStorage.AllTasks, localStorage.copInfo);
 }
 
 updateTab = (tabId, url, callback) => {
@@ -211,11 +197,11 @@ updateTab = (tabId, url, callback) => {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let AllTasksParse = JSON.parse(localStorage.AllTasks);
 
-    let task;
-  if (request.msg != "startCopTimer"){
+  let task;
+  if (request.msg != "startCopTimer") {
     task = JSON.parse(AllTasksParse[request.idtask].execTask);
   }
-  
+
   switch (request.msg) {
     case "addItemToBasket":
       if (task.length - 1 == request.idtaskitem) {
@@ -229,9 +215,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     case "fillCheckout":
       if (AllTasksParse[request.idtask].checkout == "true" && AllTasksParse[request.idtask].stateCheckoutBtn == "true") {
-        sendResponse({ callback: "checkout", timer: AllTasksParse[request.idtask].checkoutDelay });
+        sendResponse({
+          callback: "checkout",
+          timer: AllTasksParse[request.idtask].checkoutDelay
+        });
       } else if (AllTasksParse[request.idtask].checkout == "true" && AllTasksParse[request.idtask].stateCheckoutBtn == "false") {
-        sendResponse({ callback: "checkout", timer: "0" });
+        sendResponse({
+          callback: "checkout",
+          timer: "0"
+        });
       } else {
         sendResponse(0);
         AllTasksParse[request.idtask].status = "Successfully";
@@ -251,28 +243,34 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
       break;
     case "refreshCop":
-        cop(request.idtask, request.idtaskitem, localStorage.AllTasks, localStorage.copInfo);
+      cop(request.idtask, request.idtaskitem, localStorage.AllTasks, localStorage.copInfo);
       break;
-      
+
     case "stopBot":
-        chrome.tabs.remove(tabId);
-        
+      chrome.tabs.remove(tabId);
+
       break;
     case "findingLink":
       task[request.idtaskitem].link = request.link;
       task[request.idtaskitem].color = "";
       AllTasksParse[request.idtask].execTask = JSON.stringify(task);
       changeStorageValue(AllTasksParse);
-      break; 
+      if (request.idtaskitem == task.length - 1){
+        cop(request.idtask, 0, localStorage.AllTasks, localStorage.copInfo);
+      }else{
+        let newID = parseInt(request.idtaskitem) + 1;
+        cop(request.idtask, newID, localStorage.AllTasks, localStorage.copInfo);
+      }
+      break;
     case "startCopTimer":
       chrome.tabs.remove(tabId);
       execTask(request.idtask);
       break;
     case "endTimer":
       console.log(Math.round(new Date().getTime() - start));
-        break;
-    case "checkoutError":
       break;
-   
+    case "error":
+      console.log(request.error)
+      break;
   }
 });
