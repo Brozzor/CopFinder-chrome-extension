@@ -67,8 +67,8 @@ function selectSize(sizeWanted,idTask,idTaskItem, copInf){
         }
 		while (i < sizeForm.length) {
             
-			let html = sizeForm[i] != undefined ? sizeForm[i].innerText.trim() : sizeWanted
-            if (html == sizeWanted || sizeWanted == "any") {
+            let html = sizeForm[i] != undefined ? sizeForm[i].innerText.trim() : sizeWanted
+            if (html == sizeWanted || sizeWanted == "any" || html.toLowerCase().includes(sizeWanted)) {
 
 				if(sizeForm[i])
 					sizeForm.value = sizeForm[i].value;
@@ -126,7 +126,7 @@ function checkout(idTask, persoInfos, cardInfos){
 
 function checkoutClick(idTask){
     document.getElementsByName('commit')[0].click();
-    setTimeout(`checkError(${idTask})`, 4000);
+    //setTimeout(`checkError(${idTask})`, 4000);
 }
 
 function checkError(idTask){

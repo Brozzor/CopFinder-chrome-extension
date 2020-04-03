@@ -46,15 +46,15 @@ function taskPanel() {
 
                 <select id="shoeData" class="form-control form-control-sm">
                   <option value="any" selected="">Open this select menu</option>
-                  <option value="US 8.5 / UK 8">US 8.5 / UK 8</option>
-                  <option value="US 9 / UK 8.5">US 9 / UK 8.5</option>
-                  <option value="US 9.5 / UK 9">US 9.5 / UK 9</option>
-                  <option value="US 10 / UK 9.5">US 10 / UK 9.5</option>
-                  <option value="US 10.5 / UK 10">US 10.5 / UK 10</option>
-                  <option value="US 11 / UK 10.5">US 11 / UK 10.5</option>
-                  <option value="US 11.5 / UK 11">US 11.5 / UK 11</option>
-                  <option value="US 12 / UK 11.5">US 12 / UK 11.5</option>
-                  <option value="US 13 / UK 12.5">US 13 / UK 12.5</option>
+                  <option value="us 8.5">US 8.5</option>
+                  <option value="us 9">US 9</option>
+                  <option value="us 9.5">US 9.5</option>
+                  <option value="us 10">US 10</option>
+                  <option value="us 10.5">US 10.5</option>
+                  <option value="us 11">US 11</option>
+                  <option value="us 11.5">US 11.5</option>
+                  <option value="us 12">US 12</option>
+                  <option value="us 13">US 13</option>
                 </select>
 
                   </div>
