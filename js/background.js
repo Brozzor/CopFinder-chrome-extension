@@ -14,7 +14,7 @@ function checkKey() {
 
 function requestApi(use, argv, callback) {
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://cop-finder.com/api/api.php", true);
+  xhr.open("POST", "https://cop-finder.com/api/api.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.send("key=" + localStorage["keyG"] + "&use=" + use + argv);
   xhr.onreadystatechange = function() {

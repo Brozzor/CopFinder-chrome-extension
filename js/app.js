@@ -34,7 +34,7 @@ function loginPage() {
 }
 
 function redirectToBuy() {
-  chrome.tabs.create({ url: "http://cop-finder.com/" });
+  chrome.tabs.create({ url: "https://cop-finder.com/" });
 }
 
 function notification(color, message) {
@@ -62,7 +62,7 @@ function reconnectFromKey() {
 
   let xhr = new XMLHttpRequest();
   let use = "reconnect";
-  xhr.open("POST", "http://cop-finder.com/api/api.php", true);
+  xhr.open("POST", "https://cop-finder.com/api/api.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.send("key=" + localStorage["keyG"] + "&use=" + use);
   xhr.onreadystatechange = function() {
@@ -83,7 +83,7 @@ function reconnectFromKey() {
 function initialPerso() {
   let xhr = new XMLHttpRequest();
   let use = "perso";
-  xhr.open("POST", "http://cop-finder.com/api/api.php", true);
+  xhr.open("POST", "https://cop-finder.com/api/api.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.send(
     "key=" +
@@ -138,7 +138,7 @@ function launch() {
   let mail = document.getElementById("mail").value;
   let token = document.getElementById("token").value;
   let use = "login";
-  xhr.open("POST", "http://cop-finder.com/api/api.php", true);
+  xhr.open("POST", "https://cop-finder.com/api/api.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.send("mail=" + mail + "&token=" + token + "&use=" + use);
   xhr.onreadystatechange = function() {

@@ -37,7 +37,7 @@ function addInformation(){
 function addInfoPersoInBdd(inf) {
   let xhr = new XMLHttpRequest();
   let use = "perso-insert";
-  xhr.open("POST", "http://cop-finder.com/api/api.php", true);
+  xhr.open("POST", "https://cop-finder.com/api/api.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.send(
     "key=" +

@@ -31,7 +31,7 @@ function mainPage() {
 function initialItemList(){
   let xhr = new XMLHttpRequest();
   let use = "item-cat";
-  xhr.open("POST", "http://cop-finder.com/api/api.php", true);
+  xhr.open("POST", "https://cop-finder.com/api/api.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.send("key=" + localStorage["keyG"] + "&use=" + use);
   xhr.onreadystatechange = function() {
