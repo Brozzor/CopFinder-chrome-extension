@@ -1,4 +1,3 @@
-let tabId;
 let start;
 checkKey();
 checkTask("1");
@@ -75,6 +74,7 @@ function execTask(nb) {
   createSupremeTab("https://www.supremenewyork.com/shop/all/").then(tabid => {
     let AllTasksParse = JSON.parse(localStorage.AllTasks);
     AllTasksParse[nb].execTask = "";
+    AllTasksParse[nb].tabId = tabid;
     changeStorageValue(AllTasksParse);
     fetch("https://www.supremenewyork.com/mobile_stock.json")
       .then(result => result.json())
@@ -99,7 +99,6 @@ createSupremeTab = URL => {
         url: URL
       },
       tab => {
-        tabId = tab.id;
         accept(tab.id);
       }
     );
@@ -111,16 +110,18 @@ cop = (idTask, idTaskItem, AllTasks, copInfo) => {
   task = task[idTask];
   let AllTasksExecParse = JSON.parse(task.execTask);
 
-  updateTab(tabId, AllTasksExecParse[idTaskItem].link, () => {
-    chrome.tabs.executeScript(tabId, {
+  updateTab(task.tabId, AllTasksExecParse[idTaskItem].link, () => {
+    chrome.tabs.executeScript(task.tabId, {
       code: "copItem(" + idTask + "," + JSON.stringify(AllTasks) + "," + idTaskItem + "," + JSON.stringify(copInfo) + ")"
     });
   });
 };
 
 checkout = (idTask, persoInfo, cardInfo) => {
-  updateTab(tabId, "https://www.supremenewyork.com/checkout", () => {
-    chrome.tabs.executeScript(tabId, {
+  let task = JSON.parse(localStorage.AllTasks);
+  task = task[idTask];
+  updateTab(task.tabId, "https://www.supremenewyork.com/checkout", () => {
+    chrome.tabs.executeScript(task.tabId, {
       code: "checkout(" + idTask + "," + JSON.stringify(persoInfo) + "," + JSON.stringify(cardInfo) + ")"
     });
   });
@@ -166,8 +167,7 @@ function findLink(cats, keywords, taskNb, data, nbRefresh = 0) {
     }
     changeStorageValue(AllTasksParse);
   }else{
-    if (AllTasksParse[taskNb].stateTimerBtn == "true" && AllTasksParse[taskNb].timer != null && AllTasksParse[taskNb].state == 1 && nbRefresh <= 20){
-      console.log('inot find');
+    if (AllTasksParse[taskNb].stateTimerBtn == "true" && AllTasksParse[taskNb].timer != null && AllTasksParse[taskNb].state == 1 && nbRefresh <= 40){
       nbRefresh++;
       setTimeout(function() { findLink(cats, keywords, taskNb, data,nbRefresh); }, 500);
     }else{
@@ -210,7 +210,7 @@ function errorManager(taskID, id){
   AllTasksParse[taskID].status = id;
   AllTasksParse[taskID].state = "0";
   changeStorageValue(AllTasksParse);
-  chrome.tabs.remove(tabId);    
+  chrome.tabs.remove(AllTasksParse[taskID].tabId); 
 }
 
 function notificationsSend(name, title, message){
@@ -274,7 +274,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break;
 
     case "stopBot":
-      chrome.tabs.remove(tabId);
+      chrome.tabs.remove(AllTasksParse[request.idtask].tabId);
 
       break;
     case "findingLink":
@@ -290,7 +290,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
       break;
     case "startCopTimer":
-      chrome.tabs.remove(tabId);
       execTask(request.idtask);
       break;
     case "endTimer":
