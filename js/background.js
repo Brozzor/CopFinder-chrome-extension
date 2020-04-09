@@ -126,7 +126,7 @@ checkout = (idTask, persoInfo, cardInfo) => {
   });
 };
 
-function findLink(cats, keywords, taskNb, data) {
+function findLink(cats, keywords, taskNb, data, nbRefresh = 0) {
   let AllTasksParse = JSON.parse(localStorage.AllTasks);
   let words = keywords;
   let i = 0;
@@ -166,7 +166,13 @@ function findLink(cats, keywords, taskNb, data) {
     }
     changeStorageValue(AllTasksParse);
   }else{
-    errorManager(taskNb, '101');
+    if (AllTasksParse[taskNb].stateTimerBtn == "true" && AllTasksParse[taskNb].timer != null && AllTasksParse[taskNb].state == 1 && nbRefresh <= 20){
+      console.log('inot find');
+      nbRefresh++;
+      setTimeout(function() { findLink(cats, keywords, taskNb, data,nbRefresh); }, 500);
+    }else{
+      errorManager(taskNb, '101');
+    }
     return false;
   }
 

@@ -4,22 +4,19 @@
   "description": "Le bot Supreme le plus rapide du monde",
   "version": "1.0",
   "permissions": [
-    "*://*.supremenewyork.com/*",
-    "*://*.supremenewyork.com/mobile_stock.json",
-    "*://gogetproxy.com/checker/*",
-    "*://supremecommunity.com/*",
-    "*://proxycheck.io/*",
-    "*://cop-finder.com/*",
+    "http://*.supremenewyork.com/*",
+    "https://*.supremenewyork.com/*",
+    "http://cop-finder.com/*",
+    "https://cop-finder.com/*",
+    "https://api.cop-finder.com/*",
     "notifications",
-    "unlimitedStorage",
+    "storage",
     "tabs",
     "windows",
-    "proxy",
     "activeTab",
     "background",
     "notifications",
-    "webRequest",
-    "webRequestBlocking"],
+    "webRequest"],
   "browser_action": {
     "default_icon": "img/icon.png",
     "default_popup": "popup.html"
@@ -27,7 +24,8 @@
   "content_scripts": [
     {
       "matches": [
-        "<all_urls>"
+        "http://*.supremenewyork.com/*",
+        "https://*.supremenewyork.com/*"
       ],
       "js": ["js/extension.js"]
     }
