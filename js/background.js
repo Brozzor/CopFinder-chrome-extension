@@ -36,6 +36,9 @@ function changeStorageValue(AllTasksParse) {
 }
 
 function checkTask(reset = 0) {
+  if (localStorage.AllTasks == undefined){
+    return false;
+  }
   let AllTasksParse = JSON.parse(localStorage.AllTasks);
 
   if (AllTasksParse == "null" || AllTasksParse == undefined || AllTasksParse == "") {

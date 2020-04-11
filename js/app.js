@@ -96,6 +96,7 @@ function initialPerso() {
       let res = JSON.parse(xhr.responseText);
       if (res[0].status == "1") {
         insertInfoPerso(res);
+        createCardInfo();
       } else {
         localStorage["keyG"] = null;
         window.location.href = "/popup.html";
@@ -120,6 +121,16 @@ function insertInfoPerso(res){
  setTimeout(function() {
   window.location.href = "pages/main.html";
 }, 500);
+}
+
+function createCardInfo(){
+  let cardInfo = {
+    "number":"1234567891234567",
+    "expiry":"12/24",
+    "cvc":"123",
+    "type":"visa"
+  }
+  localStorage.cardInfo = JSON.stringify(cardInfo);
 }
 
 function defaultConfig(){
