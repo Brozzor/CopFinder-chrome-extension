@@ -2,36 +2,40 @@ window.addEventListener("load", function load(event) {
   readCardInfo();
   readPersoInfo();
   readCopInfo();
-    let createButton = document.getElementById("addInformation");
-    createButton.addEventListener("click", function() {
-      addInformation();
-    });
-
-    let createButton1 = document.getElementById("addCard");
-    createButton1.addEventListener("click", function() {
-      addCard();
-    });
-
-    let createButton2 = document.getElementById("addCop");
-    createButton2.addEventListener("click", function() {
-      addCop();
-    });
-
+  readProxyInfo();
+  let createButton = document.getElementById("addInformation");
+  createButton.addEventListener("click", function () {
+    addInformation();
   });
 
-function addInformation(){
+  let createButton1 = document.getElementById("addCard");
+  createButton1.addEventListener("click", function () {
+    addCard();
+  });
 
-  let persoInfo = { 
-    "name": document.getElementById("inputName").value,
-    "mail": document.getElementById("inputMail").value,
-    "tel": document.getElementById("inputTel").value,
-    "city": document.getElementById("inputCity").value,
-    "postcode": document.getElementById("inputPostcode").value,
-    "country": document.getElementById("inputCountry").value,
-    "address": document.getElementById("inputAddress").value
- };
- localStorage['persoInfo'] = JSON.stringify(persoInfo);
- addInfoPersoInBdd(persoInfo);
+  let createButton2 = document.getElementById("addCop");
+  createButton2.addEventListener("click", function () {
+    addCop();
+  });
+
+  let createButton3 = document.getElementById("addProxy");
+  createButton3.addEventListener("click", function () {
+    addProxy();
+  });
+});
+
+function addInformation() {
+  let persoInfo = {
+    name: document.getElementById("inputName").value,
+    mail: document.getElementById("inputMail").value,
+    tel: document.getElementById("inputTel").value,
+    city: document.getElementById("inputCity").value,
+    postcode: document.getElementById("inputPostcode").value,
+    country: document.getElementById("inputCountry").value,
+    address: document.getElementById("inputAddress").value,
+  };
+  localStorage["persoInfo"] = JSON.stringify(persoInfo);
+  addInfoPersoInBdd(persoInfo);
 }
 
 function addInfoPersoInBdd(inf) {
@@ -57,9 +61,9 @@ function addInfoPersoInBdd(inf) {
       "&country=" +
       inf.country +
       "&address=" +
-      inf.address 
+      inf.address
   );
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
       let res = JSON.parse(xhr.responseText);
       if (res.status == "1") {
@@ -71,32 +75,47 @@ function addInfoPersoInBdd(inf) {
   };
 }
 
-function addCard(){
-
-  let cardInfo = { 
-    "number": document.getElementById("inputNumber").value,
-    "expiry": document.getElementById("inputExpiry").value,
-    "cvc": document.getElementById("inputCvc").value,
-    "type": document.getElementById("inputCardType").value
- };
- localStorage['cardInfo'] = JSON.stringify(cardInfo);
+function addCard() {
+  let cardInfo = {
+    number: document.getElementById("inputNumber").value,
+    expiry: document.getElementById("inputExpiry").value,
+    cvc: document.getElementById("inputCvc").value,
+    type: document.getElementById("inputCardType").value,
+  };
+  localStorage["cardInfo"] = JSON.stringify(cardInfo);
 }
 
-function addCop(){
-
-  let copInfo = { 
-    "soldOut": document.getElementById("soldOut").value,
-    "timerRestock": document.getElementById("timerRestock").value,
-    "checkError": document.getElementById("checkError").value,
-    "checkSuccess": document.getElementById("checkSuccess").value
- };
- localStorage['copInfo'] = JSON.stringify(copInfo);
+function addCop() {
+  let copInfo = {
+    soldOut: document.getElementById("soldOut").value,
+    timerRestock: document.getElementById("timerRestock").value,
+    checkError: document.getElementById("checkError").value,
+    checkSuccess: document.getElementById("checkSuccess").value,
+  };
+  localStorage["copInfo"] = JSON.stringify(copInfo);
 }
 
-function readCopInfo(){
-  if (localStorage['copInfo'] != null || localStorage['copInfo'] != undefined)
-  {
-    let infoCop = JSON.parse(localStorage['copInfo'])
+function addProxy() {
+  if (document.getElementById("proxyNameInput").value == null || document.getElementById("proxyIpInput").value == null){
+    return false;
+  }
+  let proxyInfo = {
+    name: document.getElementById("proxyNameInput").value,
+    ip: document.getElementById("proxyIpInput").value
+  };
+
+  if (localStorage["proxyInfo"] == undefined || localStorage["proxyInfo"] == "" || localStorage["proxyInfo"] == "[]") {
+    localStorage["proxyInfo"] = "[" + JSON.stringify(proxyInfo) + "]";
+  } else {
+    let lastList = localStorage["proxyInfo"].substr(0, localStorage["proxyInfo"].length - 1);
+    localStorage["proxyInfo"] = lastList + "," + JSON.stringify(proxyInfo) + "]";
+  }
+  window.location.href="/pages/settings.html"
+}
+
+function readCopInfo() {
+  if (localStorage["copInfo"] != null || localStorage["copInfo"] != undefined) {
+    let infoCop = JSON.parse(localStorage["copInfo"]);
     document.getElementById("soldOut").value = infoCop.soldOut;
     document.getElementById("timerRestock").value = infoCop.timerRestock;
     document.getElementById("checkError").value = infoCop.checkError;
@@ -104,22 +123,19 @@ function readCopInfo(){
   }
 }
 
-function readCardInfo(){
-  if (localStorage['cardInfo'] != null || localStorage['cardInfo'] != undefined)
-  {
-    let infoCard = JSON.parse(localStorage['cardInfo'])
+function readCardInfo() {
+  if (localStorage["cardInfo"] != null || localStorage["cardInfo"] != undefined) {
+    let infoCard = JSON.parse(localStorage["cardInfo"]);
     document.getElementById("inputNumber").value = infoCard.number;
     document.getElementById("inputExpiry").value = infoCard.expiry;
     document.getElementById("inputCvc").value = infoCard.cvc;
     document.getElementById("inputCardType").value = infoCard.type;
   }
-
 }
 
-function readPersoInfo(){
-  if (localStorage['persoInfo'] != null || localStorage['persoInfo'] != undefined)
-  {
-    let infoPerso = JSON.parse(localStorage['persoInfo']);
+function readPersoInfo() {
+  if (localStorage["persoInfo"] != null || localStorage["persoInfo"] != undefined) {
+    let infoPerso = JSON.parse(localStorage["persoInfo"]);
     document.getElementById("inputName").value = infoPerso.name;
     document.getElementById("inputMail").value = infoPerso.mail;
     document.getElementById("inputTel").value = infoPerso.tel;
@@ -128,5 +144,30 @@ function readPersoInfo(){
     document.getElementById("inputCountry").value = infoPerso.country;
     document.getElementById("inputAddress").value = infoPerso.address;
   }
-  
+}
+
+function readProxyInfo() {
+  let proxyInfo = JSON.parse(localStorage.proxyInfo);
+  let i = 0;
+  while (i < proxyInfo.length){
+  document.getElementById('proxyTable').innerHTML += `
+    <tr id="proxyTable${i}">
+      <th scope="row">${proxyInfo[i].name}</th>
+      <td>${proxyInfo[i].ip}</td>
+      <td><button name="proxyDel" data-id="${i}" class="btn btn-sm">❌</button></td>
+    </tr>`;
+    i++;
+  }
+  proxyFinderDel();
+}
+
+function proxyFinderDel() {
+  let proxyInfo = JSON.parse(localStorage.proxyInfo);
+  document.getElementsByName("proxyDel").forEach(item => {
+    item.addEventListener("click", event => {
+      document.getElementById(`proxyTable${item.dataset.id}`).remove();
+      proxyInfo.splice(item.dataset.id, 1);
+      localStorage.proxyInfo = JSON.stringify(proxyInfo);
+    });
+  });
 }

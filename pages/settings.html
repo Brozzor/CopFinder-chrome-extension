@@ -180,7 +180,7 @@
             <div class="card-body">
 
 
-                <div class="card-wrapper"></div>
+              <div class="card-wrapper"></div>
 
               <div class="form-btn-cop-card">
                 <button id="addCard" class="btn supreme-btn btn-block float-right">Add/Modify</button>
@@ -211,9 +211,11 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-8">Timer before refreshing to check if the item is restocked (ms)</label>
+                  <label class="col-form-label col-sm-8">Timer before refreshing to check if the item is restocked
+                    (ms)</label>
                   <div class="col-sm-4">
-                    <input type="text" id="timerRestock" name="" placeholder="Time in milliseconds" value="5000" class="form-control ">
+                    <input type="text" id="timerRestock" name="" placeholder="Time in milliseconds" value="5000"
+                      class="form-control ">
                   </div>
                 </div>
                 <div class="form-group row">
@@ -243,7 +245,61 @@
                   <button data-id="2" data-selected="false" name="sizeBtn" class="btn" value="Medium">Desactivate</button>
                   </div>
                 </div>-->
-                
+
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col" style="position: relative;">
+      <!--card-->
+      <div class="card mb-3 center-block" style="max-width: 95%;">
+        <div class="row no-gutters">
+          <div class="col-md-12">
+            <div class="card-body">
+              <h5 class="card-title mb-3">Proxies Information</h5>
+              <hr>
+
+              <div id="card-form" action="" method="">
+
+
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <table class="table center">
+                        <thead class="white-text" style="background-color: #292929;">
+                          <tr>
+                            <th style="border-top-left-radius: 5px;" width="33%">Name</th>
+                            <th width="33%">IP</th>
+                            <th style="border-top-right-radius: 5px;" width="33%"></th>
+
+                          </tr>
+                        </thead>
+                        <tbody id="proxyTable" class="table-bordered">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <p>New proxy :</p>
+                <div class="row">
+                  <div class="col">
+                    <input type="text" data-selected="true" id="proxyNameInput"
+                        placeholder="Name" class="form-control mb-1">
+                  </div>
+                  <div class="col">
+                    <input type="text"data-selected="true" id="proxyIpInput"
+                        placeholder="IP:port" class="form-control mb-1">
+                  </div>
+                  
+                </div>
+                <hr>
+                <button id="addProxy" class="btn supreme-btn btn-block">Add new proxy</button>
+
+
 
               </div>
             </div>

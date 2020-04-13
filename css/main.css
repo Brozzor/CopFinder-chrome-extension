@@ -215,3 +215,19 @@ body {
 .center {
   text-align: center;
 }
+/* table */
+table > tr:first-child > td:first-child {
+	border-top-left-radius: 14px;
+}
+
+table > tr:first-child > td:last-child {
+	border-top-right-radius: 14px;
+}
+
+table > tr:last-child > td:first-child {
+	border-bottom-left-radius: 14px;
+}
+
+table > tr:last-child > td:last-child {
+	border-bottom-right-radius: 14px;
+}
