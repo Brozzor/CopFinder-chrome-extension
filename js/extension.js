@@ -126,7 +126,7 @@ function checkout(idTask, persoInfos, cardInfos){
 
 function checkoutClick(idTask){
     document.getElementsByName('commit')[0].click();
-    //setTimeout(`checkError(${idTask})`, 4000);
+    setTimeout(`checkError(${idTask})`, 15000);
 }
 
 function checkError(idTask){

@@ -234,30 +234,38 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   switch (request.msg) {
     case "addItemToBasket":
-      if (task.length - 1 == request.idtaskitem) {
+      if (task.length - 1 == request.idtaskitem && AllTasksParse[request.idtask].addToCart == "false") {
+        AllTasksParse[request.idtask].status = "Successfully";
+        changeStorageValue(AllTasksParse);
+        notificationsSend('successNotif', `Successfully execution task n°${request.idtask}`, `Well done !`)
+      } else if (task.length - 1 == request.idtaskitem){
         sendResponse("checkout");
         checkout(request.idtask, localStorage.persoInfo, localStorage.cardInfo);
-      } else {
+      }else {
         let newID = parseInt(request.idtaskitem) + 1;
         cop(request.idtask, newID, localStorage.AllTasks, localStorage.copInfo);
       }
       break;
 
     case "fillCheckout":
-      if (AllTasksParse[request.idtask].checkout == "true" && AllTasksParse[request.idtask].stateCheckoutBtn == "true") {
+      if (AllTasksParse[request.idtask].checkoutDelayBtn == "true" && AllTasksParse[request.idtask].stateCheckoutBtn == "true") {
         sendResponse({
           callback: "checkout",
           timer: AllTasksParse[request.idtask].checkoutDelay
         });
-      } else if (AllTasksParse[request.idtask].checkout == "true" && AllTasksParse[request.idtask].stateCheckoutBtn == "false") {
+      } else if (AllTasksParse[request.idtask].checkoutDelayBtn == "false" && AllTasksParse[request.idtask].stateCheckoutBtn == "true") {
         sendResponse({
           callback: "checkout",
           timer: "0"
         });
       } else {
-        sendResponse(0);
+        sendResponse({
+          callback: 0,
+          timer: 0
+        });
         AllTasksParse[request.idtask].status = "Successfully";
         changeStorageValue(AllTasksParse);
+        notificationsSend('successNotif', `Successfully execution task n°${request.idtask}`, `Well done !`)
       }
 
       break;

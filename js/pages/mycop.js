@@ -296,7 +296,7 @@ function SearchBtnTaskPanel() {
             checkoutDelay: document.getElementById("checkoutDelayInput").value,
             anySize: document.getElementById("anySizeBtn").dataset.selected,
             addToCart: document.getElementById("addToCartBtn").dataset.selected,
-            checkout: document.getElementById("checkoutBtn").dataset.selected,
+            checkoutDelayBtn: document.getElementById("checkoutDelayBtn").dataset.selected,
             stateKeywordFinderBtn: document.getElementById("keywordFinderBtn").dataset.selected,
             stateTimerBtn: document.getElementById("timerBtn").dataset.selected,
             stateCheckoutBtn: document.getElementById("checkoutBtn").dataset.selected,
