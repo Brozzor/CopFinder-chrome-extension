@@ -224,6 +224,24 @@ function clearNotif(name){
   chrome.notifications.clear(name);
 }
 
+function proxyOn(host){
+  var config = {
+    mode: "pac_script",
+    pacScript: {
+        data: "function FindProxyForURL(url, host) {\n  if (shExpMatch(url, '*://*.supremenewyork.com/*'))\n    return 'PROXY " + host + "';\n  return 'DIRECT';\n}"
+    }
+  };
+  chrome.proxy.settings.set(
+      {value: config, scope: 'regular'},
+      function() {});
+}
+
+function proxyOff(){
+  chrome.proxy.settings.clear({
+    scope: "regular"
+}, function() {});
+}
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let AllTasksParse = JSON.parse(localStorage.AllTasks);
 
@@ -286,7 +304,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     case "stopBot":
       chrome.tabs.remove(AllTasksParse[request.idtask].tabId);
-
+      proxyOff();
       break;
     case "findingLink":
       task[request.idtaskitem].link = request.link;
