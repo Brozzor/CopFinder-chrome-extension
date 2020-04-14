@@ -1,7 +1,7 @@
 window.addEventListener("load", function load(event) {
   displayAllTasks();
   let createButton = document.getElementById("addTaskBtn");
-  createButton.addEventListener("click", function() {
+  createButton.addEventListener("click", function () {
     if (taskPanelif == false) {
       document.getElementById("taskAddPanel").hidden = false;
       taskPanel();
@@ -11,7 +11,6 @@ window.addEventListener("load", function load(event) {
       createButton.innerText = "ADD TASK";
     }
   });
-
 });
 
 let taskPanelif = false;
@@ -89,27 +88,41 @@ function taskPanel() {
                     </div>
                     </div>
                 </div>
+                <div class="form-group row">
+                  <div class="col-sm-6">
+                    <button class="btn btn-block" data-selected="false" id="timerBtn" name="timerBtn">TIMER</button>
+                    <div id="timer" class="mt-3" hidden>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <input type="datetime-local" id="timerInput" name="timerInput" placeholder="Set time" class="form-control mb-1">
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <button class="btn btn-block" data-selected="false" id="checkoutDelayBtn" name="checkoutDelayBtn">CHECKOUT DELAY</button>
+                    <div id="checkoutDelay" class="mt-3" hidden>
+                        <div class="row">
+                          <div class="col-sm-12">
+                          <input type="text" name="checkoutDelayInput" id="checkoutDelayInput" value="4000" placeholder="Time in milliseconds" class="form-control mb-1">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
                 <div class="form-group">
-                  <button class="btn btn-block" data-selected="false" id="timerBtn" name="timerBtn">TIMER</button>
-                  <div id="timer" hidden>
+                  <button class="btn btn-block" data-selected="false" id="proxyBtn" name="proxyBtn">PROXIES</button>
+                  <div id="proxy" hidden>
                     <div class="row">
-                    <div class="col-sm-12">
-                    <input type="datetime-local" id="timerInput" name="timerInput" placeholder="Set time" class="form-control mb-1">
-                    </div>
-                    </div>
-                    </div>
-                  </div>
-                <div class="form-group">
-                  <button class="btn btn-block" data-selected="false" id="checkoutDelayBtn" name="checkoutDelayBtn">CHECKOUT DELAY</button>
-                  <div id="checkoutDelay" hidden>
-                    <div class="row">
-                    <div class="col-sm-12">
-                    <input type="text" name="checkoutDelayInput" id="checkoutDelayInput" value="4000" placeholder="Time in milliseconds" class="form-control mb-1">
-                    </div>
-                    </div>
+                      <div class="col-sm-12">
+                      <select id="proxyList" class="form-control form-control-sm">
+                      </select>
+                      </div>
                     </div>
                   </div>
-                  </div>
+                </div>
                 <div class="form-group row">
                   <div class="col-sm-4">
                     <button class="btn btn-block" data-selected="false" data-id="1" id="anySizeBtn" name="aacBtn">ANY SIZE</button>
@@ -144,53 +157,69 @@ function taskPanel() {
       </div>
     `;
   SearchBtnTaskPanel();
+  if (localStorage.proxyInfo != undefined || localStorage.proxyInfo != "" || localStorage.proxyInfo != "[]"){
+    proxyInfo = JSON.parse(localStorage.proxyInfo);
+    let i = 0;
+    while (i < proxyInfo.length)
+    {
+      document.getElementById('proxyList').innerHTML += `
+      <option value="${i}">${proxyInfo[i].name}</option>
+      `;
+      i++;
+    }
+
+  }else{
+    document.getElementById('proxyList').innerHTML += `<option value="no" selected>You have no proxies</option>`;
+  }
   requestApi("item-cat", "", displayCatList);
 }
 
-function SearchBtnPanel(){
-  document.getElementsByName("actionBtn").forEach(item => {
-    item.addEventListener("click", event => {
-         AllTasksParse = JSON.parse(localStorage.AllTasks); 
-        switch (item.dataset.type) {
-          case "play":
-            if (AllTasksParse[item.dataset.id].status == "Successfully"){
-              return false;
-            }
-            if (AllTasksParse[item.dataset.id].status == 'On Play'){
-              AllTasksParse[item.dataset.id].state = "0";
-              changeState('On Pause');
-              chrome.runtime.sendMessage({msg: "stopBot", idtask: item.dataset.id});
-            }else{
-              changeState('On Play');
-            }
-            function changeState(newText){
-              AllTasksParse[item.dataset.id].status = newText;
-              AllTasksParse = JSON.stringify(AllTasksParse);
-              localStorage.AllTasks = AllTasksParse;
-              displayAllTasks();
-            }
-            break;
-          case "edit":
+function SearchBtnPanel() {
+  document.getElementsByName("actionBtn").forEach((item) => {
+    item.addEventListener("click", (event) => {
+      AllTasksParse = JSON.parse(localStorage.AllTasks);
+      switch (item.dataset.type) {
+        case "play":
+          if (AllTasksParse[item.dataset.id].status == "Successfully") {
+            return false;
+          }
+          if (AllTasksParse[item.dataset.id].status == "On Play") {
+            AllTasksParse[item.dataset.id].state = "0";
+            changeState("On Pause");
+            chrome.runtime.sendMessage({
+              msg: "stopBot",
+              idtask: item.dataset.id,
+            });
+          } else {
+            changeState("On Play");
+          }
 
-              
-            break;
-          case "delete":
-              AllTasksParse.splice(item.dataset.id, 1);
-              AllTasksParse = JSON.stringify(AllTasksParse);
-              localStorage.AllTasks = AllTasksParse;
-              window.location.href="/pages/mycop.html";
-            break;
-        
-          default:
-            break;
-        }
-    })
+          function changeState(newText) {
+            AllTasksParse[item.dataset.id].status = newText;
+            AllTasksParse = JSON.stringify(AllTasksParse);
+            localStorage.AllTasks = AllTasksParse;
+            displayAllTasks();
+          }
+          break;
+        case "edit":
+          break;
+        case "delete":
+          AllTasksParse.splice(item.dataset.id, 1);
+          AllTasksParse = JSON.stringify(AllTasksParse);
+          localStorage.AllTasks = AllTasksParse;
+          window.location.href = "/pages/mycop.html";
+          break;
+
+        default:
+          break;
+      }
+    });
   });
 }
 
 function SearchBtnTaskPanel() {
-  document.getElementsByTagName("button").forEach(item => {
-    item.addEventListener("click", event => {
+  document.getElementsByTagName("button").forEach((item) => {
+    item.addEventListener("click", (event) => {
       switch (item.name) {
         case "sizeBtn":
           let allBtn = document.getElementsByName("sizeBtn");
@@ -300,9 +329,23 @@ function SearchBtnTaskPanel() {
             stateKeywordFinderBtn: document.getElementById("keywordFinderBtn").dataset.selected,
             stateTimerBtn: document.getElementById("timerBtn").dataset.selected,
             stateCheckoutBtn: document.getElementById("checkoutBtn").dataset.selected,
-            disImgONBtn: document.getElementById("disImgONBtn").dataset.selected
+            disImgONBtn: document.getElementById("disImgONBtn").dataset.selected,
+            stateProxyBtn: document.getElementById("proxyBtn").dataset.selected,
+            proxy: document.getElementById("proxyList").value,
           };
           addNewTask(newTask);
+          break;
+        case "proxyBtn":
+          if (item.dataset.selected == "false") {
+            item.dataset.selected = true;
+            item.className = "btn btn-block supreme-btn";
+            document.getElementById("proxy").hidden = false;
+          } else {
+            item.dataset.selected = false;
+            item.className = "btn btn-block";
+            document.getElementById("proxy").hidden = true;
+          }
+
           break;
 
         default:
@@ -313,8 +356,8 @@ function SearchBtnTaskPanel() {
 }
 
 function keywordFinderDel() {
-  document.getElementsByName("keywordFinderDel").forEach(item => {
-    item.addEventListener("click", event => {
+  document.getElementsByName("keywordFinderDel").forEach((item) => {
+    item.addEventListener("click", (event) => {
       document.getElementById(`kfDiv${item.dataset.id}`).remove();
     });
   });
@@ -323,8 +366,8 @@ function keywordFinderDel() {
 function addNewTask(constTask) {
   let taskForInsert = constTask;
 
-  constTask.status = 'On Pause';
-  constTask.state = '0';
+  constTask.status = "On Pause";
+  constTask.state = "0";
   constTask.execTask = "";
   constTask.tabId = "";
 
@@ -360,12 +403,11 @@ function addNewTask(constTask) {
   }
   taskPanelif = false;
   notification("success", "You have added a new task");
-  setTimeout(function() {
-      document.getElementById("taskAddPanel").hidden = true;
-      document.getElementById("addTaskBtn").innerText = "ADD TASK";
-      window.location.href="/pages/mycop.html";
+  setTimeout(function () {
+    document.getElementById("taskAddPanel").hidden = true;
+    document.getElementById("addTaskBtn").innerText = "ADD TASK";
+    window.location.href = "/pages/mycop.html";
   }, 3000);
-  
 }
 
 function findEveryValue(name) {
@@ -374,9 +416,9 @@ function findEveryValue(name) {
   findItem = document.getElementsByName(name);
   while (k < findItem.length) {
     if (findItem[k].dataset.selected == "true") {
-      if ((findItem[k].nodeName == "BUTTON" || findItem[k].nodeName == "A") && (name != 'sizeBtn')) {
+      if ((findItem[k].nodeName == "BUTTON" || findItem[k].nodeName == "A") && name != "sizeBtn") {
         findValue.push(findItem[k].innerText);
-      } else if (findItem[k].nodeName == "INPUT" || name == 'sizeBtn') {
+      } else if (findItem[k].nodeName == "INPUT" || name == "sizeBtn") {
         findValue.push(findItem[k].value);
       }
     }
@@ -391,9 +433,9 @@ function notification(type, msg) {
 <div class="alert alert-${type}" role="alert">
   ${msg}
 </div>`;
-setTimeout(function() {
-  delNotification();
-}, 3000);
+  setTimeout(function () {
+    delNotification();
+  }, 3000);
 }
 
 function delNotification() {
@@ -408,7 +450,7 @@ function requestApi(use, argv, callback) {
   xhr.open("POST", "https://cop-finder.com/api/api.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.send("key=" + localStorage["keyG"] + "&use=" + use);
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
       let res = JSON.parse(xhr.responseText);
       if (res[0].status == "1") {
@@ -423,8 +465,8 @@ function displayCatList(res) {
     document.getElementById("catList").innerHTML += `<a class="ml-1 mr-1" name="catBtn" data-selected="false" data-id="${res[i].id}">${res[i].name} </a>`;
   }
 
-  document.getElementsByName("catBtn").forEach(item => {
-    item.addEventListener("click", event => {
+  document.getElementsByName("catBtn").forEach((item) => {
+    item.addEventListener("click", (event) => {
       if (item.dataset.id == item.dataset.id && item.className != "badge badge-danger ml-1 mr-1") {
         item.className = "badge badge-danger ml-1 mr-1";
         item.dataset.selected = true;
@@ -436,55 +478,65 @@ function displayCatList(res) {
   });
 }
 
-function displayAllTasks(){
-  document.getElementById('AllTasks').innerHTML = '';
-  if (localStorage.AllTasks == "" || localStorage.AllTasks == "undefined" || localStorage.AllTasks == undefined || localStorage.AllTasks == "[]"){
-    displayTask('0');
+function displayAllTasks() {
+  document.getElementById("AllTasks").innerHTML = "";
+  if (localStorage.AllTasks == "" || localStorage.AllTasks == "undefined" || localStorage.AllTasks == undefined || localStorage.AllTasks == "[]") {
+    displayTask("0");
     return false;
   }
   AllTasks = JSON.parse(localStorage.AllTasks);
   let i = 0;
-  while(i < AllTasks.length){
+  while (i < AllTasks.length) {
     displayTask(AllTasks[i], i);
-    if (i == AllTasks.length - 1)
-    {
+    if (i == AllTasks.length - 1) {
       SearchBtnPanel();
     }
-    i++
+    i++;
   }
-} 
+}
 
-function displayTask(task, nb){
-  if (task == 0 || task == undefined){
+function displayTask(task, nb) {
+  if (task == 0 || task == undefined) {
     document.getElementById("errorTask").innerHTML = `
     <center><p>You don't have tasks</p></center>
     `;
     return false;
   }
   let stateTd;
-  if (task.status == "Successfully"){
-    statePlayBtn = 'play';
+  if (task.status == "Successfully") {
+    statePlayBtn = "play";
     stateTd = `<span class="badge badge-success state-badge"><i class="fa fa-circle"></i> Successfully</span>`;
-  }else if(task.status == "On Pause"){
-    statePlayBtn = 'play';
+  } else if (task.status == "On Pause") {
+    statePlayBtn = "play";
     stateTd = `<span class="badge badge-warning state-badge"><i class="fa fa-circle"></i> Currently inactive</span>`;
-  }else if(task.status == "On Play"){
-    statePlayBtn = 'pause';
+  } else if (task.status == "On Play") {
+    statePlayBtn = "pause";
     stateTd = `<span class="badge badge-warning state-badge"><i class="fa fa-circle"></i> Currently active</span>`;
-  }else{
-    statePlayBtn = 'play';
+  } else {
+    statePlayBtn = "play";
     stateTd = `<span class="badge badge-danger state-badge"><i class="fa fa-circle"></i> Error code : ${task.status}</span>`;
   }
+
+  $proxyStatus = 'None';
+  if (localStorage.proxyInfo != undefined && localStorage.proxyInfo != "" && localStorage.proxyInfo != "[]")
+  {
+    proxy = JSON.parse(localStorage.proxyInfo)
+    if (task.stateProxyBtn == "true" && task.proxy != 'no' && proxy[task.proxy] != undefined)
+    {
+      $proxyStatus = proxy[task.proxy].name;
+    }
+  }
+  
 
   let element = document.createElement("tr");
   let container = document.getElementById("AllTasks");
   element.dataset.id = nb;
   element.classList.add("center");
   element.innerHTML = `
-  <th scope="row">${nb+1}</th>
+  <th scope="row">${nb + 1}</th>
   <td width="150">${task.keywordFinder}</td>
   <td>Pant Size: ${task.pantSize} <br> Shoe Size: ${task.shoeSize}<br>Size: ${task.size}</td>
-  <td>None</td>
+  <td>${$proxyStatus}</td>
   <td>${stateTd}</td>
   <td><h5><a data-type="play" name="actionBtn" data-id="${nb}" class="mr-2" style="color: #00c851;"><i class="fa fa-${statePlayBtn}" aria-hidden="true"></i></a> 
     <a data-type="edit" name="actionBtn" data-id="${nb}" style="color: #ffc107;"><i class="fa fa-pencil" aria-hidden="true"></i></a> 
