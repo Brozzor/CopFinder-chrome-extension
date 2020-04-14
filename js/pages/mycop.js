@@ -1,5 +1,6 @@
 window.addEventListener("load", function load(event) {
   displayAllTasks();
+  isTopCop();
   let createButton = document.getElementById("addTaskBtn");
   createButton.addEventListener("click", function () {
     if (taskPanelif == false) {
@@ -544,4 +545,33 @@ function displayTask(task, nb) {
   </h5></td>
 `;
   container.appendChild(element);
+}
+
+function isTopCop(){
+  if (localStorage.toCop == undefined || localStorage.toCop == ""){
+    return false;
+  }
+  document.getElementById("taskAddPanel").hidden = false;
+  taskPanel();
+  let toCop = JSON.parse(localStorage.toCop);
+  let item = document.getElementById("keywordFinderBtn");
+  item.dataset.selected = true;
+  item.className = "btn btn-block supreme-btn";
+  document.getElementById("keywordFinder").hidden = false;
+  document.getElementsByName('keywordFinderInput')[0].value = toCop.keyword.trim();
+  
+  setTimeout(function () {
+    let i = 0;
+    let cat = document.getElementsByName('catBtn');
+    while (i < cat.length){
+      if (cat[i].dataset.id == toCop.catId){
+        cat[i].className = "badge badge-danger ml-1 mr-1";
+        cat[i].dataset.selected = true;
+      }
+      i++;
+  }
+  localStorage.toCop = "";
+  },1000);
+  
+  
 }

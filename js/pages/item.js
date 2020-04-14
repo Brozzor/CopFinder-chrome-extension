@@ -4,6 +4,11 @@ window.addEventListener("load", function load(event) {
   createButton.addEventListener("click", function() {
     chrome.tabs.create({url: createButton.dataset.link});
   });
+
+  let createButton2 = document.getElementById("selectToCop");
+  createButton2.addEventListener("click", function() {
+    selectToCop();
+  });
 });
 
 function itemPage(res) {
@@ -11,6 +16,8 @@ function itemPage(res) {
   document.getElementById("img-itm").src = res[1].imgLink;
   document.getElementById("redirectWebsiteSup").dataset.link = res[1].link;
   document.getElementById("price").innerText = res[1].price + '€';
+  document.getElementById("color").innerText = res[1].model;
+  document.getElementById("color").dataset.catid = res[1].cat_id;
 }
 
 function initialItemList() {
@@ -24,11 +31,29 @@ function initialItemList() {
       let res = JSON.parse(xhr.responseText);
       if (res[0].status == "1") {
         itemPage(res);
-        console.log(res);
       } else {
         localStorage["keyG"] = null;
         window.location.href = "/popup.html";
       }
     }
   };
+}
+
+function selectToCop(){
+  let i = 0;
+  let findTitle = document.getElementById("title").innerText.split(' ');
+  let cleanTitle = "";
+  while (i < findTitle.length){
+      if (!findTitle[i].includes('®')){
+       cleanTitle = cleanTitle + " " + findTitle[i];
+      }
+      i++;
+  }
+
+  let toCop = {
+   "keyword": cleanTitle.trim() + " / " + document.getElementById("color").innerText,
+   "catId": document.getElementById("color").dataset.catid
+  };
+  localStorage.toCop = JSON.stringify(toCop);
+  window.location = '/pages/mycop.html';
 }

@@ -51,12 +51,13 @@ function checkTask(reset = 0) {
       if (reset == "1") {
         AllTasksParse[i].status = "On Pause";
         AllTasksParse[i].state = "0";
-        proxyOff();
       } else if (AllTasksParse[i].state == "0") {
         AllTasksParse[i].state = "1";
         if (AllTasksParse[i].stateTimerBtn == "true") {
+          proxyOff();
           execTaskTimer(i, AllTasksParse[i].timer);
         } else {
+          proxyOff();
           execTask(i);
         }
       }
@@ -246,6 +247,7 @@ function proxyOn(host){
 }
 
 function proxyOff(){
+  console.log('off');
   chrome.proxy.settings.clear({
     scope: "regular"
 }, function() {});
@@ -312,8 +314,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break;
 
     case "stopBot":
-      chrome.tabs.remove(AllTasksParse[request.idtask].tabId);
       proxyOff();
+      chrome.tabs.remove(AllTasksParse[request.idtask].tabId);
       break;
     case "findingLink":
       task[request.idtaskitem].link = request.link;
