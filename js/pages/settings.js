@@ -149,6 +149,7 @@ function readPersoInfo() {
 function readProxyInfo() {
   if (localStorage.proxyInfo == undefined || localStorage.proxyInfo == "" || localStorage.proxyInfo == "[]") {
     document.getElementById('noProxy').innerHTML = 'You have no proxy server';
+    return false;
   }
   let proxyInfo = JSON.parse(localStorage.proxyInfo);
   let i = 0;

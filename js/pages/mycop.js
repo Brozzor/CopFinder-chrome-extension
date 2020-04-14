@@ -157,7 +157,7 @@ function taskPanel() {
       </div>
     `;
   SearchBtnTaskPanel();
-  if (localStorage.proxyInfo != undefined || localStorage.proxyInfo != "" || localStorage.proxyInfo != "[]"){
+  if (localStorage.proxyInfo != undefined && localStorage.proxyInfo != "" && localStorage.proxyInfo != "[]"){
     proxyInfo = JSON.parse(localStorage.proxyInfo);
     let i = 0;
     while (i < proxyInfo.length)
