@@ -51,6 +51,7 @@ function checkTask(reset = 0) {
       if (reset == "1") {
         AllTasksParse[i].status = "On Pause";
         AllTasksParse[i].state = "0";
+        proxyOff();
       } else if (AllTasksParse[i].state == "0") {
         AllTasksParse[i].state = "1";
         if (AllTasksParse[i].stateTimerBtn == "true") {
@@ -79,6 +80,14 @@ function execTask(nb) {
     AllTasksParse[nb].execTask = "";
     AllTasksParse[nb].tabId = tabid;
     changeStorageValue(AllTasksParse);
+    if (localStorage.proxyInfo != undefined && localStorage.proxyInfo != "" && localStorage.proxyInfo != "[]")
+    {
+      proxy = JSON.parse(localStorage.proxyInfo)
+      if (AllTasksParse[nb].stateProxyBtn == "true" && AllTasksParse[nb].proxy != 'no' && proxy[AllTasksParse[nb].proxy] != undefined)
+      {
+        proxyOn(proxy[AllTasksParse[nb].proxy].ip);
+      }
+    }
     fetch("https://www.supremenewyork.com/mobile_stock.json")
       .then(result => result.json())
       .then(data => {
