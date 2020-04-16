@@ -39,7 +39,8 @@ function copItem(idTask, allTask, idTaskItem, copInfo){
             break;
         
         case "pants":
-            if (isNaN(document.getElementById("size")[0].innerText))
+            let sizeTxt = document.getElementById("size")[0] != undefined ? document.getElementById("size")[0].innerText : "molo";
+            if (isNaN(sizeTxt))
             {
                 selectSize(task.size,idTask,idTaskItem,copInf);
             }else{
