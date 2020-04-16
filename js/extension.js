@@ -64,6 +64,11 @@ function selectSize(sizeWanted,idTask,idTaskItem, copInf){
         {
             addToBasket(idTask,idTaskItem);
             return false;
+        } 
+        else if (sizeForm[0] == undefined && document.getElementsByClassName('button in-cart')[0] == undefined)
+        {
+            document.getElementsByName('commit')[0].click();
+            setTimeout(`addToBasket(${idTask},${idTaskItem})`, 500);
         }
 		while (i < sizeForm.length) {
             
