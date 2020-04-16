@@ -39,7 +39,13 @@ function copItem(idTask, allTask, idTaskItem, copInfo){
             break;
         
         case "pants":
-            selectSize(task.pantSize,idTask,idTaskItem,copInf);
+            if (isNaN(document.getElementById("size")[0].innerText))
+            {
+                selectSize(task.size,idTask,idTaskItem,copInf);
+            }else{
+                selectSize(task.pantSize,idTask,idTaskItem,copInf);
+            }
+            
             break;
     
         default:
@@ -65,7 +71,7 @@ function selectSize(sizeWanted,idTask,idTaskItem, copInf){
             addToBasket(idTask,idTaskItem);
             return false;
         } 
-        else if (sizeForm[0] == undefined && document.getElementsByClassName('button in-cart')[0] == undefined)
+        else if ((sizeForm[0] == undefined && document.getElementsByClassName('button in-cart')[0] == undefined) || (sizeWanted == "any"))
         {
             document.getElementsByName('commit')[0].click();
             setTimeout(`addToBasket(${idTask},${idTaskItem})`, 500);
