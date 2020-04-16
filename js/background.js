@@ -182,7 +182,7 @@ function findLink(cats, keywords, taskNb, data, nbRefresh = 0) {
   }else{
     if (AllTasksParse[taskNb].stateTimerBtn == "true" && AllTasksParse[taskNb].timer != null && AllTasksParse[taskNb].state == 1 && nbRefresh <= 40){
       nbRefresh++;
-      setTimeout(function() { findLink(cats, keywords, taskNb, data,nbRefresh); }, 500);
+      setTimeout(function() { refindLink(cats, keywords, taskNb,nbRefresh); }, 500);
     }else{
       errorManager(taskNb, '101');
     }
@@ -192,6 +192,34 @@ function findLink(cats, keywords, taskNb, data, nbRefresh = 0) {
   i++;
   }
   cop(taskNb, 0, localStorage.AllTasks, localStorage.copInfo);
+}
+
+function refindLink(cats,keywords, taskNb,nbRefresh){
+  let myHeaders = new Headers();
+  myHeaders.append('pragma', 'no-cache');
+  myHeaders.append('cache-control', 'no-cache');
+
+  let init = {
+    method: 'GET',
+    headers: myHeaders,
+  };
+  fetch("https://www.supremenewyork.com/mobile_stock.json", init)
+      .then(result => result.json())
+      .then(data => {
+        let allItems = [];
+        for (let i in data.products_and_categories) {
+          let j = 0;
+          while (j < data.products_and_categories[i].length) {
+            allItems.push(data.products_and_categories[i][j]);
+            j++;
+          }
+        }
+        console.log(allItems);
+        findLink(cats, keywords, taskNb, allItems, nbRefresh);
+      })
+      .catch(function(error) {
+        setTimeout(function() { refindLink(cats, keywords, taskNb,nbRefresh); }, 200);
+      });
 }
 
 updateTab = (tabId, url, callback) => {
