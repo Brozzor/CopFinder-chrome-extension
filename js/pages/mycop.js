@@ -518,7 +518,7 @@ function displayTask(task, nb) {
     stateTd = `<span class="badge badge-danger state-badge"><i class="fa fa-circle"></i> Error code : ${task.status}</span>`;
   }
 
-  $proxyStatus = 'None';
+  $proxyStatus = 'None'; 
   if (localStorage.proxyInfo != undefined && localStorage.proxyInfo != "" && localStorage.proxyInfo != "[]")
   {
     proxy = JSON.parse(localStorage.proxyInfo)
@@ -527,24 +527,39 @@ function displayTask(task, nb) {
       $proxyStatus = proxy[task.proxy].name;
     }
   }
-  
 
-  let element = document.createElement("tr");
-  let container = document.getElementById("AllTasks");
-  element.dataset.id = nb;
-  element.classList.add("center");
-  element.innerHTML = `
-  <th scope="row">${nb + 1}</th>
-  <td width="150">${task.keywordFinder}</td>
-  <td>Pant Size: ${task.pantSize} <br> Shoe Size: ${task.shoeSize}<br>Size: ${task.size}</td>
-  <td>${$proxyStatus}</td>
-  <td>${stateTd}</td>
-  <td><h5><a data-type="play" name="actionBtn" data-id="${nb}" class="mr-2" style="color: #00c851;"><i class="fa fa-${statePlayBtn}" aria-hidden="true"></i></a> 
-    <a data-type="edit" name="actionBtn" data-id="${nb}" style="color: #ffc107;"><i class="fa fa-pencil" aria-hidden="true"></i></a> 
-    <a data-type="delete" name="actionBtn" data-id="${nb}" class="ml-2" style="color: #da2727;"><i class="fa fa-trash" aria-hidden="true"></i></a>
-  </h5></td>
-`;
-  container.appendChild(element);
+let firstKeyWord = splitKeyword(task.keywordFinder[0]);
+if (task.keywordFinder.length > 1){
+  firstKeyWord.keyword += '...';
+}
+let element = document.createElement("div");
+let container = document.getElementById("AllTasks");
+element.dataset.id = nb;
+element.classList.add("card");
+element.classList.add("task-card");
+element.innerHTML = `
+            <div class="card-body row center" style="padding: 0.7rem;">
+              <div class="col-3 task-text">${firstKeyWord.keyword}</div>
+              <div class="col task-text">${firstKeyWord.color}</div>
+              <div class="col task-text">${$proxyStatus}</div>
+              <div class="col task-text">${stateTd}</div>
+              <div class="col-2 task-text">
+                <h5>
+                  <a data-type="play" name="actionBtn" data-id="${nb}" class="mr-2" style="color: #2e2e2e;"><i class="fa fa-${statePlayBtn}" aria-hidden="true"></i></a>
+                  <a data-type="edit" name="actionBtn" data-id="${nb}" style="color: #ffc107;"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                  <a data-type="delete" name="actionBtn" data-id="${nb}" class="ml-2" style="color: #da2727;"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                </h5>
+              </div>
+            </div>`;
+container.appendChild(element);
+}
+
+function splitKeyword(word){
+  let res = {
+    "keyword": word.split('/')[0].trim(),
+    "color": word.split('/')[1].trim()
+  }
+ return res;
 }
 
 function isTopCop(){

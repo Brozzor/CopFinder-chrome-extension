@@ -231,3 +231,17 @@ table > tr:last-child > td:first-child {
 table > tr:last-child > td:last-child {
 	border-bottom-right-radius: 14px;
 }
+
+.task-text {
+  padding-top: calc(.375rem + 1px);
+}
+
+.task-title {
+    color: #133847;
+}
+
+.task-card {
+  margin-left: auto; 
+  margin-right: auto; 
+  margin-bottom: 0.5rem;
+}
