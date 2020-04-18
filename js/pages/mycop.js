@@ -158,19 +158,17 @@ function taskPanel() {
       </div>
     `;
   SearchBtnTaskPanel();
-  if (localStorage.proxyInfo != undefined && localStorage.proxyInfo != "" && localStorage.proxyInfo != "[]"){
+  if (localStorage.proxyInfo != undefined && localStorage.proxyInfo != "" && localStorage.proxyInfo != "[]") {
     proxyInfo = JSON.parse(localStorage.proxyInfo);
     let i = 0;
-    while (i < proxyInfo.length)
-    {
-      document.getElementById('proxyList').innerHTML += `
+    while (i < proxyInfo.length) {
+      document.getElementById("proxyList").innerHTML += `
       <option value="${i}">${proxyInfo[i].name}</option>
       `;
       i++;
     }
-
-  }else{
-    document.getElementById('proxyList').innerHTML += `<option value="no" selected>You have no proxies</option>`;
+  } else {
+    document.getElementById("proxyList").innerHTML += `<option value="no" selected>You have no proxies</option>`;
   }
   requestApi("item-cat", "", displayCatList);
 }
@@ -203,6 +201,7 @@ function SearchBtnPanel() {
           }
           break;
         case "edit":
+          editTask(AllTasksParse[item.dataset.id], item.dataset.id);
           break;
         case "delete":
           AllTasksParse.splice(item.dataset.id, 1);
@@ -518,26 +517,24 @@ function displayTask(task, nb) {
     stateTd = `<span class="badge badge-danger state-badge"><i class="fa fa-circle"></i> Error code : ${task.status}</span>`;
   }
 
-  $proxyStatus = 'None'; 
-  if (localStorage.proxyInfo != undefined && localStorage.proxyInfo != "" && localStorage.proxyInfo != "[]")
-  {
-    proxy = JSON.parse(localStorage.proxyInfo)
-    if (task.stateProxyBtn == "true" && task.proxy != 'no' && proxy[task.proxy] != undefined)
-    {
+  $proxyStatus = "None";
+  if (localStorage.proxyInfo != undefined && localStorage.proxyInfo != "" && localStorage.proxyInfo != "[]") {
+    proxy = JSON.parse(localStorage.proxyInfo);
+    if (task.stateProxyBtn == "true" && task.proxy != "no" && proxy[task.proxy] != undefined) {
       $proxyStatus = proxy[task.proxy].name;
     }
   }
 
-let firstKeyWord = splitKeyword(task.keywordFinder[0]);
-if (task.keywordFinder.length > 1){
-  firstKeyWord.keyword += '...';
-}
-let element = document.createElement("div");
-let container = document.getElementById("AllTasks");
-element.dataset.id = nb;
-element.classList.add("card");
-element.classList.add("task-card");
-element.innerHTML = `
+  let firstKeyWord = splitKeyword(task.keywordFinder[0]);
+  if (task.keywordFinder.length > 1) {
+    firstKeyWord.keyword += "...";
+  }
+  let element = document.createElement("div");
+  let container = document.getElementById("AllTasks");
+  element.dataset.id = nb;
+  element.classList.add("card");
+  element.classList.add("task-card");
+  element.innerHTML = `
             <div class="card-body row center" style="padding: 0.7rem;">
               <div class="col-3 task-text">${firstKeyWord.keyword}</div>
               <div class="col task-text">${firstKeyWord.color}</div>
@@ -551,19 +548,124 @@ element.innerHTML = `
                 </h5>
               </div>
             </div>`;
-container.appendChild(element);
+  container.appendChild(element);
 }
 
-function splitKeyword(word){
-  let res = {
-    "keyword": word.split('/')[0].trim(),
-    "color": word.split('/')[1].trim()
+function editTask(task,nb) {
+  document.getElementById("taskEditPanel").innerHTML = `
+  <div class="card mb-3 center-block mt-3" style="max-width: 95%;">
+        <div class="row no-gutters">
+          <div class="col-md-12 ">
+            <div class="card-body">
+            <label class="col-sm-12 col-form-label center mb-3">View task n°${parseInt(nb) + 1}</label>
+
+              <div class="form-group row">
+                <div class="col-sm-6">
+                <span>Shoe Size :</span>
+                  <div class="row">
+                    <div class="col-sm-12">
+                        <input type="text" value="${task.shoeSize}" class="form-control mb-1" readonly>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                <span>Pant Size :</span>
+                  <div class="row">
+                    <div class="col-sm-12">
+                        <input type="text" value="${task.pantSize}" class="form-control mb-1" readonly>
+                    </div>
+                  </div>
+                 </div>  
+              </div>
+
+              <div class="form-group row">
+                <div class="col-sm-6">
+                <span>Size :</span>
+                  <div class="row">
+                    <div class="col-sm-12">
+                        <input type="text" value="${task.size}" class="form-control mb-1" readonly>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                <span>Timer :</span>
+                  <div class="row">
+                    <div class="col-sm-12">
+                        <input type="text" value="${task.timer}" class="form-control mb-1" readonly>
+                    </div>
+                  </div>
+                 </div>  
+              </div>
+
+              <div class="form-group row">
+                <div class="col-sm-6">
+                <span>Checkout Delay :</span>
+                  <div class="row">
+                    <div class="col-sm-12">
+                        <input type="text" value="${task.checkoutDelay}" class="form-control mb-1" readonly>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                <span>Proxy :</span>
+                  <div class="row">
+                    <div class="col-sm-12">
+                        <input type="text" value="${task.proxy}" class="form-control mb-1" readonly>
+                    </div>
+                  </div>
+                 </div>  
+              </div>
+              <div id="keywordsEdit"></div>
+            </div>
+          </div>
+        </div>
+    </div>
+  `;
+  editTaskAllKeywords(task);
+}
+
+function editTaskAllKeywords(task){
+  
+  let i = 0;
+  while(i < task.keywordFinder.length)
+  {
+    document.getElementById('keywordsEdit').innerHTML += `
+    <div class="form-group row">
+      <div class="col-sm-12">
+      <span>Keyword and color n° ${i+1} :</span>
+        <div class="row">
+          <div class="col-sm-12">
+            <input type="text" value="${task.keywordFinder[i]}" class="form-control mb-1" readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+    `;
+    i++;
   }
- return res;
+  
 }
 
-function isTopCop(){
-  if (localStorage.toCop == undefined || localStorage.toCop == ""){
+function splitKeyword(word) {
+  if(word.split("/").length == 1){
+    let res = {
+      keyword: word.trim(),
+      color: "none",
+    };
+    return res;
+  }
+  let res = {
+    keyword: word.split("/")[0].trim(),
+    color: word.split("/")[1].trim(),
+  };
+  return res;
+}
+
+function isTopCop() {
+  if (localStorage.toCop == undefined || localStorage.toCop == "") {
     return false;
   }
   document.getElementById("taskAddPanel").hidden = false;
@@ -573,20 +675,18 @@ function isTopCop(){
   item.dataset.selected = true;
   item.className = "btn btn-block supreme-btn";
   document.getElementById("keywordFinder").hidden = false;
-  document.getElementsByName('keywordFinderInput')[0].value = toCop.keyword.trim();
-  
+  document.getElementsByName("keywordFinderInput")[0].value = toCop.keyword.trim();
+
   setTimeout(function () {
     let i = 0;
-    let cat = document.getElementsByName('catBtn');
-    while (i < cat.length){
-      if (cat[i].dataset.id == toCop.catId){
+    let cat = document.getElementsByName("catBtn");
+    while (i < cat.length) {
+      if (cat[i].dataset.id == toCop.catId) {
         cat[i].className = "badge badge-danger ml-1 mr-1";
         cat[i].dataset.selected = true;
       }
       i++;
-  }
-  localStorage.toCop = "";
-  },1000);
-  
-  
+    }
+    localStorage.toCop = "";
+  }, 1000);
 }

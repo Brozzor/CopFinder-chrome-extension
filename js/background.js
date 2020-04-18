@@ -3,7 +3,7 @@ checkKey();
 checkTask("1");
 
 setInterval(checkKey, 3600000);
-setInterval(checkTask, 2000);
+setInterval(checkTask, 400);
 
 function checkKey() {
   if (localStorage["keyG"] != null && localStorage["keyG"] != "") {
