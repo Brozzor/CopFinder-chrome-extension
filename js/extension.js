@@ -143,6 +143,21 @@ function checkoutClick(idTask){
 
 function checkError(idTask){
     if (document.querySelector("#cart-cc > fieldset > div.errors") != undefined){
-        chrome.runtime.sendMessage({msg: "error", idtask: idTask, id: '301'})
+        chrome.runtime.sendMessage({msg: "error", idtask: idTask, id: '301'});
     }
+}
+
+checkConfirmation();
+
+function checkConfirmation(){
+    if(window.location.href == "https://www.supremenewyork.com/checkout")
+    {
+        if (document.querySelector("#tabs > div.tab.tab-confirmation").className.includes('selected'))
+        {
+            chrome.runtime.sendMessage({msg: "successCop"});
+            return false;
+        }
+    }
+    setTimeout(checkConfirmation, 3000);
+    return false;
 }
