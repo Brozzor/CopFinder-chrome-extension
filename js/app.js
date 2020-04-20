@@ -79,43 +79,23 @@ function reconnectFromKey() {
   };
 }
 
-
-function initialPerso() {
-  let xhr = new XMLHttpRequest();
-  let use = "perso";
-  xhr.open("POST", "https://cop-finder.com/api/api.php", true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  xhr.send(
-    "key=" +
-      localStorage["keyG"] +
-      "&use=" +
-      use
-  );
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
-      let res = JSON.parse(xhr.responseText);
-      if (res[0].status == "1") {
-        insertInfoPerso(res);
-        createCardInfo();
-      } else {
-        localStorage["keyG"] = null;
-        window.location.href = "/popup.html";
-      }
-    }
-  };
-}
-
-function insertInfoPerso(res){
+function initial(){
+  if (localStorage.persoInfo != "" && localStorage.persoInfo != "[]" && localStorage.persoInfo != undefined){
+    setTimeout(function() {
+      window.location.href = "pages/main.html";
+    }, 500);
+    return false
+  }
   defaultConfig();
-
+  createCardInfo();
   let persoInfo = { 
-    "name": res[1].global_name,
-    "mail": res[1].mail,
-    "tel": res[1].tel,
-    "city": res[1].city,
-    "postcode": res[1].postcode,
-    "country": res[1].country,
-    "address": res[1].address
+    "name": "no value",
+    "mail": "no value",
+    "tel": "000000",
+    "city": "no value",
+    "postcode": "00000",
+    "country": "no value",
+    "address": "no value"
  };
  localStorage['persoInfo'] = JSON.stringify(persoInfo);
  setTimeout(function() {
@@ -157,7 +137,7 @@ function launch() {
       let res = JSON.parse(xhr.responseText);
       if (res.status == "1") {
         localStorage["keyG"] = res.key;
-        initialPerso();
+        initial();
         notification("success", res.status_message);
       } else {
         notification("danger", "Mail or token is invalid");

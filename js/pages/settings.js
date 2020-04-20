@@ -35,44 +35,6 @@ function addInformation() {
     address: document.getElementById("inputAddress").value,
   };
   localStorage["persoInfo"] = JSON.stringify(persoInfo);
-  addInfoPersoInBdd(persoInfo);
-}
-
-function addInfoPersoInBdd(inf) {
-  let xhr = new XMLHttpRequest();
-  let use = "perso-insert";
-  xhr.open("POST", "https://cop-finder.com/api/api.php", true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  xhr.send(
-    "key=" +
-      localStorage["keyG"] +
-      "&use=" +
-      use +
-      "&name=" +
-      inf.name +
-      "&mail=" +
-      inf.mail +
-      "&tel=" +
-      inf.tel +
-      "&city=" +
-      inf.city +
-      "&postcode=" +
-      inf.postcode +
-      "&country=" +
-      inf.country +
-      "&address=" +
-      inf.address
-  );
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
-      let res = JSON.parse(xhr.responseText);
-      if (res.status == "1") {
-      } else {
-        localStorage["keyG"] = null;
-        window.location.href = "/popup.html";
-      }
-    }
-  };
 }
 
 function addCard() {
