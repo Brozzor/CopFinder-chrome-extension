@@ -135,6 +135,7 @@ function taskPanel() {
                     <button class="btn btn-block" data-selected="false" data-id="3" id="checkoutBtn" name="aacBtn">CHECKOUT</button>
                   </div>
                 </div>
+<!--
                 <div class="form-group row">
                   <div class="col-sm-6">
                     <button class="btn btn-block" data-selected="false" id="disImgONBtn" name="disImgBtn">DISPLAY IMAGES: ON</button>
@@ -143,6 +144,7 @@ function taskPanel() {
                     <button class="btn btn-block supreme-btn" data-selected="true" name="disImgBtn">DISPLAY IMAGES: OFF</button>
                   </div>
                 </div>
+-->
                 <hr>
                 <div class="row">
                 <div class="col-sm-12 mt-1">
@@ -329,7 +331,7 @@ function SearchBtnTaskPanel() {
             stateKeywordFinderBtn: document.getElementById("keywordFinderBtn").dataset.selected,
             stateTimerBtn: document.getElementById("timerBtn").dataset.selected,
             stateCheckoutBtn: document.getElementById("checkoutBtn").dataset.selected,
-            disImgONBtn: document.getElementById("disImgONBtn").dataset.selected,
+            //disImgONBtn: document.getElementById("disImgONBtn").dataset.selected,
             stateProxyBtn: document.getElementById("proxyBtn").dataset.selected,
             proxy: document.getElementById("proxyList").value,
           };
@@ -453,7 +455,7 @@ function requestApi(use, argv, callback) {
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
       let res = JSON.parse(xhr.responseText);
-      if (res[0].status == "1") {
+      if (res.status == "1" || res[0].status == "1") {
         callback(res);
       }
     }
@@ -551,7 +553,7 @@ function displayTask(task, nb) {
   container.appendChild(element);
 }
 
-function editTask(task,nb) {
+function editTask(task, nb) {
   document.getElementById("taskEditPanel").innerHTML = `
   <div class="card mb-3 center-block mt-3" style="max-width: 95%;">
         <div class="row no-gutters">
@@ -627,15 +629,13 @@ function editTask(task,nb) {
   editTaskAllKeywords(task);
 }
 
-function editTaskAllKeywords(task){
-  
+function editTaskAllKeywords(task) {
   let i = 0;
-  while(i < task.keywordFinder.length)
-  {
-    document.getElementById('keywordsEdit').innerHTML += `
+  while (i < task.keywordFinder.length) {
+    document.getElementById("keywordsEdit").innerHTML += `
     <div class="form-group row">
       <div class="col-sm-12">
-      <span>Keyword and color n° ${i+1} :</span>
+      <span>Keyword and color n° ${i + 1} :</span>
         <div class="row">
           <div class="col-sm-12">
             <input type="text" value="${task.keywordFinder[i]}" class="form-control mb-1" readonly>
@@ -646,21 +646,25 @@ function editTaskAllKeywords(task){
     `;
     i++;
   }
-  
 }
 
 function splitKeyword(word) {
-  if(word.split("/").length == 1){
-    let res = {
-      keyword: word.trim(),
-      color: "none",
-    };
-    return res;
-  }
   let res = {
     keyword: word.split("/")[0].trim(),
     color: word.split("/")[1].trim(),
   };
+  if (word.length == 1) {
+    res = {
+      keyword: word.trim(),
+      color: "none",
+    };
+  } else if (word.split("/").length > 2) {
+    res = {
+      keyword: word.split("/")[0].trim(),
+      color: word.split("/")[word.split("/").length - 1].trim(),
+    };
+  }
+
   return res;
 }
 

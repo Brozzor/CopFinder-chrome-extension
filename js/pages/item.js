@@ -39,6 +39,16 @@ function initialItemList() {
   };
 }
 
+function splitWords(word) {
+    let res = word.trim();
+      
+    if (word.split("/").length >= 2) {
+      res = word.split("/")[0].trim();
+    }
+  
+    return res;
+}
+
 function selectToCop(){
   let i = 0;
   let findTitle = document.getElementById("title").innerText.split(' ');
@@ -51,7 +61,7 @@ function selectToCop(){
   }
 
   let toCop = {
-   "keyword": cleanTitle.trim() + " / " + document.getElementById("color").innerText,
+   "keyword": splitWords(cleanTitle) + " / " + document.getElementById("color").innerText,
    "catId": document.getElementById("color").dataset.catid
   };
   localStorage.toCop = JSON.stringify(toCop);
