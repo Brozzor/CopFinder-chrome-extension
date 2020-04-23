@@ -421,7 +421,12 @@ function findEveryValue(name) {
       if ((findItem[k].nodeName == "BUTTON" || findItem[k].nodeName == "A") && name != "sizeBtn") {
         findValue.push(findItem[k].innerText);
       } else if (findItem[k].nodeName == "INPUT" || name == "sizeBtn") {
-        findValue.push(findItem[k].value);
+        if (findItem[k].value.includes("/")){
+          findValue.push(findItem[k].value);
+        }else{
+          findValue.push(findItem[k].value + " / any");
+        }
+
       }
     }
     k++;
@@ -651,7 +656,7 @@ function editTaskAllKeywords(task) {
 function splitKeyword(word) {
   let res = {
     keyword: word.split("/")[0].trim(),
-    color: word.split("/")[1].trim(),
+    color: word.split("/")[1],
   };
   if (word.length == 1) {
     res = {
