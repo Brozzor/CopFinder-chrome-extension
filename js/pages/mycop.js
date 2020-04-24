@@ -322,7 +322,7 @@ function SearchBtnTaskPanel() {
             pantSize: document.getElementById("pantData").value,
             size: findEveryValue("sizeBtn"),
             cat: findEveryValue("catBtn"),
-            keywordFinder: findEveryValue("keywordFinderInput"),
+            keywordFinder: findEveryValue("keywordFinderInput",true),
             timer: document.getElementById("timerInput").value,
             checkoutDelay: document.getElementById("checkoutDelayInput").value,
             anySize: document.getElementById("anySizeBtn").dataset.selected,
@@ -412,7 +412,7 @@ function addNewTask(constTask) {
   }, 3000);
 }
 
-function findEveryValue(name) {
+function findEveryValue(name,keyword = null) {
   let findValue = [];
   let k = 0;
   findItem = document.getElementsByName(name);
@@ -421,10 +421,10 @@ function findEveryValue(name) {
       if ((findItem[k].nodeName == "BUTTON" || findItem[k].nodeName == "A") && name != "sizeBtn") {
         findValue.push(findItem[k].innerText);
       } else if (findItem[k].nodeName == "INPUT" || name == "sizeBtn") {
-        if (findItem[k].value.includes("/")){
-          findValue.push(findItem[k].value);
-        }else{
+        if (!findItem[k].value.includes("/") && keyword){
           findValue.push(findItem[k].value + " / any");
+        }else{
+          findValue.push(findItem[k].value);
         }
 
       }

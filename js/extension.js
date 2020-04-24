@@ -7,7 +7,7 @@ function copItem(idTask, allTask, idTaskItem, copInfo) {
     let i = 0;
     while (i < document.querySelector("#details > ul").childNodes.length) {
       let name = document.querySelector("#details > ul").childNodes[i].firstChild.dataset.styleName.toLowerCase().trim();
-      if (name.includes(taskExecParse[idTaskItem].color)) {
+      if (name.includes(taskExecParse[idTaskItem].color) || taskExecParse[idTaskItem].color.trim() == "any") {
         chrome.runtime.sendMessage({ msg: "findingLink", idtask: idTask, idtaskitem: idTaskItem, link: document.querySelector("#details > ul").childNodes[i].firstChild.href });
         return false;
       }
