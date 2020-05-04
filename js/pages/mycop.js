@@ -206,6 +206,7 @@ function SearchBtnPanel() {
           editTask(AllTasksParse[item.dataset.id], item.dataset.id);
           break;
         case "delete":
+          delTask(item.dataset.idBdd)
           AllTasksParse.splice(item.dataset.id, 1);
           AllTasksParse = JSON.stringify(AllTasksParse);
           localStorage.AllTasks = AllTasksParse;
@@ -372,6 +373,7 @@ function addNewTask(constTask) {
   constTask.state = "0";
   constTask.execTask = "";
   constTask.tabId = "";
+  constTask.idBdd = "";
 
   if (taskForInsert.size.length == 0) {
     taskForInsert.size = "any";
@@ -405,11 +407,12 @@ function addNewTask(constTask) {
   }
   taskPanelif = false;
   notification("success", "You have added a new task");
+  newTask(JSON.stringify(taskForInsert));
   setTimeout(function () {
     document.getElementById("taskAddPanel").hidden = true;
     document.getElementById("addTaskBtn").innerText = "ADD TASK";
     window.location.href = "/pages/mycop.html";
-  }, 3000);
+  }, 2000);
 }
 
 function findEveryValue(name,keyword = null) {
@@ -452,11 +455,11 @@ function delNotification() {
   }
 }
 
-function requestApi(use, argv, callback) {
+function requestApi(use, argv, callback = console.log) {
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "https://cop-finder.com/api/api.php", true);
+  xhr.open("POST", "https://cop-finder.com/api/apidev.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  xhr.send("key=" + localStorage["keyG"] + "&use=" + use);
+  xhr.send("key=" + localStorage["keyG"] + "&use=" + use + argv);
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
       let res = JSON.parse(xhr.responseText);
@@ -465,6 +468,24 @@ function requestApi(use, argv, callback) {
       }
     }
   };
+}
+
+function newTask(task){
+  let taskEncode = btoa(task);
+  requestApi("newTask", `&task="${taskEncode}"`, assignId);
+  
+}
+
+function delTask(id){
+
+  requestApi("delTask", `&task="${id}"`);
+  
+}
+
+function assignId(res){
+  let task = JSON.parse(localStorage.AllTasks);
+  task[task.length - 1].idBdd = res.status_message;
+  localStorage.AllTasks = JSON.stringify(task);
 }
 
 function displayCatList(res) {
