@@ -106,7 +106,7 @@ function taskPanel() {
                     <div id="checkoutDelay" class="mt-3" hidden>
                         <div class="row">
                           <div class="col-sm-12">
-                          <input type="text" name="checkoutDelayInput" id="checkoutDelayInput" value="4000" placeholder="Time in milliseconds" class="form-control mb-1">
+                          <input type="text" name="checkoutDelayInput" id="checkoutDelayInput" value="4500" placeholder="Time in milliseconds" class="form-control mb-1">
                         </div>
                       </div>
                     </div>
@@ -206,7 +206,8 @@ function SearchBtnPanel() {
           editTask(AllTasksParse[item.dataset.id], item.dataset.id);
           break;
         case "delete":
-          delTask(item.dataset.idBdd)
+
+          delTask(AllTasksParse[item.dataset.id].idBdd)
           AllTasksParse.splice(item.dataset.id, 1);
           AllTasksParse = JSON.stringify(AllTasksParse);
           localStorage.AllTasks = AllTasksParse;
@@ -457,9 +458,10 @@ function delNotification() {
 
 function requestApi(use, argv, callback = console.log) {
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "https://cop-finder.com/api/apidev.php", true);
+  xhr.open("POST", "https://cop-finder.com/api/api.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.send("key=" + localStorage["keyG"] + "&use=" + use + argv);
+  
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
       let res = JSON.parse(xhr.responseText);
@@ -477,8 +479,8 @@ function newTask(task){
 }
 
 function delTask(id){
-
-  requestApi("delTask", `&task="${id}"`);
+  
+  requestApi("delTask", `&task=${parseInt(id)}`);
   
 }
 
