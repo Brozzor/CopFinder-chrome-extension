@@ -479,8 +479,8 @@ function newTask(task){
 }
 
 function delTask(id){
-  
-  requestApi("delTask", `&task=${parseInt(id)}`);
+  let idCheck = parseInt(id);
+  requestApi("delTask", `&task=${idCheck}`);
   
 }
 
