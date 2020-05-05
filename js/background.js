@@ -87,7 +87,15 @@ function execTask(nb) {
         proxyOn(proxy[AllTasksParse[nb].proxy].ip);
       }
     }
-    fetch("https://www.supremenewyork.com/mobile_stock.json")
+    let myHeaders = new Headers();
+  myHeaders.append("pragma", "no-cache");
+  myHeaders.append("cache-control", "no-cache");
+
+  let init = {
+    method: "GET",
+    headers: myHeaders,
+  };
+    fetch("https://www.supremenewyork.com/mobile_stock.json", init)
       .then((result) => result.json())
       .then((data) => {
         let allItems = [];
