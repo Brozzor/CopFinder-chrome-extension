@@ -8,7 +8,12 @@ function copItem(idTask, allTask, idTaskItem, copInfo) {
     while (i < document.querySelector("#details > ul").childNodes.length) {
       let name = document.querySelector("#details > ul").childNodes[i].firstChild.dataset.styleName.toLowerCase().trim();
       if (name.includes(taskExecParse[idTaskItem].color) || taskExecParse[idTaskItem].color.trim() == "any") {
-        chrome.runtime.sendMessage({ msg: "findingLink", idtask: idTask, idtaskitem: idTaskItem, link: document.querySelector("#details > ul").childNodes[i].firstChild.href });
+        if (findStore() == 'us') {
+          let usLink = document.location.origin + document.querySelector("#details > ul").childNodes[i].firstChild.dataset.url
+          chrome.runtime.sendMessage({ msg: "findingLink", idtask: idTask, idtaskitem: idTaskItem, link: usLink });
+        }else{
+          chrome.runtime.sendMessage({ msg: "findingLink", idtask: idTask, idtaskitem: idTaskItem, link: document.querySelector("#details > ul").childNodes[i].firstChild.href });
+        }
         return false;
       }
       i++;
@@ -52,6 +57,13 @@ function copItem(idTask, allTask, idTaskItem, copInfo) {
   }
 }
 
+function findStore(){
+  if (document.body.classList[2].includes('us')){
+    return 'us';
+  }
+  return 'eu';
+}
+
 function soldOutRefresh(idTask, idTaskItem) {
   chrome.runtime.sendMessage({ msg: "refreshCop", idtask: idTask, idtaskitem: idTaskItem });
 }
@@ -68,7 +80,7 @@ function selectSize(sizeWanted, idTask, idTaskItem, copInf) {
     return false;
   } else if ((sizeForm[0] == undefined && document.getElementsByClassName("button in-cart")[0] == undefined) || sizeWanted == "any") {
     document.getElementsByName("commit")[0].click();
-    setTimeout(`addToBasket(${idTask},${idTaskItem})`, 500);
+    setTimeout(`addToBasket(${idTask},${idTaskItem})`, setTimerChanges(copInf));
   }
   while (i < sizeForm.length) {
     let html = sizeForm[i] != undefined ? sizeForm[i].innerText.trim() : sizeWanted;
@@ -76,7 +88,7 @@ function selectSize(sizeWanted, idTask, idTaskItem, copInf) {
       if (sizeForm[i]) sizeForm.value = sizeForm[i].value;
 
       document.getElementsByName("commit")[0].click();
-      setTimeout(`addToBasket(${idTask},${idTaskItem})`, 500);
+      setTimeout(`addToBasket(${idTask},${idTaskItem})`, setTimerChanges(copInf));
 
       break;
     } else if (i == sizeForm.length - 1) {
@@ -85,6 +97,13 @@ function selectSize(sizeWanted, idTask, idTaskItem, copInf) {
     }
     i++;
   }
+}
+
+function setTimerChanges(copInf){
+  if (copInf.timerChanges == undefined || copInf.timerChanges == null || copInf.timerChanges == ""){
+    return 1000;
+  }
+  return copInf.timerChanges;
 }
 
 function addToBasket(idTask, idTaskItem) {
@@ -109,9 +128,17 @@ function checkout(idTask, persoInfos, cardInfos) {
   document.getElementById("order_billing_country").value = persoInfosParse.country;
   document.getElementById("order_billing_country").dispatchEvent(new Event("change"));
 
-  document.getElementById("credit_card_type").value = cardInfosParse.type;
-  writeNumberCard(cardInfosParse.number, 'cnb');
-  writeNumberCard(cardInfosParse.cvc, 'vval');
+  if (findStore() == 'us'){
+    document.getElementById("order_billing_state").value = persoInfosParse.state;
+    document.getElementById("order_billing_state").dispatchEvent(new Event("change"));
+    writeNumberCard(cardInfosParse.number, 'rnsnckrn');
+    writeNumberCard(cardInfosParse.cvc, 'orcer');
+  }else{
+    document.getElementById("credit_card_type").value = cardInfosParse.type;
+    writeNumberCard(cardInfosParse.number, 'cnb');
+    writeNumberCard(cardInfosParse.cvc, 'vval');
+  }
+
   document.getElementById("credit_card_month").value = cardInfosParse.expiry.split("/")[0].trim();
   document.getElementById("credit_card_year").value = cardYear;
 
@@ -126,7 +153,7 @@ function checkout(idTask, persoInfos, cardInfos) {
 
 function writeNumberCard(number, id, i = 0) {
     let elem = document.getElementById(id);
-    if (i >= number.length && id == 'cnb') {
+    if (i >= number.length && (id == 'cnb' || id == 'rnsnckrn')) {
       elem.value = number;
       document.getElementsByClassName("icheckbox_minimal")[1].click();
       return;

@@ -117,6 +117,7 @@ function defaultConfig(){
     let copInfo = { 
       "soldOut": "wait",
       "timerRestock": "5000",
+      "timerChanges": "1000",
       "checkError": "send",
       "checkSuccess": "send"
    };

@@ -33,6 +33,7 @@ function addInformation() {
     postcode: document.getElementById("inputPostcode").value,
     country: document.getElementById("inputCountry").value,
     address: document.getElementById("inputAddress").value,
+    state: document.getElementById("inputState").value,
   };
   localStorage["persoInfo"] = JSON.stringify(persoInfo);
 }
@@ -51,6 +52,7 @@ function addCop() {
   let copInfo = {
     soldOut: document.getElementById("soldOut").value,
     timerRestock: document.getElementById("timerRestock").value,
+    timerChanges: document.getElementById("timerChanges").value,
     checkError: document.getElementById("checkError").value,
     checkSuccess: document.getElementById("checkSuccess").value,
   };
@@ -80,6 +82,7 @@ function readCopInfo() {
     let infoCop = JSON.parse(localStorage["copInfo"]);
     document.getElementById("soldOut").value = infoCop.soldOut;
     document.getElementById("timerRestock").value = infoCop.timerRestock;
+    document.getElementById("timerChanges").value = infoCop.timerChanges || 1000;
     document.getElementById("checkError").value = infoCop.checkError;
     document.getElementById("checkSuccess").value = infoCop.checkSuccess;
   }
@@ -105,6 +108,7 @@ function readPersoInfo() {
     document.getElementById("inputPostcode").value = infoPerso.postcode;
     document.getElementById("inputCountry").value = infoPerso.country;
     document.getElementById("inputAddress").value = infoPerso.address;
+    document.getElementById("inputState").value = infoPerso.state;
   }
 }
 
