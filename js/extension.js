@@ -158,22 +158,61 @@ function checkout(idTask, persoInfos, cardInfos) {
 
 function writeNumberCard(number, id, i = 0) {
   let elem = document.getElementById(id);
+
+  if (i == 0){
+    evtClickSouris(document.getElementById(id));
+  }
+
   if (i >= number.length && (id == "cnb" || id == "rnsnckrn")) {
+    evtEnterKey(number,elem);
     elem.value = number;
-    document.getElementsByClassName("icheckbox_minimal")[1].click();
+    elem.dispatchEvent(new Event("change"));
+    evtClickSouris(document.getElementsByClassName("icheckbox_minimal")[1]);
     return;
   } else if (i >= number.length) {
+    evtEnterKey(number,elem);
     elem.value = number;
+    elem.dispatchEvent(new Event("change"));
     return;
   }
+  evtEnterKey(number,elem);
   elem.value = number.substring(0, i);
   setTimeout(function () {
     writeNumberCard(number, id, i + 1);
   }, 50);
 }
 
+function evtEnterKey(number,elem){
+  let evt = new MouseEvent("keydown", {
+    key: number
+  })
+  let evt2 = new MouseEvent("keypress", {
+    key: number
+  })
+  let evt4 = new MouseEvent("keyup", {
+    key: number
+  })
+
+  elem.dispatchEvent(evt);
+  elem.dispatchEvent(evt2);
+  elem.dispatchEvent(evt4);
+  return false;
+}
+
+function evtClickSouris(id){
+  
+  let evt = new MouseEvent("click", {
+    view: window,
+    bubbles: true,
+    cancelable: true,
+    clientX: 20,
+  })
+  id.dispatchEvent(evt);
+  return false;
+}
+
 function checkoutClick(idTask) {
-  document.getElementsByName("commit")[0].click();
+  evtClickSouris(document.getElementsByName("commit")[0]);
   setTimeout(`checkError(${idTask})`, 15000);
 }
 
