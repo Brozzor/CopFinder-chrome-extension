@@ -19,7 +19,7 @@ function copItem(idTask, allTask, idTaskItem, copInfo) {
         }
         i++;
       }
-    }else if (taskExecParse[idTaskItem].color.trim() == 'any' || taskExecParse[idTaskItem].color.trim() == document.querySelector("#details > p.style.protect").innerText.trim().toLowerCase()){
+    } else if (taskExecParse[idTaskItem].color.trim() == "any" || taskExecParse[idTaskItem].color.trim() == document.querySelector("#details > p.style.protect").innerText.trim().toLowerCase()) {
       chrome.runtime.sendMessage({ msg: "findingLink", idtask: idTask, idtaskitem: idTaskItem, link: document.location.href });
       return false;
     }
@@ -115,9 +115,10 @@ function addToBasket(idTask, idTaskItem) {
   chrome.runtime.sendMessage({ msg: "addItemToBasket", idtask: idTask, idtaskitem: idTaskItem });
 }
 
-function checkout(idTask, persoInfos, cardInfos) {
+function checkout(idTask, persoInfos, cardInfos, allTasks) {
   cardInfosParse = JSON.parse(cardInfos);
   persoInfosParse = JSON.parse(persoInfos);
+  allTasksParse = JSON.parse(allTasks);
 
   let cardYear = cardInfosParse.expiry.split("/")[1].trim();
   if (cardInfosParse.expiry.split("/")[1].trim().length == 2) {
@@ -133,15 +134,29 @@ function checkout(idTask, persoInfos, cardInfos) {
   document.getElementById("order_billing_country").value = persoInfosParse.country;
   document.getElementById("order_billing_country").dispatchEvent(new Event("change"));
 
+  let delay = allTasksParse[idTask].checkoutDelay;
+  calTime(delay, 'nbcBefore');
   if (findStore() == "us") {
     document.getElementById("order_billing_state").value = persoInfosParse.state;
     document.getElementById("order_billing_state").dispatchEvent(new Event("change"));
-    writeNumberCard(cardInfosParse.number, "rnsnckrn");
-    writeNumberCard(cardInfosParse.cvc, "orcer");
+
+    setTimeout(function () {
+      writeNumberCard(cardInfosParse.number, "rnsnckrn", 1, delay, function () {
+        setTimeout(function () {
+          writeNumberCard(cardInfosParse.cvc, "orcer", 1, delay);
+        }, calTime(delay, 'nbcBefore'));
+      });
+    }, calTime(delay, 'nbcBefore'));
   } else {
     document.getElementById("credit_card_type").value = cardInfosParse.type;
-    writeNumberCard(cardInfosParse.number, "cnb");
-    writeNumberCard(cardInfosParse.cvc, "vval");
+
+    setTimeout(function () {
+      writeNumberCard(cardInfosParse.number, "cnb", 1, delay, function () {
+        setTimeout(function () {
+          writeNumberCard(cardInfosParse.cvc, "vval", 1, delay);
+        }, calTime(delay, 'nbcBefore'));
+      });
+    }, calTime(delay, 'nbcBefore'));
   }
 
   document.getElementById("credit_card_month").value = cardInfosParse.expiry.split("/")[0].trim();
@@ -156,42 +171,66 @@ function checkout(idTask, persoInfos, cardInfos) {
   chrome.runtime.sendMessage({ msg: "endTimer", idtask: "0" });
 }
 
-function writeNumberCard(number, id, i = 0) {
+function writeNumberCard(number, id, i = 0, delay, callback) {
   let elem = document.getElementById(id);
 
-  if (i == 0){
+  if (i == 0) {
     evtClickSouris(document.getElementById(id));
+    elem.dispatchEvent(new Event("focus"));
   }
-
+  let nbr = number.substring(0, i);
+  evtEnterKey(nbr.substr(nbr.length - 1), elem);
   if (i >= number.length && (id == "cnb" || id == "rnsnckrn")) {
-    evtEnterKey(number,elem);
     elem.value = number;
+    elem.dispatchEvent(new Event("blur"));
+    elem.dispatchEvent(new Event("change"));
+    callback();
+    return;
+  } else if (i >= number.length) {
+    elem.value = number;
+    elem.dispatchEvent(new Event("blur"));
     elem.dispatchEvent(new Event("change"));
     evtClickSouris(document.getElementsByClassName("icheckbox_minimal")[1]);
     return;
-  } else if (i >= number.length) {
-    evtEnterKey(number,elem);
-    elem.value = number;
-    elem.dispatchEvent(new Event("change"));
-    return;
   }
-  evtEnterKey(number,elem);
+
   elem.value = number.substring(0, i);
   setTimeout(function () {
-    writeNumberCard(number, id, i + 1);
-  }, 50);
+    writeNumberCard(number, id, i + 1, delay, callback);
+  }, calTime(delay, 'letter'));
 }
 
-function evtEnterKey(number,elem){
-  let evt = new MouseEvent("keydown", {
-    key: number
-  })
-  let evt2 = new MouseEvent("keypress", {
-    key: number
-  })
-  let evt4 = new MouseEvent("keyup", {
-    key: number
-  })
+function calTime(time,type) {
+  let res;
+  switch (type) {
+    case 'nbcBefore':
+      res = (time / 100) * 10;
+      break;
+    case 'letter':
+      res = (time / 100) * 60;
+      res /= 20;
+      let min = (res / 100) * 70
+      res = randomNumber(min, res);
+      break;
+  }
+  return res
+}
+
+function randomNumber(min, max)
+{
+ return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function evtEnterKey(number, elem) {
+  let evt = new KeyboardEvent("keydown", {
+    key: number,
+  });
+  let evt2 = new KeyboardEvent("keypress", {
+    key: number,
+  });
+  let evt4 = new KeyboardEvent("keyup", {
+    key: number,
+  });
 
   elem.dispatchEvent(evt);
   elem.dispatchEvent(evt2);
@@ -199,14 +238,13 @@ function evtEnterKey(number,elem){
   return false;
 }
 
-function evtClickSouris(id){
-  
+function evtClickSouris(id) {
   let evt = new MouseEvent("click", {
     view: window,
     bubbles: true,
     cancelable: true,
     clientX: 20,
-  })
+  });
   id.dispatchEvent(evt);
   return false;
 }

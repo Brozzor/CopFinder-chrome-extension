@@ -136,12 +136,12 @@ cop = (idTask, idTaskItem, AllTasks, copInfo) => {
   });
 };
 
-checkout = (idTask, persoInfo, cardInfo) => {
+checkout = (idTask, persoInfo, cardInfo, tasks) => {
   let task = JSON.parse(localStorage.AllTasks);
   task = task[idTask];
   updateTab(task.tabId, "https://www.supremenewyork.com/checkout", () => {
     chrome.tabs.executeScript(task.tabId, {
-      code: "checkout(" + idTask + "," + JSON.stringify(persoInfo) + "," + JSON.stringify(cardInfo) + ")",
+      code: "checkout(" + idTask + "," + JSON.stringify(persoInfo) + "," + JSON.stringify(cardInfo) + "," + JSON.stringify(tasks) + ")",
     });
   });
 };
@@ -326,7 +326,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         notificationsSend("successNotif", `Successfully execution task n°${request.idtask}`, `Well done !`);
       } else if (task.length - 1 == request.idtaskitem) {
         sendResponse("checkout");
-        checkout(request.idtask, localStorage.persoInfo, localStorage.cardInfo);
+        checkout(request.idtask, localStorage.persoInfo, localStorage.cardInfo, localStorage.AllTasks);
       } else {
         let newID = parseInt(request.idtaskitem) + 1;
         cop(request.idtask, newID, localStorage.AllTasks, localStorage.copInfo);
