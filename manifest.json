@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "CopFinder",
   "description": "The Best World CopBot",
-  "version": "1.4.1",
+  "version": "1.4.3",
   "permissions": [
     "https://*.supremenewyork.com/*",
     "https://cop-finder.com/*",

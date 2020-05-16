@@ -171,10 +171,27 @@ function checkout(idTask, persoInfos, cardInfos, allTasks) {
   chrome.runtime.sendMessage({ msg: "endTimer", idtask: "0" });
 }
 
+document.getElementById("cnb").addEventListener("input", function(evt){
+  console.log(evt)
+});
+
+document.getElementById("vval").addEventListener("input", function(evt){
+  console.log(evt)
+});
+
+document.getElementById("vval").addEventListener("textInput", function(evt){
+  console.log(evt)
+});
+
+document.getElementById("cnb").addEventListener("textInput", function(evt){
+  console.log(evt)
+});
+
+
 function writeNumberCard(number, id, i = 0, delay, callback) {
   let elem = document.getElementById(id);
 
-  if (i == 0) {
+  if (i == 1) {
     evtClickSouris(document.getElementById(id));
     elem.dispatchEvent(new Event("focus"));
   }
@@ -182,19 +199,27 @@ function writeNumberCard(number, id, i = 0, delay, callback) {
   evtEnterKey(nbr.substr(nbr.length - 1), elem);
   if (i >= number.length && (id == "cnb" || id == "rnsnckrn")) {
     elem.value = number;
-    elem.dispatchEvent(new Event("blur"));
+    //elem.dispatchEvent(new Event("input"));
+    evtInput(nbr.substr(nbr.length - 1), elem);
     elem.dispatchEvent(new Event("change"));
+    elem.dispatchEvent(new Event("blur"));
+    
     callback();
     return;
   } else if (i >= number.length) {
     elem.value = number;
-    elem.dispatchEvent(new Event("blur"));
+    //elem.dispatchEvent(new Event("input"));
+    evtInput(nbr.substr(nbr.length - 1), elem);
     elem.dispatchEvent(new Event("change"));
+    elem.dispatchEvent(new Event("blur"));
     evtClickSouris(document.getElementsByClassName("icheckbox_minimal")[1]);
     return;
   }
 
   elem.value = number.substring(0, i);
+  //elem.dispatchEvent(new Event("input"));
+  evtInput(nbr.substr(nbr.length - 1), elem);
+  
   setTimeout(function () {
     writeNumberCard(number, id, i + 1, delay, callback);
   }, calTime(delay, 'letter'));
@@ -221,20 +246,54 @@ function randomNumber(min, max)
  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function evtInput(number, elem){
+  elem.dispatchEvent(new InputEvent("input", {
+    data: number,
+    bubbles: true,
+    inputType: "insertText"
+  }));
+}
+
 function evtEnterKey(number, elem) {
+  let codeNumber = number.toString();
+  codeNumber = codeNumber.charCodeAt();
+
   let evt = new KeyboardEvent("keydown", {
     key: number,
+    keyCode: codeNumber,
+    shiftKey: true,
+    altKey: false,
+    ctrlKey: false,
+    metaKey: false,
+    wish: codeNumber
   });
   let evt2 = new KeyboardEvent("keypress", {
     key: number,
+    keyCode: codeNumber,
+    shiftKey: true,
+    altKey: false,
+    ctrlKey: false,
+    metaKey: false,
+    wish: codeNumber
+
   });
-  let evt4 = new KeyboardEvent("keyup", {
+  let evt3 = new Event("textInput", {
+    data: number
+  });
+  let evt5 = new KeyboardEvent("keyup", {
     key: number,
+    keyCode: codeNumber,
+    shiftKey: true,
+    altKey: false,
+    ctrlKey: false,
+    metaKey: false,
+    wish: codeNumber
   });
 
   elem.dispatchEvent(evt);
   elem.dispatchEvent(evt2);
-  elem.dispatchEvent(evt4);
+  elem.dispatchEvent(evt3);
+  elem.dispatchEvent(evt5);
   return false;
 }
 
