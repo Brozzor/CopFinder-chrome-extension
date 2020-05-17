@@ -171,23 +171,6 @@ function checkout(idTask, persoInfos, cardInfos, allTasks) {
   chrome.runtime.sendMessage({ msg: "endTimer", idtask: "0" });
 }
 
-document.getElementById("cnb").addEventListener("input", function(evt){
-  console.log(evt)
-});
-
-document.getElementById("vval").addEventListener("input", function(evt){
-  console.log(evt)
-});
-/*
-document.getElementById("vval").addEventListener("textInput", function(evt){
-  console.log(evt)
-});
-
-document.getElementById("cnb").addEventListener("textInput", function(evt){
-  console.log(evt)
-});
-*/
-
 function writeNumberCard(number, id, i = 0, delay, callback) {
   let elem = document.getElementById(id);
 
@@ -205,7 +188,7 @@ function writeNumberCard(number, id, i = 0, delay, callback) {
     elem.dispatchEvent(new Event("blur"));
     
     callback();
-    return false;
+    return;
   } else if (i >= number.length) {
     elem.value = number;
 
@@ -213,11 +196,11 @@ function writeNumberCard(number, id, i = 0, delay, callback) {
     elem.dispatchEvent(new Event("change"));
     elem.dispatchEvent(new Event("blur"));
     evtClickSouris(document.getElementsByClassName("icheckbox_minimal")[1]);
-    return false;
+    return;
   }
 
   elem.value = number.substring(0, i);
-
+  
   evtInput(nbr.substr(nbr.length - 1), elem);
   
   setTimeout(function () {
@@ -247,6 +230,7 @@ function randomNumber(min, max)
 }
 
 function evtInput(number, elem){
+
   let codeNumber = number.toString();
   codeNumber = codeNumber.charCodeAt();
 
@@ -254,11 +238,13 @@ function evtInput(number, elem){
     data: number,
     bubbles: true
   }));
+
   elem.dispatchEvent(new InputEvent("input", {
     data: number,
     bubbles: true,
     inputType: "insertText"
   }));
+
   elem.dispatchEvent(new KeyboardEvent("keyup", {
     key: number,
     keyCode: codeNumber,
@@ -268,6 +254,7 @@ function evtInput(number, elem){
     metaKey: false,
     wish: codeNumber
   }));
+  return false;
 }
 
 function evtEnterKey(number, elem) {
@@ -293,9 +280,11 @@ function evtEnterKey(number, elem) {
     wish: codeNumber
 
   });
-  
+ 
+
   elem.dispatchEvent(evt);
   elem.dispatchEvent(evt2);
+
   return false;
 }
 
