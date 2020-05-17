@@ -344,7 +344,7 @@ checkConfirmation();
 
 function checkConfirmation() {
   if (window.location.href == "https://www.supremenewyork.com/checkout") {
-    if (document.querySelector("#tabs > div.tab.tab-confirmation").className.includes("selected")) {
+    if (document.querySelector("#tabs > div.tab.tab-confirmation").className.includes("selected") && !document.getElementById('confirmation').className.includes('failed')) {
       chrome.runtime.sendMessage({ msg: "successCop" });
       return false;
     }
