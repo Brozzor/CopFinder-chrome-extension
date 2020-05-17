@@ -121,6 +121,7 @@ function checkout(idTask, persoInfos, cardInfos, allTasks) {
   allTasksParse = JSON.parse(allTasks);
 
   let cardYear = cardInfosParse.expiry.split("/")[1].trim();
+  let cardMonth = cardInfosParse.expiry.split("/")[0].trim();
   if (cardInfosParse.expiry.split("/")[1].trim().length == 2) {
     cardYear = "20" + cardInfosParse.expiry.split("/")[1].trim();
   }
@@ -135,7 +136,7 @@ function checkout(idTask, persoInfos, cardInfos, allTasks) {
   document.getElementById("order_billing_country").dispatchEvent(new Event("change"));
 
   let delay = allTasksParse[idTask].checkoutDelay;
-  calTime(delay, 'nbcBefore');
+  calTime(delay, "nbcBefore");
   if (findStore() == "us") {
     document.getElementById("order_billing_state").value = persoInfosParse.state;
     document.getElementById("order_billing_state").dispatchEvent(new Event("change"));
@@ -144,9 +145,9 @@ function checkout(idTask, persoInfos, cardInfos, allTasks) {
       writeNumberCard(cardInfosParse.number, "rnsnckrn", 1, delay, function () {
         setTimeout(function () {
           writeNumberCard(cardInfosParse.cvc, "orcer", 1, delay);
-        }, calTime(delay, 'nbcBefore'));
+        }, calTime(delay, "nbcBefore"));
       });
-    }, calTime(delay, 'nbcBefore'));
+    }, calTime(delay, "nbcBefore"));
   } else {
     document.getElementById("credit_card_type").value = cardInfosParse.type;
 
@@ -154,21 +155,45 @@ function checkout(idTask, persoInfos, cardInfos, allTasks) {
       writeNumberCard(cardInfosParse.number, "cnb", 1, delay, function () {
         setTimeout(function () {
           writeNumberCard(cardInfosParse.cvc, "vval", 1, delay);
-        }, calTime(delay, 'nbcBefore'));
+        }, calTime(delay, "nbcBefore"));
       });
-    }, calTime(delay, 'nbcBefore'));
+    }, calTime(delay, "nbcBefore"));
   }
 
-  document.getElementById("credit_card_month").value = cardInfosParse.expiry.split("/")[0].trim();
-  document.getElementById("credit_card_year").value = cardYear;
+  setTimeout(function () {
+    writeExpiry("credit_card_month", "credit_card_year", cardMonth, cardYear, 1, delay);
+  }, calTime(delay, "expiry"));
 
-  //document.getElementsByClassName("icheckbox_minimal")[1].click();
   chrome.runtime.sendMessage({ msg: "fillCheckout", idtask: idTask }, (rep) => {
     if (rep.callback != 0) {
       setTimeout(`checkoutClick(${idTask})`, rep.timer);
     }
   });
   chrome.runtime.sendMessage({ msg: "endTimer", idtask: "0" });
+}
+
+function writeExpiry(idM, idY, cardM, cardY, type, delay) {
+  let elemM = document.getElementById(idM);
+  let elemY = document.getElementById(idY);
+
+  if (type == 1) {
+    evtClickSouris(document.getElementById(idM));
+    elemM.dispatchEvent(new Event("focus"));
+    elemM.value = cardM;
+    elemM.dispatchEvent(new Event("change"));
+    elemM.dispatchEvent(new Event("blur"));
+    setTimeout(function () {
+      writeExpiry(idM, idY, cardM, cardY, 0, delay);
+    }, calTime(delay, "expiry"));
+  } else {
+    evtClickSouris(document.getElementById(idY));
+    elemY.dispatchEvent(new Event("focus"));
+    elemY.value = cardY;
+    elemY.dispatchEvent(new Event("change"));
+    elemY.dispatchEvent(new Event("blur"));
+  }
+
+  return false;
 }
 
 function writeNumberCard(number, id, i = 0, delay, callback) {
@@ -186,7 +211,7 @@ function writeNumberCard(number, id, i = 0, delay, callback) {
     evtInput(nbr.substr(nbr.length - 1), elem);
     elem.dispatchEvent(new Event("change"));
     elem.dispatchEvent(new Event("blur"));
-    
+
     callback();
     return;
   } else if (i >= number.length) {
@@ -200,60 +225,67 @@ function writeNumberCard(number, id, i = 0, delay, callback) {
   }
 
   elem.value = number.substring(0, i);
-  
+
   evtInput(nbr.substr(nbr.length - 1), elem);
-  
+
   setTimeout(function () {
     writeNumberCard(number, id, i + 1, delay, callback);
-  }, calTime(delay, 'letter'));
+  }, calTime(delay, "letter"));
 }
 
-function calTime(time,type) {
+function calTime(time, type) {
   let res;
   switch (type) {
-    case 'nbcBefore':
-      res = (time / 100) * 10;
+    case "nbcBefore":
+      res = (time / 100) * 15;
       break;
-    case 'letter':
+    case "letter":
       res = (time / 100) * 60;
       res /= 20;
-      let min = (res / 100) * 70
+      let min = (res / 100) * 70;
       res = randomNumber(min, res);
       break;
+    case "expiry":
+      res = (time / 100) * 5;
+      break;
   }
-  return res
+  return res;
 }
 
-function randomNumber(min, max)
-{
- return Math.floor(Math.random() * (max - min + 1)) + min;
+function randomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function evtInput(number, elem){
-
+function evtInput(number, elem) {
   let codeNumber = number.toString();
   codeNumber = codeNumber.charCodeAt();
 
-  elem.dispatchEvent(new InputEvent("textInput", {
-    data: number,
-    bubbles: true
-  }));
+  elem.dispatchEvent(
+    new InputEvent("textInput", {
+      data: number,
+      bubbles: true,
+    })
+  );
 
-  elem.dispatchEvent(new InputEvent("input", {
-    data: number,
-    bubbles: true,
-    inputType: "insertText"
-  }));
+  elem.dispatchEvent(
+    new InputEvent("input", {
+      data: number,
+      bubbles: true,
+      inputType: "insertText",
+    })
+  );
 
-  elem.dispatchEvent(new KeyboardEvent("keyup", {
-    key: number,
-    keyCode: codeNumber,
-    shiftKey: true,
-    altKey: false,
-    ctrlKey: false,
-    metaKey: false,
-    wish: codeNumber
-  }));
+  elem.dispatchEvent(
+    new KeyboardEvent("keyup", {
+      key: number,
+      keyCode: codeNumber,
+      shiftKey: true,
+      altKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      wish: codeNumber,
+    })
+  );
   return false;
 }
 
@@ -268,7 +300,7 @@ function evtEnterKey(number, elem) {
     altKey: false,
     ctrlKey: false,
     metaKey: false,
-    wish: codeNumber
+    wish: codeNumber,
   });
   let evt2 = new KeyboardEvent("keypress", {
     key: number,
@@ -277,10 +309,8 @@ function evtEnterKey(number, elem) {
     altKey: false,
     ctrlKey: false,
     metaKey: false,
-    wish: codeNumber
-
+    wish: codeNumber,
   });
- 
 
   elem.dispatchEvent(evt);
   elem.dispatchEvent(evt2);
