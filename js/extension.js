@@ -149,7 +149,11 @@ function checkout(idTask, persoInfos, cardInfos, allTasks) {
       });
     }, calTime(delay, "nbcBefore"));
   } else {
+    evtClickSouris(document.getElementById("credit_card_type"));
+    document.getElementById("credit_card_type").dispatchEvent(new Event("focus"));
     document.getElementById("credit_card_type").value = cardInfosParse.type;
+    document.getElementById("credit_card_type").dispatchEvent(new Event("change"));
+    document.getElementById("credit_card_type").dispatchEvent(new Event("blur"));
 
     setTimeout(function () {
       writeNumberCard(cardInfosParse.number, "cnb", 1, delay, function () {
