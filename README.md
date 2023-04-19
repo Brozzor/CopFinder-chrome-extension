@@ -1,4 +1,4 @@
-# Extension chrome CopFinder
+# DEPRECATED Extension chrome CopFinder
 
 ## Gestion des erreurs par code : 
 - 101 : Modèles du produit non trouver
